@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import {
   absorbFindsIntoPayload,
   composeBriefing,
+  emergencyBriefing,
   localizeHeadline,
 } from "./compose";
 import { ingestStories } from "./ingest";
@@ -57,7 +58,7 @@ async function generateForHour(id: string) {
     const stories = await Promise.race([
       ingestStories(true, "fast"),
       new Promise<RawStory[]>((resolve) => {
-        setTimeout(() => resolve([]), 25_000);
+        setTimeout(() => resolve([]), 8_000);
       }),
     ]);
     const [seen, previous, ticker] = await Promise.all([
@@ -86,41 +87,30 @@ async function generateForHour(id: string) {
       seen,
     });
 
-    const itemCount = result.payload.arenas.reduce((n, a) => n + a.items.length, 0);
+    let payload = result.payload;
+    let itemCount = payload.arenas.reduce((n, a) => n + a.items.length, 0);
     if (itemCount === 0) {
-      // Don't lock an empty "ready" card — keep generating and kick fuller ingest.
-      console.error("[briefing] empty compose", id, "stories", stories.length);
-      kickIngest();
-      await failBriefing(id, "empty_compose");
-      // Retry once with whatever ticker already has
-      const more = await storiesFromTicker();
-      if (more.length) {
-        const retry = await composeBriefing({
-          hourLabel: hourLabelFromKey(id),
-          stories: more,
-          previous,
-          seen,
-        });
-        const n2 = retry.payload.arenas.reduce((n, a) => n + a.items.length, 0);
-        if (n2 > 0) {
-          await claimBriefing(id, true);
-          await saveBriefing(id, await shortenPayload(retry.payload));
-        }
+      console.error("[briefing] empty compose", id, "stories", (stories.length ? stories : fromTicker).length);
+      const pool = stories.length ? stories : fromTicker;
+      payload = emergencyBriefing(pool);
+      itemCount = payload.arenas.reduce((n, a) => n + a.items.length, 0);
+      if (itemCount === 0) {
+        kickIngest();
+        await failBriefing(id, "empty_compose");
+        return;
       }
-      return;
     }
-    await saveBriefing(id, await shortenPayload(result.payload));
+    await saveBriefing(id, await shortenPayload(payload));
     const prints: string[] = [];
-    for (const arena of result.payload.arenas) {
+    for (const arena of payload.arenas) {
       for (const item of arena.items) {
         prints.push(fingerprint(item.url, `${item.speaker} ${item.body}`));
       }
     }
-    for (const item of result.payload.spares) {
+    for (const item of payload.spares) {
       prints.push(fingerprint(item.url, `${item.speaker} ${item.body}`));
     }
     await addSeen(id, prints);
-    // Do NOT seedTicker from briefing — that made ticker identical to עדכון/spares.
     if (result.tickerHe.length) {
       await applyTickerHe(result.tickerHe);
     }
@@ -255,7 +245,7 @@ export const ensureBriefing = createServerFn({ method: "POST" })
       inflight.set(id, task);
       await Promise.race([
         task,
-        new Promise((r) => setTimeout(r, 20_000)),
+        new Promise((r) => setTimeout(r, 9_000)),
       ]);
       return buildDashboard(id);
     }

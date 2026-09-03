@@ -304,6 +304,48 @@ function padSpares(payload: BriefingPayload, stories: RawStory[], previous: stri
   return ensureItemIds({ ...payload, spares: spares.slice(0, 10) });
 }
 
+
+/** Last-resort filler when filters wipe everything — still better than empty card. */
+export function emergencyBriefing(stories: RawStory[]): BriefingPayload {
+  const arenas = new Map<ArenaId, BriefingItem[]>();
+  const spares: SpareItem[] = [];
+  let n = 0;
+  for (const story of stories) {
+    if (story.indicator) continue;
+    const title = (story.title || "").replace(/\s+/g, " ").trim();
+    if (title.length < 20) continue;
+    const arenaId = (story.arena && ARENA_META[story.arena] ? story.arena : resolveArena(title)) as ArenaId;
+    const id = arenaId in ARENA_META ? arenaId : ("intl" as ArenaId);
+    const outlet = formatOutlet(story.source) || story.source;
+    const row = mkItem(
+      `דווח ב-${outlet}`,
+      hasHebrew(title) ? title : title,
+      story.url,
+      story.publishedAt,
+    );
+    if (n < 6) {
+      const list = arenas.get(id) ?? [];
+      list.push(row);
+      arenas.set(id, list);
+      n += 1;
+    } else if (spares.length < 10) {
+      spares.push({ ...row, id: makeId("s", row.url), arena: id });
+    }
+  }
+  return ensureItemIds(
+    decorateArenas({
+      desk: DESK_STYLE,
+      arenas: ARENA_ORDER.filter((id) => arenas.get(id)?.length).map((id) => ({
+        id,
+        title: ARENA_META[id].title,
+        flags: ARENA_META[id].flags,
+        items: arenas.get(id)!,
+      })),
+      spares,
+    }),
+  );
+}
+
 /** Rule-based desk composer — no XAI / no api.x.ai. */
 export async function composeBriefing(input: {
   hourLabel: string;

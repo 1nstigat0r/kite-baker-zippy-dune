@@ -142,8 +142,15 @@ async function poolMap<T, R>(items: T[], size: number, fn: (item: T) => Promise<
 
 export type IngestMode = "fast" | "full";
 
-/** Top Telegram primaries for the fast path (Vercel time budget). */
-const FAST_TG = TELEGRAM_SOURCES.filter((s) => !s.indicator).slice(0, 18);
+/** Priority RSS only — must finish inside Vercel hobby/pro cold budgets. */
+const FAST_RSS = RSS_SOURCES.filter((s) =>
+  /aljazeera|bbc|middleeasteye|al-monitor|reuters|guardian|france24|aa\.com|iranintl|thecradle/i.test(
+    s.url,
+  ),
+).slice(0, 8);
+
+/** Top Telegram primaries for the full path. */
+const FAST_TG = TELEGRAM_SOURCES.filter((s) => !s.indicator).slice(0, 12);
 
 export async function ingestStories(
   force = false,
@@ -158,25 +165,22 @@ export async function ingestStories(
   }
   await setMeta("ticker_at", String(Date.now()));
 
-  // Fast: all RSS + small TG. Full: RSS + all TG (incl. indicator tips).
+  // Fast: 8 RSS only (~5s). Full: RSS + TG.
   const jobs =
     mode === "fast"
-      ? [
-          ...RSS_SOURCES.map((src) => ({ kind: "rss" as const, src })),
-          ...FAST_TG.map((src) => ({ kind: "tg" as const, src })),
-        ]
+      ? FAST_RSS.map((src) => ({ kind: "rss" as const, src }))
       : [
           ...RSS_SOURCES.map((src) => ({ kind: "rss" as const, src })),
           ...TELEGRAM_SOURCES.map((src) => ({ kind: "tg" as const, src })),
         ];
 
-  const batches = await poolMap(jobs, mode === "fast" ? 12 : 10, async (job) => {
+  const batches = await poolMap(jobs, mode === "fast" ? 8 : 10, async (job) => {
     if (job.kind === "rss") {
-      const xml = await fetchText(job.src.url, mode === "fast" ? 7000 : 5000);
+      const xml = await fetchText(job.src.url, mode === "fast" ? 4500 : 5000);
       if (!xml || !/[<](rss|feed|item|entry)/i.test(xml)) return [] as RawStory[];
       return parseRss(xml, job.src.name);
     }
-    const html = await fetchText(`https://t.me/s/${job.src.channel}`, mode === "fast" ? 7000 : 5000);
+    const html = await fetchText(`https://t.me/s/${job.src.channel}`, 5000);
     if (!html) return [] as RawStory[];
     return parseTelegram(html, job.src.channel, job.src.name, !!job.src.indicator);
   });
