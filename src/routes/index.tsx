@@ -15,11 +15,11 @@ import {
   burnUrls,
   filterBurned,
   clearLocalDeskCache,
-  emptyBriefing,
   purgeLegacyDeskCache,
   saveQueueAt,
   scanDueAt,
 } from "@/lib/news/desk";
+import { hourLabelFromKey, hourKey as nowHourKey, todayDateLabel } from "@/lib/news/time";
 import {
   addSpare,
   ensureBriefing,
@@ -54,8 +54,8 @@ function seedDash(): DashboardData {
   return {
     briefing: {
       id: "seed",
-      hourLabel: "",
-      dateLabel: "",
+      hourLabel: hourLabelFromKey(nowHourKey()),
+      dateLabel: todayDateLabel(),
       generatedAt: new Date().toISOString(),
       status: "ready",
       payload: filterBurned(seed),
@@ -64,9 +64,9 @@ function seedDash(): DashboardData {
     hours: [],
     ticker: [],
     scanQueue: seed.spares.slice(0, 6),
-    currentHourKey: "seed",
-    currentClock: "",
-    currentDateLabel: "",
+    currentHourKey: nowHourKey(),
+    currentClock: hourLabelFromKey(nowHourKey()),
+    currentDateLabel: todayDateLabel(),
     generatingHour: null,
     scanningNext: false,
     scanDueAt: null,

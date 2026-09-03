@@ -52,6 +52,25 @@ async function localizeTicker() {
   if (he.length) await applyTickerHe(he);
 }
 
+function isSeedPayload(payload: BriefingPayload | undefined | null) {
+  if (!payload) return true;
+  const seed = new Set(
+    [
+      ...CURRENT_BRIEFING.arenas.flatMap((a) => a.items.map((i) => i.url)),
+      ...CURRENT_BRIEFING.spares.map((i) => i.url),
+    ].filter(Boolean),
+  );
+  const items = payload.arenas.flatMap((a) => a.items);
+  if (items.length === 0) return true;
+  const hits = items.filter((i) => seed.has(i.url)).length;
+  return hits >= Math.ceil(items.length * 0.6);
+}
+
+function isSeedDash(dash: { briefing?: { payload: BriefingPayload } | null; latestBriefing?: { payload: BriefingPayload } | null }) {
+  const p = dash.briefing?.payload ?? dash.latestBriefing?.payload;
+  return isSeedPayload(p);
+}
+
 async function generateForHour(id: string) {
   const parts = israelParts();
   const dayPrefix = `${parts.year}-${parts.month}-${parts.day}`;
@@ -59,7 +78,7 @@ async function generateForHour(id: string) {
     const stories = await Promise.race([
       ingestStories(true, "fast"),
       new Promise<RawStory[]>((resolve) => {
-        setTimeout(() => resolve([]), 8_000);
+        setTimeout(() => resolve([]), 20_000);
       }),
     ]);
     const [seen, previous, ticker] = await Promise.all([
@@ -218,7 +237,6 @@ export const getDashboard = createServerFn({ method: "POST" })
 export const refreshTicker = createServerFn({ method: "POST" }).handler(
   async () => {
     await ensureDeskGeneration();
-    await clearTicker();
     await ingestStories(true, "fast");
     await setMeta("last_ingest_at", new Date().toISOString());
     await localizeTicker();
@@ -239,14 +257,15 @@ export const ensureBriefing = createServerFn({ method: "POST" })
     const dash = await buildDashboard(id);
     const has =
       briefingHasContent(dash.briefing) || briefingHasContent(dash.latestBriefing);
-    if (data.force || wiped || !has) {
+    const seedish = isSeedDash(dash);
+    if (data.force || wiped || !has || seedish) {
       inflight.delete(id);
       await claimBriefing(id, true);
       const task = generateForHour(id).finally(() => inflight.delete(id));
       inflight.set(id, task);
       await Promise.race([
         task,
-        new Promise((r) => setTimeout(r, 9_000)),
+        new Promise((r) => setTimeout(r, 22_000)),
       ]);
       return buildDashboard(id);
     }

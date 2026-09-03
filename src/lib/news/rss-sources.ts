@@ -254,7 +254,7 @@ export const X_HANDLES = [
 ];
 
 /** Owner X (Twitter) source lists — monitor for exclusives; always open the primary outlet. */
-/** Owner X lists — tip-off only (never publish list/member tweets as source of record). Find the primary outlet. */
+/** Owner X lists — catalog only, NOT ingested (no Twitter API; tip-off for humans). */
 export const X_LISTS: { name: string; id: string; url: string; tipOff: true }[] = [
   { name: "list-1", id: "2028039297878634889", url: "https://x.com/i/lists/2028039297878634889", tipOff: true },
   { name: "list-2", id: "193997610", url: "https://x.com/i/lists/193997610", tipOff: true },

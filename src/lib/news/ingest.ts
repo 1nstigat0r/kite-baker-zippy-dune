@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { RSS_SOURCES, TELEGRAM_SOURCES } from "./sources";
+import { RSS_SOURCES } from "./sources";
 import { insertTicker, getMeta, setMeta } from "./store";
 import {
   resolveArena,
@@ -142,15 +142,15 @@ async function poolMap<T, R>(items: T[], size: number, fn: (item: T) => Promise<
 
 export type IngestMode = "fast" | "full";
 
-/** Priority RSS only — must finish inside Vercel hobby/pro cold budgets. */
-const FAST_RSS = RSS_SOURCES.filter((s) =>
-  /aljazeera|bbc|middleeasteye|al-monitor|reuters|guardian|france24|aa\.com|iranintl|thecradle/i.test(
-    s.url,
-  ),
-).slice(0, 8);
-
-/** Top Telegram primaries for the full path. */
-const FAST_TG = TELEGRAM_SOURCES.filter((s) => !s.indicator).slice(0, 12);
+/** 6 RSS only on the request path — Telegram pool times out Vercel. */
+const FAST_RSS: { name: string; url: string }[] = [
+  { name: "BBC", url: "https://feeds.bbci.co.uk/news/world/middle_east/rss.xml" },
+  { name: "אלג'זירה", url: "https://www.aljazeera.com/xml/rss/all.xml" },
+  { name: "MEE", url: "https://www.middleeasteye.net/rss.xml" },
+  { name: "ה-Guardian", url: "https://www.theguardian.com/world/middleeast/rss" },
+  { name: "איראן אינטרנשיונל", url: "https://www.iranintl.com/feed" },
+  { name: "פראנס 24", url: "https://www.france24.com/en/middle-east/rss" },
+];
 
 export async function ingestStories(
   force = false,
@@ -165,14 +165,10 @@ export async function ingestStories(
   }
   await setMeta("ticker_at", String(Date.now()));
 
-  // Fast: 8 RSS only (~5s). Full: RSS + TG.
-  const jobs =
-    mode === "fast"
-      ? FAST_RSS.map((src) => ({ kind: "rss" as const, src }))
-      : [
-          ...RSS_SOURCES.map((src) => ({ kind: "rss" as const, src })),
-          ...TELEGRAM_SOURCES.map((src) => ({ kind: "tg" as const, src })),
-        ];
+  // Fast: 6 proven RSS. Full: entire RSS catalog (no Telegram, no X).
+  const jobs = (mode === "fast" ? FAST_RSS : RSS_SOURCES).map(
+    (src) => ({ kind: "rss" as const, src }),
+  );
 
   const batches = await poolMap(jobs, mode === "fast" ? 8 : 10, async (job) => {
     if (job.kind === "rss") {
