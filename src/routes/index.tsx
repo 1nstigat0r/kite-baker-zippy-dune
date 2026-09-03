@@ -412,11 +412,10 @@ function Home() {
         <div className="flex h-16 items-center sm:h-20">
           <div className="flex h-full min-w-0 flex-1 items-center overflow-hidden border-b border-gold/25">
             <div
-              key={tickKey}
               className="ticker-track flex h-full w-max items-center gap-12 whitespace-nowrap px-5 text-base text-fg-on-dark sm:text-lg"
             >
               {tickerRows.map((row, i) => (
-                <span key={row.url + i} className="inline-flex items-center gap-1.5 leading-none">
+                <span key={row.url + i} className="ticker-item inline-flex items-center gap-1.5 leading-none">
                   {row.url !== "#" ? (
                     <button
                       type="button"
@@ -427,7 +426,7 @@ function Home() {
                         e.stopPropagation();
                         onAddTickerToSpare(row.url);
                       }}
-                      className="inline-flex size-5 shrink-0 items-center justify-center rounded-full border border-gold/55 text-[11px] font-bold text-gold hover:bg-gold hover:text-bg"
+                      className="ticker-plus inline-flex size-5 shrink-0 items-center justify-center rounded-full border border-gold/55 text-[11px] font-bold text-gold hover:bg-gold hover:text-bg"
                     >
                       +
                     </button>

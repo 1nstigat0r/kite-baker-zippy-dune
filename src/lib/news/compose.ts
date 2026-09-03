@@ -379,8 +379,8 @@ export function itemInterest(item: { speaker: string; body: string; publishedAt?
 /**
  * After «השתמשתי»: new briefing from strongest *current spares only*.
  * Consumed briefing items are DROPPED (not demoted to spares).
- * Leftover unused spares are also cleared — spares refill from live scan.
- * If too few spares, pad briefly from unused spare-pool only (never used briefing).
+ * Leftover unused spares stay in the spare list (6 go up, the rest remain).
+ * Used briefing items are never demoted into spares.
  */
 export function briefingFromSpares(payload: BriefingPayload, max = 6): BriefingPayload {
   const sparePool = [...(payload.spares ?? [])].sort(
@@ -414,8 +414,9 @@ export function briefingFromSpares(payload: BriefingPayload, max = 6): BriefingP
     arenas.set(arenaId, list);
   }
 
-  // Do NOT carry leftover old spares or used briefing items.
-  // Empty spares → live scan / absorbFinds fills them.
+  const pickedIds = new Set(picked.map((r) => r.id));
+  const leftover = sparePool.filter((r) => !pickedIds.has(r.id));
+
   const ordered = ARENA_ORDER.filter((id) => arenas.get(id)?.length).map((id) => {
     const items = (arenas.get(id) ?? []).sort(
       (a, b) => itemInterest(b) - itemInterest(a),
@@ -432,7 +433,7 @@ export function briefingFromSpares(payload: BriefingPayload, max = 6): BriefingP
     ensureItemIds({
       desk: DESK_STYLE,
       arenas: ordered,
-      spares: [],
+      spares: leftover.slice(0, 10),
     }),
   );
 }
