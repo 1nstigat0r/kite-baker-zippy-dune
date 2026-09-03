@@ -1,11 +1,10 @@
 import { CURRENT_BRIEFING } from "./desk";
 import {
-  classifyArena,
+  resolveArena,
   deskHeadline,
   fingerprint,
   formatOutlet,
   hasHebrew,
-  isGulfPolitics,
   isJunkItem,
   sameEvent,
   shapeCopy,
@@ -167,9 +166,8 @@ function fromStories(
     if (covered.some((p) => sameEvent(p, text))) continue;
     covered.push(text);
     seen.add(fp);
-    let arenaId = (story.arena ?? classifyArena(`${row.speaker} ${row.body}`) ?? "intl") as ArenaId;
+    let arenaId = resolveArena(text, story.arena);
     if (!ARENA_META[arenaId]) arenaId = "intl";
-    if (arenaId === "gulf" && !isGulfPolitics(text)) arenaId = "intl";
     const mainCount = [...arenas.values()].reduce((s, a) => s + a.length, 0);
     if (mainCount < 6) {
       const list = arenas.get(arenaId) ?? [];
@@ -275,7 +273,7 @@ function padSpares(payload: BriefingPayload, stories: RawStory[], previous: stri
     const row = storyToItem(story);
     if (!row) continue;
     if (covered.some((p) => sameEvent(p, itemText(row)))) continue;
-    let arenaId = (story.arena ?? classifyArena(itemText(row)) ?? "intl") as ArenaId;
+    let arenaId = resolveArena(itemText(row), story.arena);
     if (!ARENA_META[arenaId]) arenaId = "intl";
     spares.push({ ...row, id: makeId("s", row.url), arena: arenaId });
     covered.push(itemText(row));
@@ -372,7 +370,7 @@ export function briefingFromSpares(payload: BriefingPayload, max = 6): BriefingP
 
   const arenas = new Map<ArenaId, BriefingItem[]>();
   for (const row of picked) {
-    let arenaId = (row.arena ?? classifyArena(itemText(row)) ?? "intl") as ArenaId;
+    let arenaId = resolveArena(itemText(row), row.arena);
     if (!ARENA_META[arenaId]) arenaId = "intl";
     const list = arenas.get(arenaId) ?? [];
     list.push({
@@ -396,7 +394,7 @@ export function briefingFromSpares(payload: BriefingPayload, max = 6): BriefingP
     rest.push({
       ...row,
       id: makeId("s", row.url || row.id),
-      arena: (row.arena ?? classifyArena(t) ?? "intl") as ArenaId,
+      arena: resolveArena(t, row.arena),
     });
     covered.push(t);
   }
@@ -465,7 +463,7 @@ export function absorbFindsIntoPayload(
     if (knownUrls.has(row.url)) continue;
     const t = itemText(row);
     if (covered.some((p) => sameEvent(p, t))) continue;
-    let arenaId = (story.arena ?? classifyArena(t) ?? "intl") as ArenaId;
+    let arenaId = resolveArena(t, story.arena);
     if (!ARENA_META[arenaId]) arenaId = "intl";
     candidates.push({ item: row, arenaId, score: itemInterest(row) });
   }

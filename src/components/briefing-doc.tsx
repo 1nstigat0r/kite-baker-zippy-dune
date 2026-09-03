@@ -81,7 +81,7 @@ function whatsAppText(header: string, payload: BriefingPayload) {
   let n = 0;
   for (const arena of payload.arenas) {
     const shown = arenaPresentation(arena.id, arena.items);
-    const flags = shown.flags.map((c) => FLAG_EMOJI[c] ?? "🌐").join("");
+    const flags = shown.flags.map((c) => FLAG_EMOJI[c.toLowerCase()] ?? "🌐").join("");
     lines.push(`${shown.title} ${flags}`.trim());
     for (const item of arena.items) {
       n += 1;

@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { RSS_SOURCES, TELEGRAM_SOURCES } from "./sources";
 import { insertTicker, getMeta, setMeta } from "./store";
 import {
-  classifyArena,
+  resolveArena,
   firstLine,
   hasHebrew,
   isDeskStory,
@@ -79,7 +79,7 @@ function parseRss(xml: string, source: string): RawStory[] {
       url: url.trim(),
       source,
       publishedAt: parsePossiblyUtc(published)?.toISOString() ?? null,
-      arena: classifyArena(text),
+      arena: resolveArena(text),
       via: "rss",
     });
   }
@@ -110,7 +110,7 @@ function parseTelegram(
       url,
       source,
       publishedAt: parsePossiblyUtc(time)?.toISOString() ?? null,
-      arena: classifyArena(`${title} ${body}`),
+      arena: resolveArena(`${title} ${body}`),
       via: "telegram",
     });
   }

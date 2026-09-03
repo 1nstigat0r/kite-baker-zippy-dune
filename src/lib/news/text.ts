@@ -26,10 +26,10 @@ const GULF_GEO_RE =
   /סעודי|ריאד|אמירויות|אבו דאבי|דובאי|קטר|דוחה|כווית|בחריין|עומאן|מפרצי|\bgcc\b|saudi|riyadh|uae|abu dhabi|dubai|qatar|doha|kuwait|bahrain|oman|mbs|mbz|السعود|الإمارات|قطر|الكويت|البحرين|عُمان|عمان/i;
 
 const GULF_POL_RE =
-  /מלך|יורש|נסיך|אמיר|שר |נשיא|שגריר|דיפלומט|הסכם|ברית|פסגה|מועצה|חימוש|תקיפה|צבא|חיל|נורמליזציה|חמאס|איראן|חות|תימן|ישראל|minister|king|prince|emir|mbs|mbz|diplomatic|\bgcc\b|defense|defence|foreign|bin salman|bin zayed|tamim|נורמליז|חיזבאללה/i;
+  /מלך|יורש|נסיך|אמיר|שר |נשיא|שגריר|דיפלומט|הסכם|ברית|פסגה|מועצה|חימוש|תקיפה|צבא|חיל|נורמליזציה|חמאס|תימן|ישראל|minister|king|prince|emir|mbs|mbz|diplomatic|\bgcc\b|defense|defence|foreign|bin salman|bin zayed|tamim|נורמליז/i;
 
 const IRAN_RE =
-  /איראן|טהראן|ח['׳]?אמנאי|חמינאי|חמאנאי|פזשכיאן|קאליבאף|חסד["״]ם|משמרות המהפכה|משה["״]מ|הורמוז|נתנז|פורדו|אספהאן|\biran\b|tehran|khamenei|pezeshkian|qalibaf|ghalibaf|irgc|hormuz|natanz|fordow|islamic republic|إيران|طهران/i;
+  /איראן|איראני|טהראן|ח['׳]?אמנאי|חמינאי|חמאנאי|פזשכיאן|קאליבאף|חסד["״]ם|משמרות המהפכה|משה["״]מ|חה["״]י|הורמוז|נתנז|פורדו|אספהאן|סרדיניה|\biran\b|tehran|khamenei|pezeshkian|qalibaf|ghalibaf|irgc|hormuz|natanz|fordow|islamic republic|إيران|طهران|witkoff.*(?:uae|iran)|(?:uae|iran).*witkoff/i;
 
 const LEBANON_RE =
   /לבנון|ביירות|חיזבאללה|דאחי[יה]|נסראללה|נעים קאסם|\blebanon\b|beirut|hezbollah|nasrallah|dahieh|لبنان|حزب الله|بيروت/i;
@@ -386,17 +386,40 @@ export function fingerprint(url: string, text: string) {
 
 export function classifyArena(text: string): ArenaId | null {
   const t = text ?? "";
+  // Iran first — never park Iran under מפרציות / בינ״ל
   if (IRAN_RE.test(t)) return "iran";
   const leb = LEBANON_RE.test(t);
   const syr = SYRIA_RE.test(t);
   if (leb && !syr) return "lebanon";
-  if (syr) return "north";
+  if (syr && !leb) return "north";
+  if (leb && syr) return "north";
   if (leb) return "lebanon";
   if (AXIS_RE.test(t)) return "axis";
-  if (GULF_GEO_RE.test(t)) return "gulf";
+  if (GULF_GEO_RE.test(t) && isGulfPolitics(t) && !IRAN_RE.test(t)) return "gulf";
+  if (GULF_GEO_RE.test(t) && !IRAN_RE.test(t)) return "gulf";
   if (TURKEY_RE.test(t)) return "turkey";
   if (REGION_ARENA_RE.test(t)) return "region";
   return null;
+}
+
+/** Content wins over RSS host hint. Iran subject → iran even if outlet is Gulf/US. */
+export function resolveArena(text: string, hint?: string | null): ArenaId {
+  const t = text ?? "";
+  const byContent = classifyArena(t);
+  if (byContent === "iran" || IRAN_RE.test(t)) return "iran";
+  if (byContent) {
+    if (byContent === "gulf" && !isGulfPolitics(t)) return "intl";
+    return byContent;
+  }
+  const hintId =
+    hint && (hint in ARENA_META) ? (hint as ArenaId) : null;
+  if (hintId === "gulf") {
+    if (IRAN_RE.test(t)) return "iran";
+    if (isGulfPolitics(t)) return "gulf";
+    return "intl";
+  }
+  if (hintId) return hintId;
+  return "intl";
 }
 
 export function isRegional(text: string) {
@@ -501,8 +524,11 @@ export function arenaPresentation(
   items: Array<CopyBits | BriefingItem> = [],
 ): { title: string; flags: string[] } {
   const meta = ARENA_META[id] ?? ARENA_META.intl;
-  if (id === "intl") return { title: meta.title, flags: ["globe"] };
-  const found = flagsForItems(items);
+  if (id === "intl") return { title: "בינ״ל", flags: ["globe"] };
+  if (id === "iran") return { title: "איראן", flags: ["ir"] };
+  const found = flagsForItems(items).map((c) => c.toLowerCase());
+  // Desk: US mention inside a regional item does not add 🇺🇸
+  const filtered = found.filter((c) => c !== "us");
   const names: Record<string, string> = {
     ir: "איראן",
     lb: "לבנון",
@@ -517,11 +543,21 @@ export function arenaPresentation(
     eg: "מצרים",
     tr: "תורכיה",
   };
-  if (found.length === 1 && names[found[0]]) {
-    return { title: names[found[0]], flags: found };
+  if (id === "axis" && filtered.length === 1 && names[filtered[0]]) {
+    return { title: names[filtered[0]], flags: filtered };
   }
-  if (found.length) {
-    return { title: meta.title, flags: found.slice(0, 4) };
+  if (id === "gulf") {
+    const gulfOnly = filtered.filter((c) => ["sa", "ae", "qa", "kw", "bh", "om"].includes(c));
+    if (gulfOnly.length === 1 && names[gulfOnly[0]]) {
+      return { title: names[gulfOnly[0]], flags: gulfOnly };
+    }
+    return { title: "המפרציות", flags: gulfOnly.length ? gulfOnly : ["sa", "ae"] };
+  }
+  if (filtered.length === 1 && names[filtered[0]]) {
+    return { title: names[filtered[0]], flags: filtered };
+  }
+  if (filtered.length) {
+    return { title: meta.title, flags: filtered.slice(0, 4) };
   }
   return { title: meta.title, flags: [...meta.flags] };
 }

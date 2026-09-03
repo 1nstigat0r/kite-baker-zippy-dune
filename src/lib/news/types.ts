@@ -146,7 +146,8 @@ export function flagsForItems(items: BriefingItem[]): string[] {
 
 export function arenaPresentation(id: ArenaId, items: BriefingItem[]) {
   if (id === "intl") return { title: "בינ״ל", flags: ["globe"] as string[] };
-  const flags = flagsForItems(items);
+  if (id === "iran") return { title: "איראן", flags: ["ir"] as string[] };
+  const flags = flagsForItems(items).map((c) => c.toLowerCase()).filter((c) => c !== "us");
   const names: Record<string, string> = {
     ir: "איראן",
     lb: "לבנון",
@@ -161,6 +162,16 @@ export function arenaPresentation(id: ArenaId, items: BriefingItem[]) {
     eg: "מצרים",
     tr: "תורכיה",
   };
+  if (id === "axis" && flags.length === 1 && names[flags[0]]) {
+    return { title: names[flags[0]], flags };
+  }
+  if (id === "gulf") {
+    const gulfOnly = flags.filter((c) => ["sa", "ae", "qa", "kw", "bh", "om"].includes(c));
+    if (gulfOnly.length === 1 && names[gulfOnly[0]]) {
+      return { title: names[gulfOnly[0]], flags: gulfOnly };
+    }
+    return { title: "המפרציות", flags: gulfOnly.length ? gulfOnly : ["sa", "ae"] };
+  }
   if (flags.length === 1 && names[flags[0]]) {
     return { title: names[flags[0]], flags };
   }
