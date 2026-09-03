@@ -182,14 +182,14 @@ export function BriefingDoc({
         <button
           type="button"
           onClick={onUsed}
-          disabled={used}
+          disabled={false}
           className={cn(
             "inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold shadow-[0_6px_0_0_var(--color-gold-deep),0_10px_18px_rgba(0,0,0,0.35)] transition active:translate-y-0.5 active:shadow-[0_3px_0_0_var(--color-gold-deep)]",
             used ? "bg-navy-2 text-fg-on-dark/80" : "bg-gold text-bg hover:bg-gold-deep",
           )}
         >
           <Check className="size-4" strokeWidth={2.4} />
-          {used ? "סומן כמשומש" : "השתמשתי בעדכון"}
+          {used ? "השתמשתי שוב" : "השתמשתי בעדכון"}
         </button>
       </div>
 

@@ -7,6 +7,8 @@ import {
   CURRENT_BRIEFING,
   TICKER,
   activePayload,
+  burnSeedBriefingUrls,
+  clearUsedLocal,
   formatDue,
   isScanning,
   loadOriginalIds,
@@ -139,20 +141,43 @@ function Home() {
   const scanQueueRef = useRef<SpareItem[]>([]);
 
   useEffect(() => {
-    const used = loadUsedAt();
+    let used = loadUsedAt();
     const orig = loadOriginalIds();
     originalsRef.current = orig;
-    setUsedAt(used);
-    setOriginalIds(orig);
     queueAt.current = loadQueueAt();
     const p = pickPayload(initial ?? seedDash());
-    // Prefer persisted post-השתמשתי draft over server seed on hard refresh.
     const local = activePayload();
-    const chosen =
+    let chosen =
       payloadItemCount(local) > 0 &&
       (looksLikeSeed(p.payload) || payloadItemCount(stripBurned(p.payload)) === 0)
         ? local
         : p.payload;
+    chosen = stripBurned(chosen);
+
+    // Stuck: «משומש» locked but old seed briefing still on screen — unlock + burn seed exclusives.
+    if (used && (looksLikeSeed(chosen) || payloadItemCount(chosen) === 0)) {
+      burnSeedBriefingUrls();
+      clearUsedLocal();
+      used = null;
+      chosen = stripBurned(
+        payloadItemCount(local) > 0 && !looksLikeSeed(local)
+          ? local
+          : structuredClone(CURRENT_BRIEFING),
+      );
+      // If still empty after burning seed arenas, keep seed spares promoted locally
+      if (payloadItemCount(chosen) === 0) {
+        void import("@/lib/news/compose").then(({ briefingFromSpares }) => {
+          const next = stripBurned(briefingFromSpares(CURRENT_BRIEFING, 6));
+          if (payloadItemCount(next) > 0) {
+            setPayload(next);
+            persistPayloadLocal(next);
+          }
+        });
+      }
+    }
+
+    setUsedAt(used);
+    setOriginalIds(used ? orig : []);
     setPayload(chosen);
     setHeader(p.header);
     setHourKey(p.hourKey);

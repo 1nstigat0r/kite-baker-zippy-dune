@@ -206,10 +206,10 @@ export const BRIEFING_HEADER = briefingHeaderNow();
 export const SWAP_EVERY_MS = 12_000;
 export const SCAN_MS = 40 * 60 * 1000;
 
-const USED_KEY = "idkun-used-at-v9";
-const PAYLOAD_KEY = "idkun-payload-v9";
-const ORIG_KEY = "idkun-orig-ids-v9";
-const QUEUE_KEY = "idkun-queue-at-v9";
+const USED_KEY = "idkun-used-at-v10";
+const PAYLOAD_KEY = "idkun-payload-v10";
+const ORIG_KEY = "idkun-orig-ids-v10";
+const QUEUE_KEY = "idkun-queue-at-v10";
 const BURN_URLS_KEY = "idkun-burned-urls-v9";
 
 function lsGet(key: string): string | null {
@@ -299,7 +299,30 @@ export function stripBurned(payload: BriefingPayload): BriefingPayload {
   };
 }
 
+export function burnSeedBriefingUrls() {
+  const burned = loadBurnedUrls();
+  for (const arena of CURRENT_BRIEFING.arenas) {
+    for (const item of arena.items) {
+      if (item.url) burned.add(item.url);
+      if (item.shortUrl) burned.add(item.shortUrl);
+    }
+  }
+  persistBurnedUrls(burned);
+}
+
+export function clearUsedLocal() {
+  try {
+    if (typeof localStorage === "undefined") return;
+    localStorage.removeItem(USED_KEY);
+    localStorage.removeItem(ORIG_KEY);
+    localStorage.removeItem(QUEUE_KEY);
+  } catch {
+    /* iframe */
+  }
+}
+
 export function markUsedLocal(payload: BriefingPayload) {
+
   lsSet(USED_KEY, String(Date.now()));
   lsSet(ORIG_KEY, JSON.stringify(listItemIds(payload)));
   lsSet(QUEUE_KEY, "0");
