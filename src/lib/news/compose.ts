@@ -15,6 +15,7 @@ import {
   isPropagandaCopy,
   isUsDomesticOffDesk,
   sameEvent,
+  stripEmoji,
   tooMuchLatin,
   shapeCopy,
   shortenSpeaker,
@@ -583,7 +584,7 @@ export async function composeTickerItem(story: RawStory): Promise<TickerItem | n
   const he = await localizeHeadlineAsync(story.title, story.source);
   const item = storyToItem({ ...story, title: he });
   if (!item) return null;
-  const body = item.body.replace(/\*\*/g, "").replace(/^דחוף\s*[|｜]\s*/, "");
+  const body = stripEmoji(item.body.replace(/\*\*/g, "").replace(/^דחוף\s*[|｜]\s*/, ""));
   if (!hasHebrew(body) || tooMuchLatin(body) || body.length < 20) return null;
   if (failsTickerQuality(body)) return null;
   return {

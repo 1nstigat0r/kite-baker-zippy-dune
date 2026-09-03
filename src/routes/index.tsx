@@ -38,7 +38,7 @@ import { packSparesNow, tickerToSpare } from "@/lib/news/compose";
 import { formatHeDateTime } from "@/lib/news/time";
 import { mergeTicker, nextPackLabel, shouldPackHour } from "@/lib/news/ticker-loop";
 import { displayShort } from "@/lib/news/display-short";
-import { attributionLead, formatOutlet, hasHebrew } from "@/lib/news/text";
+import { attributionLead, formatOutlet, hasHebrew, stripEmoji } from "@/lib/news/text";
 import {
   briefingHasContent,
   briefingItemCount,
@@ -270,7 +270,7 @@ function Home() {
   const tickerRows = useMemo(() => {
     const live = tickerItems
       .map((row) => {
-        const text = (row.titleHe || "").replace(/\*\*/g, "");
+        const text = stripEmoji((row.titleHe || "").replace(/\*\*/g, ""));
         const source = attributionLead(row.source || "מבזק");
         const url = displayShort(undefined, row.url) || row.url;
         return { source, text, url };

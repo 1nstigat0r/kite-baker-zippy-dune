@@ -415,8 +415,6 @@ export function toDeskHebrew(text: string) {
     [/\bAl-?Masirah\b/gi, "אלמסירה"],
     [/\bAl-?Quds\b/gi, "קדס"],
     [/צבא ישראלי הורג/g, "צה\"ל הרג"],
-    [/פלסטין הכבושה/g, "עזה"],
-    [/occupied palestine/gi, "עזה"],
     [/^כתב\s+[^:]+:\s*/g, ""],
   ];
   for (const [re, to] of pairs) s = s.replace(re, to);
@@ -433,7 +431,29 @@ export function stripAlHyphen(text: string) {
 
 /** Leftover enemy-desk phrasing that was not recast into an Israeli desk report. */
 export function isPropagandaCopy(text: string) {
-  return /משטר ציוני|ישות ציונית|כיבוש ציוני|תוקפנות ציונית|פלסטין הכבושה|שהיד|ציוניים|الكيان|الصهيون|صهیون|זרעי רוואנש|זרע רוואנש/i.test(
+  return /משטר ציוני|ישות ציונית|כיבוש|פלסטין הכבושה|השטחים הכבושים|תוקפנות ציונית|שהיד|ציוניים|occupied palestine|occupied territories|الكيان|الصهيون|صهیون|المحتل|זרעי רוואנש|זרע רוואנש/i.test(
+    text ?? "",
+  );
+}
+
+export function stripEmoji(text: string) {
+  return (text ?? "").replace(/\p{Extended_Pictographic}/gu, "").replace(/\s+/g, " ").trim();
+}
+
+export function hasEmoji(text: string) {
+  return /\p{Extended_Pictographic}/u.test(text ?? "");
+}
+
+/** Photo essays / aftermath color — not a desk exclusive. */
+export function isPhotoColor(text: string) {
+  return /צילומ(?:י|ים)? אוויר|צילומים מראים|תמונות מראות|מראים את ההרס|ההרס ב|aerial (?:photo|image|footage)|footage shows|pictures show|וידאו מראה|תיעוד אווירי/i.test(
+    text ?? "",
+  );
+}
+
+/** A flash must be an event or an official statement, not scenery. */
+export function hasNewsHook(text: string) {
+  return /תקיפ|הפגז|הפצצ|טיל|מסר|הודיע|איים|נסוג|הרג|ירה|סנקצ|הסכים|דחה|הכריז|הורה|יירוט|כטב|חיזבאללה|חות['׳]?ים|חסד["״]ם|הורמוז|שביתת נשק|הפסקת אש|דיפלומט|גרעין|חימוש|הכריח/i.test(
     text ?? "",
   );
 }
@@ -530,7 +550,11 @@ export function isOffDeskFiller(text: string) {
 }
 
 export function failsTickerQuality(text: string) {
-  return isWeakDeskCopy(text) || isOffDeskFiller(text) || isPropagandaCopy(text) || tooMuchLatin(text);
+  const s = stripEmoji(text ?? "");
+  if (hasEmoji(text)) return true;
+  if (isPhotoColor(s)) return true;
+  if (!hasNewsHook(s)) return true;
+  return isWeakDeskCopy(s) || isOffDeskFiller(s) || isPropagandaCopy(s) || tooMuchLatin(s);
 }
 
 export function isUsDomesticOffDesk(text: string) {
@@ -675,8 +699,8 @@ export function isRegional(text: string) {
 
 export function isDeskStory(text: string) {
   const t = text ?? "";
-  if (JUNK_RE.test(t)) return false;
-  if (DESK_RE.test(t)) return true;
+  if (JUNK_RE.test(t) || isPhotoColor(t) || isPropagandaCopy(t) || hasEmoji(t)) return false;
+  if (DESK_RE.test(t) && hasNewsHook(t)) return true;
   const arena = classifyArena(t);
   return arena === "iran" || arena === "lebanon" || arena === "north" || arena === "axis";
 }
@@ -740,9 +764,10 @@ export function sameEvent(a: string, b: string) {
 
 export function shapeCopy(speaker: string, body: string, url = "") {
   let sp = shortenSpeaker(speaker ?? "");
-  let bd = toDeskHebrew(body ?? "");
+  let bd = stripEmoji(toDeskHebrew(body ?? ""));
   bd = bd.replace(/\s*20\d{2}-\d{2}-\d{2}T[\d:.Z+-]+/g, "").trim();
-  bd = bd.replace(/^\s*(?:BREAKING|عاجل|דחוף|عاجل جدا|מבזק)\s*[:\-–]\s*/i, "");
+  bd = bd.replace(/^\s*(?:BREAKING|عاجل|דחוף|عاجل جدا|מבזק|פלסטין הכבושה)\s*[:\-–]\s*/i, "");
+  bd = bd.replace(/^כתב\s+[^:]+:\s*/, "");
   if (sp) {
     const escaped = sp.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     bd = bd.replace(new RegExp(`^${escaped}\\s*[:：]\\s*`), "");
