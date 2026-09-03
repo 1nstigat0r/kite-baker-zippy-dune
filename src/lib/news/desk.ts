@@ -210,7 +210,7 @@ const USED_KEY = "idkun-used-at-v8";
 const PAYLOAD_KEY = "idkun-payload-v8";
 const ORIG_KEY = "idkun-orig-ids-v8";
 const QUEUE_KEY = "idkun-queue-at-v8";
-const BURN_URLS_KEY = "idkun-burned-urls-v8";
+const BURN_URLS_KEY = "idkun-burned-urls-v9";
 
 function lsGet(key: string): string | null {
   try {
@@ -271,17 +271,13 @@ function persistBurnedUrls(urls: Set<string>) {
   lsSet(BURN_URLS_KEY, JSON.stringify([...urls].slice(-500)));
 }
 
-function collectPayloadUrls(payload: BriefingPayload): string[] {
+function collectBriefingUrls(payload: BriefingPayload): string[] {
   const urls: string[] = [];
   for (const arena of payload.arenas) {
     for (const item of arena.items) {
       if (item.url) urls.push(item.url);
       if (item.shortUrl) urls.push(item.shortUrl);
     }
-  }
-  for (const spare of payload.spares ?? []) {
-    if (spare.url) urls.push(spare.url);
-    if (spare.shortUrl) urls.push(spare.shortUrl);
   }
   return urls;
 }
@@ -308,7 +304,7 @@ export function markUsedLocal(payload: BriefingPayload) {
   lsSet(ORIG_KEY, JSON.stringify(listItemIds(payload)));
   lsSet(QUEUE_KEY, "0");
   const burned = loadBurnedUrls();
-  for (const url of collectPayloadUrls(payload)) burned.add(url);
+  for (const url of collectBriefingUrls(payload)) burned.add(url);
   persistBurnedUrls(burned);
 }
 
@@ -333,7 +329,11 @@ export function activePayload(): BriefingPayload {
       /* ignore */
     }
   }
-  return stripBurned(structuredClone(CURRENT_BRIEFING));
+  const seed = stripBurned(structuredClone(CURRENT_BRIEFING));
+  const seedCount = seed.arenas.reduce((sum, arena) => sum + arena.items.length, 0);
+  if (seedCount > 0) return seed;
+  // Last resort: never show a blank card even if burns wiped the seed.
+  return structuredClone(CURRENT_BRIEFING);
 }
 
 export function persistPayloadLocal(payload: BriefingPayload) {

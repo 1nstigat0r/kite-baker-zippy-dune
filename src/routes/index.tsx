@@ -215,7 +215,15 @@ function Home() {
       });
       setDash(next);
       const p = pickPayload(next);
-      const cleaned = stripBurned(p.payload);
+      let cleaned = stripBurned(p.payload);
+      const cleanedCount = cleaned.arenas.reduce((s, a) => s + a.items.length, 0);
+      if (cleanedCount === 0) {
+        const { briefingFromSpares } = await import("@/lib/news/compose");
+        cleaned = stripBurned(briefingFromSpares(payload, 6));
+      }
+      if (cleaned.arenas.reduce((s, a) => s + a.items.length, 0) === 0) {
+        cleaned = payload; // never blank the card
+      }
       setPayload(cleaned);
       setHeader(p.header);
       setHourKey(p.hourKey);
@@ -223,7 +231,8 @@ function Home() {
       scanQueueRef.current = (cleaned.spares ?? next.scanQueue ?? []).slice(0, 10);
     } catch {
       const { briefingFromSpares } = await import("@/lib/news/compose");
-      const local = stripBurned(briefingFromSpares(payload, 6));
+      let local = stripBurned(briefingFromSpares(payload, 6));
+      if (local.arenas.reduce((s, a) => s + a.items.length, 0) === 0) local = payload;
       setPayload(local);
       persistPayloadLocal(local);
       scanQueueRef.current = local.spares.slice(0, 10);

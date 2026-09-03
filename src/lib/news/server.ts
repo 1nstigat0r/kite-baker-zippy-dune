@@ -6,6 +6,7 @@ import {
   composeLiveOnly,
   localizeHeadline,
 } from "./compose";
+import { CURRENT_BRIEFING } from "./desk";
 import { ingestStories } from "./ingest";
 import { shortenPayload } from "./shorten";
 import {
@@ -263,16 +264,13 @@ export const markUsed = createServerFn({ method: "POST" })
     const takeUrl = (url?: string | null) => {
       if (url) burnedUrls.add(url);
     };
+    // Burn briefing items only — spares must stay available to promote.
     for (const arena of current.arenas) {
       for (const item of arena.items) {
         burned.push(fingerprint(item.url, `${item.speaker} ${item.body}`));
         takeUrl(item.url);
         takeUrl(item.shortUrl);
       }
-    }
-    for (const spare of current.spares ?? []) {
-      takeUrl(spare.url);
-      takeUrl(spare.shortUrl);
     }
     if (burned.length) await addSeen(data.hourKey || "used", burned);
 
@@ -309,13 +307,25 @@ export const markUsed = createServerFn({ method: "POST" })
           listSeen(dayPrefix),
           previousBodies(dayPrefix, data.hourKey),
         ]);
-        next = composeLiveOnly({ stories: pool, previous, seen });
+        const live = composeLiveOnly({ stories: pool, previous, seen });
+        if (briefingItemCount(live) > 0) next = live;
+        else next = absorbFindsIntoPayload(next, pool);
       } else if (pool.length) {
         next = absorbFindsIntoPayload(next, pool);
       }
       next = stripBurnedUrls(next);
     } catch (err) {
       console.error("[markUsed-ingest]", err instanceof Error ? err.message : err);
+    }
+
+    if (briefingItemCount(next) === 0) {
+      next = stripBurnedUrls(briefingFromSpares(current, 6));
+    }
+    if (briefingItemCount(next) === 0) {
+      next = stripBurnedUrls(structuredClone(CURRENT_BRIEFING));
+    }
+    if (briefingItemCount(next) === 0) {
+      next = structuredClone(CURRENT_BRIEFING);
     }
 
     const nowId = hourKey();
