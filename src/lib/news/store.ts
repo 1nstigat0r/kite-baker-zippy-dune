@@ -463,11 +463,29 @@ export async function buildDashboard(selectedHour?: string): Promise<DashboardDa
       : briefing;
   const scanQueue = (view?.payload.spares ?? []).slice(0, 10);
 
+  // Ticker must not echo the live briefing/spares.
+  const deskUrls = new Set<string>();
+  if (view?.payload) {
+    for (const arena of view.payload.arenas) {
+      for (const item of arena.items) {
+        if (item.url) deskUrls.add(item.url);
+        if (item.shortUrl) deskUrls.add(item.shortUrl);
+      }
+    }
+    for (const item of view.payload.spares ?? []) {
+      if (item.url) deskUrls.add(item.url);
+      if (item.shortUrl) deskUrls.add(item.shortUrl);
+    }
+  }
+  const tickerDistinct = ticker.filter(
+    (row) => !deskUrls.has(row.url) && !(row.url.endsWith("/") && deskUrls.has(row.url.slice(0, -1))),
+  );
+
   return {
     briefing: briefing ?? null,
     latestBriefing: latest,
     hours: [...hourSet.values()].sort((a, b) => (a.id < b.id ? 1 : -1)),
-    ticker,
+    ticker: tickerDistinct,
     scanQueue,
     currentHourKey: current,
     currentClock: formatHeClock(now),

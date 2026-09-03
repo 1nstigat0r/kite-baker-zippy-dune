@@ -148,10 +148,10 @@ function Home() {
     };
     const poll = window.setInterval(() => {
       void getDashboard({ data: {} }).then(applyDash).catch(() => undefined);
-    }, 15_000);
+    }, 12_000);
     const tick = window.setInterval(() => {
       void onRefreshTicker();
-    }, 45_000);
+    }, 30_000);
     return () => {
       window.clearInterval(poll);
       window.clearInterval(tick);
@@ -165,18 +165,36 @@ function Home() {
   const total = Math.max(originalIds.length, 1);
   const replaced = 0;
 
+  const deskUrlSet = useMemo(() => {
+    const s = new Set<string>();
+    for (const arena of payload.arenas) {
+      for (const item of arena.items) {
+        if (item.url) s.add(item.url);
+        if (item.shortUrl) s.add(item.shortUrl);
+      }
+    }
+    for (const item of payload.spares ?? []) {
+      if (item.url) s.add(item.url);
+      if (item.shortUrl) s.add(item.shortUrl);
+    }
+    return s;
+  }, [payload]);
+
   const tickerRows = useMemo(() => {
     const live = dash.ticker
       .map((row) => {
         const text = (row.titleHe || row.title || "").replace(/\*\*/g, "");
         const source = row.source || "מבזק";
         const url = displayShort(undefined, row.url) || row.url;
-        return { source, text, url };
+        return { source, text, url, raw: row.url };
       })
-      .filter((row) => row.text.length > 8);
-    const base = live.length ? live : TICKER;
+      .filter((row) => row.text.length > 8)
+      .filter((row) => !deskUrlSet.has(row.raw) && !deskUrlSet.has(row.url));
+    // Prefer live scan ticker; static TICKER only if still empty, and never desk dupes.
+    const fallback = TICKER.filter((row) => !deskUrlSet.has(row.url));
+    const base = live.length ? live : fallback;
     return [...base, ...base];
-  }, [dash.ticker]);
+  }, [dash.ticker, deskUrlSet]);
 
   async function onRefreshTicker() {
     setScanningTicker(true);

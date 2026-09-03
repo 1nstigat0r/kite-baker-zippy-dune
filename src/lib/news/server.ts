@@ -28,7 +28,6 @@ import {
   previousBodies,
   pruneTicker,
   saveBriefing,
-  seedTicker,
   setMeta,
   swapSpareItem,
 } from "./store";
@@ -99,9 +98,9 @@ async function generateForHour(id: string) {
       prints.push(fingerprint(item.url, `${item.speaker} ${item.body}`));
     }
     await addSeen(id, prints);
+    // Ticker stays scan-only — never seed from briefing/spares text.
     if (result.tickerHe.length) {
       await applyTickerHe(result.tickerHe);
-      await seedTicker(result.tickerHe);
     }
     await localizeTicker();
     await pruneTicker(16);
@@ -118,7 +117,7 @@ function kickIngest() {
   if (ingestKick) return;
   ingestKick = (async () => {
     await setMeta("last_ingest_at", new Date().toISOString());
-    await ingestStories(false);
+    await ingestStories(true, "hot");
     await localizeTicker();
     await pruneTicker(16);
   })()
@@ -146,9 +145,15 @@ async function refineActiveDraft() {
   const draftId = (await getMeta("active_draft_id")) || hourKey();
   const briefing = await getBriefing(draftId);
   if (!briefingHasContent(briefing)) return;
-  const stories = await storiesFromTicker();
+  const payload = briefing!.payload;
+  const known = new Set([
+    ...payload.arenas.flatMap((a) => a.items.flatMap((i) => [i.url, i.shortUrl ?? ""])),
+    ...payload.spares.flatMap((i) => [i.url, i.shortUrl ?? ""]),
+  ]);
+  known.delete("");
+  const stories = (await storiesFromTicker()).filter((s) => !known.has(s.url));
   if (!stories.length) return;
-  const updated = absorbFindsIntoPayload(briefing!.payload, stories);
+  const updated = absorbFindsIntoPayload(payload, stories);
   await saveBriefing(draftId, await shortenPayload(updated));
 }
 
@@ -204,7 +209,7 @@ export const getDashboard = createServerFn({ method: "POST" })
 
 export const refreshTicker = createServerFn({ method: "POST" }).handler(
   async () => {
-    await ingestStories(false);
+    await ingestStories(true, "hot");
     await setMeta("last_ingest_at", new Date().toISOString());
     await localizeTicker();
     await pruneTicker(16);
