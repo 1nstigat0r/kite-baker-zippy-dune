@@ -340,6 +340,214 @@ export async function composeBriefing(input: {
   return { payload, tickerHe };
 }
 
+
+export function itemInterest(item: { speaker: string; body: string; publishedAt?: string | null }) {
+  return interestScore(itemText(item), item.publishedAt);
+}
+
+/** Immediate next briefing: strongest spares (pad from current items if thin). */
+export function briefingFromSpares(payload: BriefingPayload, max = 6): BriefingPayload {
+  const sparePool = [...(payload.spares ?? [])].sort(
+    (a, b) => itemInterest(b) - itemInterest(a),
+  );
+  const fromBriefing: SpareItem[] = payload.arenas.flatMap((arena) =>
+    arena.items.map((it) => ({
+      ...it,
+      id: makeId("s", it.url || it.id),
+      arena: arena.id as ArenaId,
+    })),
+  ).sort((a, b) => itemInterest(b) - itemInterest(a));
+
+  const picked: SpareItem[] = [];
+  const covered: string[] = [];
+  const take = (row: SpareItem) => {
+    if (picked.length >= max) return;
+    const t = itemText(row);
+    if (covered.some((p) => sameEvent(p, t))) return;
+    picked.push(row);
+    covered.push(t);
+  };
+  for (const row of sparePool) take(row);
+  for (const row of fromBriefing) take(row);
+
+  const arenas = new Map<ArenaId, BriefingItem[]>();
+  for (const row of picked) {
+    let arenaId = (row.arena ?? classifyArena(itemText(row)) ?? "intl") as ArenaId;
+    if (!ARENA_META[arenaId]) arenaId = "intl";
+    const list = arenas.get(arenaId) ?? [];
+    list.push({
+      id: makeId("i", row.url || row.id),
+      speaker: row.speaker,
+      body: row.body,
+      url: row.url,
+      shortUrl: row.shortUrl,
+      publishedAt: row.publishedAt,
+    });
+    arenas.set(arenaId, list);
+  }
+
+  const pickedUrls = new Set(picked.map((r) => r.url));
+  const rest: SpareItem[] = [];
+  for (const row of [...sparePool, ...fromBriefing]) {
+    if (rest.length >= 10) break;
+    if (pickedUrls.has(row.url)) continue;
+    const t = itemText(row);
+    if (covered.some((p) => sameEvent(p, t))) continue;
+    rest.push({
+      ...row,
+      id: makeId("s", row.url || row.id),
+      arena: (row.arena ?? classifyArena(t) ?? "intl") as ArenaId,
+    });
+    covered.push(t);
+  }
+
+  const ordered = ARENA_ORDER.filter((id) => arenas.get(id)?.length).map((id) => {
+    const items = (arenas.get(id) ?? []).sort(
+      (a, b) => itemInterest(b) - itemInterest(a),
+    );
+    return {
+      id,
+      title: ARENA_META[id].title,
+      flags: ARENA_META[id].flags,
+      items,
+    };
+  });
+
+  return decorateArenas(
+    ensureItemIds({
+      desk: DESK_STYLE,
+      arenas: ordered,
+      spares: rest.slice(0, 10),
+    }),
+  );
+}
+
+const SCORE_MARGIN = 0.35;
+
+function flatBriefingItems(payload: BriefingPayload) {
+  const rows: { arenaId: ArenaId; item: BriefingItem; score: number }[] = [];
+  for (const arena of payload.arenas) {
+    for (const item of arena.items) {
+      rows.push({
+        arenaId: arena.id as ArenaId,
+        item,
+        score: itemInterest(item),
+      });
+    }
+  }
+  return rows;
+}
+
+/** Live scan: stronger find replaces weakest briefing item, else weakest spare. */
+export function absorbFindsIntoPayload(
+  payload: BriefingPayload,
+  stories: RawStory[],
+): BriefingPayload {
+  let next: BriefingPayload = {
+    desk: payload.desk,
+    arenas: payload.arenas.map((a) => ({ ...a, items: [...a.items] })),
+    spares: [...(payload.spares ?? [])],
+  };
+
+  const knownUrls = new Set([
+    ...next.arenas.flatMap((a) => a.items.map((i) => i.url)),
+    ...next.spares.map((i) => i.url),
+  ]);
+  const covered = [
+    ...next.arenas.flatMap((a) => a.items.map(itemText)),
+    ...next.spares.map(itemText),
+  ];
+
+  const candidates: { item: BriefingItem; arenaId: ArenaId; score: number }[] = [];
+  for (const story of stories) {
+    const row = storyToItem(story);
+    if (!row) continue;
+    if (knownUrls.has(row.url)) continue;
+    const t = itemText(row);
+    if (covered.some((p) => sameEvent(p, t))) continue;
+    let arenaId = (story.arena ?? classifyArena(t) ?? "intl") as ArenaId;
+    if (!ARENA_META[arenaId]) arenaId = "intl";
+    candidates.push({ item: row, arenaId, score: itemInterest(row) });
+  }
+  candidates.sort((a, b) => b.score - a.score);
+
+  for (const cand of candidates) {
+    const flat = flatBriefingItems(next);
+    if (flat.length > 0) {
+      flat.sort((a, b) => a.score - b.score);
+      const weakest = flat[0]!;
+      if (cand.score > weakest.score + SCORE_MARGIN) {
+        // demote weakest to spares, insert cand into its arena
+        next.arenas = next.arenas
+          .map((arena) =>
+            arena.id === weakest.arenaId
+              ? { ...arena, items: arena.items.filter((i) => i.id !== weakest.item.id) }
+              : arena,
+          )
+          .filter((arena) => arena.items.length > 0);
+
+        let target = next.arenas.find((a) => a.id === cand.arenaId);
+        if (!target) {
+          target = {
+            id: cand.arenaId,
+            title: ARENA_META[cand.arenaId].title,
+            flags: ARENA_META[cand.arenaId].flags,
+            items: [],
+          };
+          next.arenas.push(target);
+        }
+        target.items = [...target.items, cand.item];
+
+        const demoted: SpareItem = {
+          ...weakest.item,
+          id: makeId("s", weakest.item.url || weakest.item.id),
+          arena: weakest.arenaId,
+        };
+        next.spares = [demoted, ...next.spares.filter((s) => s.url !== demoted.url)];
+        if (next.spares.length > 10) {
+          next.spares = [...next.spares]
+            .sort((a, b) => itemInterest(b) - itemInterest(a))
+            .slice(0, 10);
+        }
+        knownUrls.add(cand.item.url);
+        covered.push(itemText(cand.item));
+        continue;
+      }
+    }
+
+    if (next.spares.length > 0) {
+      const rankedSpares = [...next.spares]
+        .map((s) => ({ s, score: itemInterest(s) }))
+        .sort((a, b) => a.score - b.score);
+      const weak = rankedSpares[0]!;
+      if (cand.score > weak.score + SCORE_MARGIN) {
+        next.spares = next.spares.filter((s) => s.id !== weak.s.id);
+        next.spares.push({
+          ...cand.item,
+          id: makeId("s", cand.item.url || cand.item.id),
+          arena: cand.arenaId,
+        });
+        next.spares = [...next.spares]
+          .sort((a, b) => itemInterest(b) - itemInterest(a))
+          .slice(0, 10);
+        knownUrls.add(cand.item.url);
+        covered.push(itemText(cand.item));
+        continue;
+      }
+    } else if (next.spares.length < 10) {
+      next.spares.push({
+        ...cand.item,
+        id: makeId("s", cand.item.url || cand.item.id),
+        arena: cand.arenaId,
+      });
+      knownUrls.add(cand.item.url);
+      covered.push(itemText(cand.item));
+    }
+  }
+
+  return decorateArenas(ensureItemIds(next));
+}
+
 export function localizeHeadline(title: string, source: string) {
   const he = toDeskHebrew(title);
   if (hasHebrew(he)) return deskHeadline(he);

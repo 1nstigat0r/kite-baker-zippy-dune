@@ -1,5 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
-import { composeBriefing, localizeHeadline } from "./compose";
+import {
+  absorbFindsIntoPayload,
+  briefingFromSpares,
+  composeBriefing,
+  localizeHeadline,
+} from "./compose";
 import { ingestStories } from "./ingest";
 import { shortenPayload } from "./shorten";
 import {
@@ -10,6 +15,7 @@ import {
   claimBriefing,
   clearScan,
   failBriefing,
+  getBriefing,
   getLatestReady,
   getMeta,
   getScanState,
@@ -26,7 +32,7 @@ import {
 } from "./store";
 import { fingerprint, hasHebrew } from "./text";
 import { hourKey, hourLabelFromKey, israelParts } from "./time";
-import type { RawStory } from "./types";
+import { briefingHasContent, type BriefingPayload, type RawStory } from "./types";
 
 const inflight = new Map<string, Promise<void>>();
 
@@ -122,6 +128,30 @@ function kickIngest() {
     });
 }
 
+async function storiesFromTicker(): Promise<RawStory[]> {
+  const ticker = await listTicker(48);
+  return ticker.map((item) => ({
+    title: item.titleHe ?? item.title,
+    url: item.url,
+    source: item.source,
+    publishedAt: item.publishedAt,
+    arena: item.arena,
+    via: "rss" as const,
+  }));
+}
+
+async function refineActiveDraft() {
+  const draftId = (await getMeta("active_draft_id")) || hourKey();
+  const briefing = await getBriefing(draftId);
+  if (!briefingHasContent(briefing)) return;
+  const stories = await storiesFromTicker();
+  if (!stories.length) return;
+  const updated = absorbFindsIntoPayload(briefing!.payload, stories);
+  await saveBriefing(draftId, await shortenPayload(updated));
+}
+
+let refineInflight: Promise<void> | null = null;
+
 async function tickScan() {
   const parts = israelParts();
   const dayPrefix = `${parts.year}-${parts.month}-${parts.day}`;
@@ -133,18 +163,22 @@ async function tickScan() {
   if (scan.scanning && scan.dueAt) {
     const due = Date.parse(scan.dueAt);
     if (Date.now() >= due) {
-      const id = hourKey();
-      if (!inflight.has(id)) {
-        const task = (async () => {
-          await claimBriefing(id, true);
-          await generateForHour(id);
-          await clearScan();
-        })().finally(() => inflight.delete(id));
-        inflight.set(id, task);
-      }
-    } else {
-      const last = await getMeta("last_ingest_at");
-      if (!last || Date.now() - Date.parse(last) > 6 * 60_000) kickIngest();
+      // Lock current draft — stop live swaps; wait for next «השתמשתי»
+      await clearScan();
+      return;
+    }
+    const last = await getMeta("last_ingest_at");
+    if (!last || Date.now() - Date.parse(last) > 3 * 60_000) {
+      kickIngest();
+    }
+    if (!refineInflight) {
+      refineInflight = refineActiveDraft()
+        .catch((err) => {
+          console.error("[refine]", err instanceof Error ? err.message : err);
+        })
+        .finally(() => {
+          refineInflight = null;
+        });
     }
     return;
   }
@@ -158,6 +192,7 @@ async function tickScan() {
   }
 }
 
+
 export const getDashboard = createServerFn({ method: "POST" })
   .validator((input: { hourKey?: string } | undefined) => input ?? {})
   .handler(async ({ data }) => {
@@ -168,10 +203,13 @@ export const getDashboard = createServerFn({ method: "POST" })
 export const refreshTicker = createServerFn({ method: "POST" }).handler(
   async () => {
     await ingestStories(false);
+    await setMeta("last_ingest_at", new Date().toISOString());
     await localizeTicker();
     await pruneTicker(16);
     await tickScan();
-    return buildDashboard();
+    const scan = await getScanState();
+    const draftId = (await getMeta("active_draft_id")) || undefined;
+    return buildDashboard(scan.scanning ? draftId : undefined);
   },
 );
 
@@ -204,11 +242,39 @@ export const ensureBriefing = createServerFn({ method: "POST" })
   });
 
 export const markUsed = createServerFn({ method: "POST" })
-  .validator((input: { hourKey: string }) => input)
+  .validator(
+    (input: { hourKey: string; payload?: BriefingPayload }) => input,
+  )
   .handler(async ({ data }) => {
+    const existing = await getBriefing(data.hourKey);
+    const current =
+      data.payload ??
+      (briefingHasContent(existing) ? existing!.payload : null);
+    if (!current) {
+      await markBriefingUsed(data.hourKey);
+      kickIngest();
+      return buildDashboard();
+    }
+
+    let next = briefingFromSpares(current, 6);
+    try {
+      const fresh = await Promise.race([
+        ingestStories(false),
+        new Promise<RawStory[]>((resolve) => setTimeout(() => resolve([]), 8_000)),
+      ]);
+      const pool = fresh.length ? fresh : await storiesFromTicker();
+      if (pool.length) next = absorbFindsIntoPayload(next, pool);
+    } catch (err) {
+      console.error("[markUsed-ingest]", err instanceof Error ? err.message : err);
+    }
+
+    const nowId = hourKey();
+    await claimBriefing(nowId, true);
+    await saveBriefing(nowId, await shortenPayload(next));
+    await setMeta("active_draft_id", nowId);
     await markBriefingUsed(data.hourKey);
     kickIngest();
-    return buildDashboard();
+    return buildDashboard(nowId);
   });
 
 export const swapSpare = createServerFn({ method: "POST" })

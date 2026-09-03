@@ -5,7 +5,6 @@ import { BriefingDoc } from "@/components/briefing-doc";
 import {
   BRIEFING_HEADER,
   CURRENT_BRIEFING,
-  SWAP_EVERY_MS,
   TICKER,
   formatDue,
   isScanning,
@@ -14,7 +13,6 @@ import {
   loadUsedAt,
   markUsedLocal,
   persistPayloadLocal,
-  remainingOriginal,
   saveQueueAt,
   scanDueAt,
 } from "@/lib/news/desk";
@@ -30,7 +28,6 @@ import {
 import { displayShort } from "@/lib/news/display-short";
 import {
   briefingHasContent,
-  replaceNextOriginal,
   type BriefingPayload,
   type DashboardData,
   type SpareItem,
@@ -136,73 +133,36 @@ function Home() {
     scanQueueRef.current = (dash.scanQueue ?? []).slice(0, 10);
   }, [dash.scanQueue]);
 
-  useEffect(() => {
-    if (!usedAt) return;
-    const tick = () => {
-      setPayload((curr) => {
-        const still = remainingOriginal(curr, originalsRef.current);
-        if (still.length === 0) return curr;
-        const queue = scanQueueRef.current;
-        if (queueAt.current >= queue.length) return curr;
-        const nextIn = queue[queueAt.current];
-        const result = replaceNextOriginal(curr, still, nextIn);
-        if (!result) return curr;
-        queueAt.current += 1;
-        saveQueueAt(queueAt.current);
-        persistPayloadLocal(result.payload);
-        if (hourKey && hourKey !== "seed") {
-          void persistPayload({
-            data: { hourKey, payload: result.payload },
-          }).catch(() => undefined);
-        }
-        return result.payload;
-      });
-    };
-    const first = window.setTimeout(tick, 8_000);
-    const loop = window.setInterval(tick, SWAP_EVERY_MS);
-    return () => {
-      window.clearTimeout(first);
-      window.clearInterval(loop);
-    };
-  }, [usedAt, hourKey]);
 
   useEffect(() => {
+    const applyDash = (next: DashboardData) => {
+      setDash(next);
+      const p = pickPayload(next);
+      if (briefingHasContent(next.briefing) || briefingHasContent(next.latestBriefing)) {
+        setPayload(p.payload);
+        setHeader(p.header);
+        setHourKey(p.hourKey);
+        persistPayloadLocal(p.payload);
+      }
+    };
     const poll = window.setInterval(() => {
-      void getDashboard({ data: {} })
-        .then((next) => {
-          setDash(next);
-          // While user is scanning/editing, don't yank locked view until window ends
-          if (!isScanning(usedAt)) {
-            const p = pickPayload(next);
-            if (briefingHasContent(next.briefing) || briefingHasContent(next.latestBriefing)) {
-              setPayload(p.payload);
-              setHeader(p.header);
-              setHourKey(p.hourKey);
-            }
-          }
-        })
-        .catch(() => undefined);
-    }, 20_000);
+      void getDashboard({ data: {} }).then(applyDash).catch(() => undefined);
+    }, 15_000);
     const tick = window.setInterval(() => {
       void onRefreshTicker();
-    }, 60_000);
+    }, 45_000);
     return () => {
       window.clearInterval(poll);
       window.clearInterval(tick);
     };
-  }, [usedAt]);
+  }, []);
 
-  const scanning =
-    Boolean(usedAt) &&
-    (isScanning(usedAt) ||
-      dash.scanningNext ||
-      remainingOriginal(payload, originalIds).length > 0);
+  const scanning = Boolean(usedAt) && (isScanning(usedAt) || dash.scanningNext);
   const due =
     (dash.scanDueLabel && dash.scanningNext ? dash.scanDueLabel : null) ||
     (usedAt ? formatDue(scanDueAt(usedAt)) : null);
-  const left = remainingOriginal(payload, originalIds).length;
   const total = Math.max(originalIds.length, 1);
-  const replaced = Math.max(0, originalIds.length - left);
+  const replaced = 0;
 
   const tickerRows = useMemo(() => {
     const live = dash.ticker
@@ -223,6 +183,13 @@ function Home() {
     try {
       const next = await refreshTicker();
       setDash(next);
+      const p = pickPayload(next);
+      if (briefingHasContent(next.briefing) || briefingHasContent(next.latestBriefing)) {
+        setPayload(p.payload);
+        setHeader(p.header);
+        setHourKey(p.hourKey);
+        persistPayloadLocal(p.payload);
+      }
     } catch {
       /* keep */
     } finally {
@@ -239,11 +206,25 @@ function Home() {
     setOriginalIds(ids);
     setUsedAt(Date.now());
     try {
-      const next = await markUsed({ data: { hourKey: hourKey === "seed" ? dash.currentHourKey : hourKey } });
+      const next = await markUsed({
+        data: {
+          hourKey: hourKey === "seed" ? dash.currentHourKey : hourKey,
+          payload,
+        },
+      });
       setDash(next);
+      const p = pickPayload(next);
+      setPayload(p.payload);
+      setHeader(p.header);
+      setHourKey(p.hourKey);
+      persistPayloadLocal(p.payload);
       scanQueueRef.current = (next.scanQueue ?? []).slice(0, 10);
     } catch {
-      scanQueueRef.current = (dash.scanQueue ?? CURRENT_BRIEFING.spares).slice(0, 10);
+      const { briefingFromSpares } = await import("@/lib/news/compose");
+      const local = briefingFromSpares(payload, 6);
+      setPayload(local);
+      persistPayloadLocal(local);
+      scanQueueRef.current = local.spares.slice(0, 10);
     }
   }
 
