@@ -79,7 +79,7 @@ function parseRss(xml: string, source: string): RawStory[] {
       null;
     const text = `${title} ${tag(block, "description")}`;
     if (title.length < 12) continue;
-    if (!isDeskStory(text) && !isRegional(text)) continue;
+    if (!isDeskStory(text)) continue;
     if (isUsDomesticOffDesk(text) || isOffPrimarySource(text, source) || isOffTheater(text, source) || isPropagandaCopy(text) || failsTickerQuality(text)) continue;
     items.push({
       title: firstLine(title, 220),
@@ -112,7 +112,7 @@ function parseTelegram(
     const url = post ? `https://t.me/${post}` : `https://t.me/s/${channel}`;
     const title = firstLine(body, 220);
     const blob = `${title} ${body}`;
-    if (!isDeskStory(blob) && !isRegional(blob)) continue;
+    if (!isDeskStory(blob)) continue;
     if (isUsDomesticOffDesk(blob) || isOffPrimarySource(blob, source) || isOffTheater(blob, source) || isPropagandaCopy(blob) || failsTickerQuality(blob)) continue;
     items.push({
       title,

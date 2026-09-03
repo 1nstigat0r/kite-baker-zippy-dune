@@ -14,7 +14,7 @@ const MEDIA_IL_RE =
   /אבו עלי|כאן 11|דסק ערבים|ynet|עמית סגל|יחזקאלי|jpost|jerusalempost|timesofisrael|israelhayom|mako\.|walla\.|n12|kan11|inn\.co/i;
 
 const JUNK_RE =
-  /הורוסקופ|מזג אוויר|שידור חי|הגרל[הת]|כדורגל|premier league|la liga|nba\b|netflix|follow us|subscribe|click here|לחצו כאן|לערוץ הטלגרם|מה מזג|תוצאות הגרלה|reality tv/i;
+  /הורוסקופ|מזג אוויר|שידור חי|הגרל[הת]|כדורגל|ליגה|מאמן|קבוצה|משחק|גול |שיחקנו|דירייה|diriyah|premier league|la liga|nba\b|fifa|soccer|football|sport|netflix|follow us|subscribe|click here|לחצו כאן|לערוץ הטלגרם|מה מזג|תוצאות הגרלה|reality tv/i;
 
 const DESK_RE =
   /איראן|טהראן|משה["״]מ|חסד["״]ם|חיזבאללה|חות['׳]?ים|הורמוז|תקיפ|טיל|מלחמ|סנקצי|גרעין|חימוש|צה["״]ל|כטב["״]מ|כטמ["״]ם|פיצוץ|הפצצ|רקט|drone|missile|strike|nuclear|sanctions|hormuz|hezbollah|houthi|irgc|centcom|\biran\b|lebanon|syria|yemen|gaza|hamas|netanyahu|khamenei|trump|rubio|israel|עזה|חמאס|סוריה|לבנון|תימן|עיראק|נתניהו|טראמפ|רוביו|קאליבאף|פזשכיאן|חמאנאי|חמינאי|נסראללה|ארדואן|סיסי|בן סלמאן|משמרות המהפכה|פיקוד המרכז|שביתת נשק|הפסקת אש|דיפלומט/i;
@@ -415,6 +415,9 @@ export function toDeskHebrew(text: string) {
     [/\bAl-?Masirah\b/gi, "אלמסירה"],
     [/\bAl-?Quds\b/gi, "קדס"],
     [/צבא ישראלי הורג/g, "צה\"ל הרג"],
+    [/פלסטין הכבושה/g, "עזה"],
+    [/occupied palestine/gi, "עזה"],
+    [/^כתב\s+[^:]+:\s*/g, ""],
   ];
   for (const [re, to] of pairs) s = s.replace(re, to);
   s = s
@@ -430,7 +433,7 @@ export function stripAlHyphen(text: string) {
 
 /** Leftover enemy-desk phrasing that was not recast into an Israeli desk report. */
 export function isPropagandaCopy(text: string) {
-  return /משטר ציוני|ישות ציונית|כיבוש ציוני|תוקפנות ציונית|שהיד|ציוניים|الكيان|الصهيون|صهیون|זרעי רוואנש|זרע רוואנש/i.test(
+  return /משטר ציוני|ישות ציונית|כיבוש ציוני|תוקפנות ציונית|פלסטין הכבושה|שהיד|ציוניים|الكيان|الصهيون|صهیون|זרעי רוואנש|זרע רוואנש/i.test(
     text ?? "",
   );
 }
@@ -510,6 +513,7 @@ export function isWeakDeskCopy(text: string) {
   if (/אומרים תושבים|residents say/i.test(s)) return true;
   if (/([\u0590-\u05FF])\1{2,}/.test(s)) return true;
   if (/^(?:החלה|מתחילים|מתחילה)\s+(?:תקיפה|פינוי)/.test(s) && s.length < 48) return true;
+  if (/^כתב\s/.test(s)) return true;
   return false;
 }
 
@@ -521,6 +525,7 @@ export function isOffDeskFiller(text: string) {
   }
   if (/צדק להרג|תקופת אסד|עינויים מתקופת/.test(s) && !/כתב אישום|בית דין|האשמ/.test(s)) return true;
   if (/צבא ישראלי הורג|צה["״]ל הרג|פשיטה בכפר/.test(s) && !/לבנון|עזה|סוריה|תימן|איראן/.test(s)) return true;
+  if (JUNK_RE.test(s)) return true;
   return false;
 }
 

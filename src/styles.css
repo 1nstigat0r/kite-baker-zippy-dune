@@ -60,10 +60,10 @@
 .ticker-plus {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 4px;
   z-index: 3;
   display: none;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   pointer-events: none;
 }
 
