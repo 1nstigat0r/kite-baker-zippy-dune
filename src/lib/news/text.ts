@@ -390,9 +390,66 @@ export function toDeskHebrew(text: string) {
     [/\bSaudi Arabia\b/gi, "סעודיה"],
     [/\bthe UAE\b/gi, "איחוד האמירויות"],
     [/\bUAE\b/g, "איחוד האמירויות"],
+    [/המשטר הציוני/g, "ישראל"],
+    [/הישות הציונית/g, "ישראל"],
+    [/הכיבוש הציוני/g, "ישראל"],
+    [/התוקפנות הציונית/g, "תקיפות ישראליות"],
+    [/תוקפנות ציונית/g, "תקיפות ישראליות"],
+    [/המשך התוקפנות של ישראל/g, "תקיפות ישראליות"],
+    [/התוקפנות של ישראל/g, "תקיפות ישראליות"],
+    [/התוקפנות הישראלית/g, "תקיפות ישראליות"],
+    [/שהידים/g, "הרוגים"],
+    [/שאהידים/g, "הרוגים"],
+    [/שהיד(?:ים)?/g, "הרוג"],
+    [/الكيان الصهيوني/g, "ישראל"],
+    [/النظام الصهيوني/g, "ישראל"],
+    [/العدوان الصهيوني/g, "תקיפות ישראליות"],
+    [/رژیم صهیونیستی/g, "ישראל"],
   ];
   for (const [re, to] of pairs) s = s.replace(re, to);
+  s = s
+    .replace(/המשך התוקפנות של ישראל/g, "תקיפות ישראליות")
+    .replace(/התוקפנות של ישראל/g, "תקיפות ישראליות");
   return collapse(s);
+}
+
+/** Leftover enemy-desk phrasing that was not recast into an Israeli desk report. */
+export function isPropagandaCopy(text: string) {
+  return /משטר ציוני|ישות ציונית|כיבוש ציוני|תוקפנות ציונית|שהיד|ציוניים|الكيان|الصهيون|صهیون|זרעי רוואנש|זרע רוואנש/i.test(
+    text ?? "",
+  );
+}
+
+function eventHome(text: string): OriginHome | null {
+  const x = text ?? "";
+  const hit = /תקיפ|הפצצ|כטב|strike|airstrike|aggression|תוקפנות|عدوان|قصف|انفجار|פיצוץ/i.test(x);
+  if (LEBANON_RE.test(x) && (hit || /חיזבאללה|ביירות|דאחי/.test(x))) return "lebanon";
+  if (SYRIA_RE.test(x) && hit) return "syria";
+  if (AXIS_RE.test(x) && /תימן|חות|houthi|yemen/i.test(x) && hit) return "yemen";
+  if (AXIS_RE.test(x) && /עיראק|iraq|baghdad/i.test(x) && hit) return "iraq";
+  if (IRAN_RE.test(x) && !LEBANON_RE.test(x) && !SYRIA_RE.test(x)) return "iran";
+  if (LEBANON_RE.test(x)) return "lebanon";
+  if (SYRIA_RE.test(x)) return "syria";
+  return null;
+}
+
+/**
+ * Theater belongs to its home outlet.
+ * IRNA covering Israeli strikes in Lebanon with no Iranian speaker = drop.
+ * Wires (US/UK) may cover the region. Pan-Arab may cover Arab theaters.
+ * An official from the outlet's country speaking = keep.
+ */
+export function isOffTheater(text: string, source: string) {
+  if (isDirectToThisOutlet(text, source)) return false;
+  const where = outletHome(source);
+  const event = eventHome(text);
+  const who = speakerHome(text);
+  if (!where || !event) return false;
+  if (where === event) return false;
+  if (who === where) return false;
+  if (where === "us" || where === "uk") return false;
+  if ((where === "qatar" || where === "gulf") && event !== "us" && event !== "iran" && event !== "uk") return false;
+  return true;
 }
 
 export function deskHeadline(text: string) {
@@ -433,7 +490,7 @@ export function isUsDomesticOffDesk(text: string) {
   return /\bvance\b|ואנס|גיי די|\btrump\b|טראמפ|uber\b|nigeria|congress|senate|white house|הבית הלבן|campaign|ohio|governor|midterm|burgum|groundbreaking|\barch\b/i.test(x);
 }
 
-type OriginHome = "us" | "iran" | "lebanon" | "yemen" | "iraq" | "gulf" | "russia" | "uk" | "qatar";
+type OriginHome = "us" | "iran" | "lebanon" | "syria" | "yemen" | "iraq" | "gulf" | "russia" | "uk" | "qatar";
 
 function outletHome(source: string): OriginHome | null {
   const s = `${source ?? ""}`;
@@ -482,11 +539,11 @@ function isDirectToThisOutlet(text: string, source: string) {
  */
 export function isOffPrimarySource(text: string, source: string) {
   if (isDirectToThisOutlet(text, source)) return false;
+  if (isOffTheater(text, source)) return true;
   const who = speakerHome(text);
   const where = outletHome(source);
   if (!who || !where) return false;
   if (who === where) return false;
-  // US/UK/west pool can host each other for western officials
   if (who === "us" && (where === "us" || where === "uk")) return false;
   if (who === "uk" && (where === "uk" || where === "us")) return false;
   return true;
@@ -641,6 +698,9 @@ export function shapeCopy(speaker: string, body: string, url = "") {
     bd = bd.replace(new RegExp(`^${escaped}\\s*[:：]\\s*`), "");
   }
   bd = collapse(bd).replace(/^["«»״]+|["«»״]+$/g, "").trim();
+  if (isPropagandaCopy(bd)) {
+    return { speaker: sp, body: "" };
+  }
   if (sp && MEDIA_IL_RE.test(sp)) sp = "";
   if (isIsraeliVoice(sp, bd, url) && MEDIA_IL_RE.test(`${sp} ${url}`)) {
     if (!/^(נתניהו|שר הביטחון|משהב["״]ט|צה["״]ל|הלוי|זמיר|קץ|כץ|לשכת רמ["״]מ)$/.test(sp)) {

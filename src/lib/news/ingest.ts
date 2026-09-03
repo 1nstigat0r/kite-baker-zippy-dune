@@ -9,6 +9,8 @@ import {
   isRegional,
   isUsDomesticOffDesk,
   isOffPrimarySource,
+  isOffTheater,
+  isPropagandaCopy,
   stripHtml,
 } from "./text";
 import { israelParts, parsePossiblyUtc } from "./time";
@@ -77,7 +79,7 @@ function parseRss(xml: string, source: string): RawStory[] {
     const text = `${title} ${tag(block, "description")}`;
     if (title.length < 12) continue;
     if (!isDeskStory(text) && !isRegional(text)) continue;
-    if (isUsDomesticOffDesk(text) || isOffPrimarySource(text, source)) continue;
+    if (isUsDomesticOffDesk(text) || isOffPrimarySource(text, source) || isOffTheater(text, source) || isPropagandaCopy(text)) continue;
     items.push({
       title: firstLine(title, 220),
       url: url.trim(),
@@ -110,7 +112,7 @@ function parseTelegram(
     const title = firstLine(body, 220);
     const blob = `${title} ${body}`;
     if (!isDeskStory(blob) && !isRegional(blob)) continue;
-    if (isUsDomesticOffDesk(blob) || isOffPrimarySource(blob, source)) continue;
+    if (isUsDomesticOffDesk(blob) || isOffPrimarySource(blob, source) || isOffTheater(blob, source) || isPropagandaCopy(blob)) continue;
     items.push({
       title,
       url,

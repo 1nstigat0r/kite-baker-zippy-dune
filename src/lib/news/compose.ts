@@ -10,6 +10,8 @@ import {
   isIsraeliVoice,
   isJunkItem,
   isOffPrimarySource,
+  isOffTheater,
+  isPropagandaCopy,
   isUsDomesticOffDesk,
   sameEvent,
   tooMuchLatin,
@@ -140,6 +142,7 @@ function storyToItem(story: RawStory): BriefingItem | null {
   if (isOffPrimarySource(blob, story.source)) return null;
   if (isIsraeliVoice(cleaned.speaker, cleaned.body, story.url) && !isIsraeliStrike(cleaned.body)) return null;
   if (isUsDomesticOffDesk(blob)) return null;
+  if (isPropagandaCopy(cleaned.body) || isOffTheater(`${cleaned.body} ${story.title}`, story.source)) return null;
   return mkItem(
     cleaned.speaker || attributionLead(story.source),
     cleaned.body,
