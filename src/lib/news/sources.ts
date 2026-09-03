@@ -23,7 +23,7 @@ export const SOURCE_POOL = {
   gulf: ["arabnews.com", "thenationalnews.com", "gulfnews.com", "spa.gov.sa"],
   iraq: ["shafaq.com", "ina.iq", "alsumaria.tv"],
   yemen: ["almasirah.net", "sabanew.net", "aden-alhadath.net"],
-  iran: ["farsnews.ir", "tasnimnews.com", "irna.ir", "isna.ir", "presstv.ir", "defapress.ir"],
+  iran: ["farsnews.ir", "tasnimnews.com", "irna.ir", "isna.ir", "presstv.ir", "defapress.ir", "mehrnews.com", "snn.ir", "nournews.ir", "iribnews.ir", "jamaran.news", "ilna.ir"],
   intl: ["reuters.com", "axios.com", "ft.com", "wsj.com", "apnews.com"],
 } as const;
 

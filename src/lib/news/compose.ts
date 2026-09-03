@@ -343,18 +343,16 @@ export function itemInterest(item: { speaker: string; body: string; publishedAt?
   return interestScore(itemText(item), item.publishedAt);
 }
 
-/** Immediate next briefing: strongest spares (pad from current items if thin). */
+/**
+ * After «השתמשתי»: new briefing from strongest *current spares only*.
+ * Consumed briefing items are DROPPED (not demoted to spares).
+ * Leftover unused spares are also cleared — spares refill from live scan.
+ * If too few spares, pad briefly from unused spare-pool only (never used briefing).
+ */
 export function briefingFromSpares(payload: BriefingPayload, max = 6): BriefingPayload {
   const sparePool = [...(payload.spares ?? [])].sort(
     (a, b) => itemInterest(b) - itemInterest(a),
   );
-  const fromBriefing: SpareItem[] = payload.arenas.flatMap((arena) =>
-    arena.items.map((it) => ({
-      ...it,
-      id: makeId("s", it.url || it.id),
-      arena: arena.id as ArenaId,
-    })),
-  ).sort((a, b) => itemInterest(b) - itemInterest(a));
 
   const picked: SpareItem[] = [];
   const covered: string[] = [];
@@ -366,7 +364,6 @@ export function briefingFromSpares(payload: BriefingPayload, max = 6): BriefingP
     covered.push(t);
   };
   for (const row of sparePool) take(row);
-  for (const row of fromBriefing) take(row);
 
   const arenas = new Map<ArenaId, BriefingItem[]>();
   for (const row of picked) {
@@ -384,21 +381,8 @@ export function briefingFromSpares(payload: BriefingPayload, max = 6): BriefingP
     arenas.set(arenaId, list);
   }
 
-  const pickedUrls = new Set(picked.map((r) => r.url));
-  const rest: SpareItem[] = [];
-  for (const row of [...sparePool, ...fromBriefing]) {
-    if (rest.length >= 10) break;
-    if (pickedUrls.has(row.url)) continue;
-    const t = itemText(row);
-    if (covered.some((p) => sameEvent(p, t))) continue;
-    rest.push({
-      ...row,
-      id: makeId("s", row.url || row.id),
-      arena: resolveArena(t, row.arena),
-    });
-    covered.push(t);
-  }
-
+  // Do NOT carry leftover old spares or used briefing items.
+  // Empty spares → live scan / absorbFinds fills them.
   const ordered = ARENA_ORDER.filter((id) => arenas.get(id)?.length).map((id) => {
     const items = (arenas.get(id) ?? []).sort(
       (a, b) => itemInterest(b) - itemInterest(a),
@@ -415,7 +399,7 @@ export function briefingFromSpares(payload: BriefingPayload, max = 6): BriefingP
     ensureItemIds({
       desk: DESK_STYLE,
       arenas: ordered,
-      spares: rest.slice(0, 10),
+      spares: [],
     }),
   );
 }

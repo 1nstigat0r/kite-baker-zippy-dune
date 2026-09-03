@@ -232,3 +232,25 @@ export const X_HANDLES = [
   "alaraby_ar",
   "alqudsalarabi",
 ];
+
+/** Owner X (Twitter) source lists — monitor for exclusives; always open the primary outlet. */
+export const X_LISTS: { name: string; id: string; url: string }[] = [
+  { name: "list-1", id: "2028039297878634889", url: "https://x.com/i/lists/2028039297878634889" },
+  { name: "list-2", id: "193997610", url: "https://x.com/i/lists/193997610" },
+  { name: "list-3", id: "193992434", url: "https://x.com/i/lists/193992434" },
+  { name: "list-4", id: "1359519988156157954", url: "https://x.com/i/lists/1359519988156157954" },
+  { name: "list-5", id: "194023773", url: "https://x.com/i/lists/194023773" },
+  { name: "list-6", id: "2029309781169905773", url: "https://x.com/i/lists/2029309781169905773" },
+  { name: "list-7", id: "194326098", url: "https://x.com/i/lists/194326098" },
+  { name: "list-8", id: "1619207287297511424", url: "https://x.com/i/lists/1619207287297511424" },
+];
+
+/** Prefer these hosts when an exclusive is attributed through a secondary paper. */
+export const PRIMARY_HOST_HINTS: Record<string, string[]> = {
+  iran: ["farsnews.ir", "tasnimnews.com", "irna.ir", "mehrnews.com", "isna.ir", "presstv.ir", "defapress.ir", "snn.ir", "nournews.ir", "iribnews.ir"],
+  lebanon: ["almanar.com.lb", "al-akhbar.com", "alahednews.com.lb", "almayadeen.net"],
+  yemen: ["almasirah.net", "sabanew.net"],
+  iraq: ["shafaq.com", "ina.iq"],
+  syria: ["sana.sy"],
+};
+

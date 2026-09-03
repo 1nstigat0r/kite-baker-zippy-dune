@@ -256,6 +256,15 @@ export const markUsed = createServerFn({ method: "POST" })
       return buildDashboard();
     }
 
+    // Burn consumed briefing items — never recycle into spares
+    const burned: string[] = [];
+    for (const arena of current.arenas) {
+      for (const item of arena.items) {
+        burned.push(fingerprint(item.url, `${item.speaker} ${item.body}`));
+      }
+    }
+    if (burned.length) await addSeen(data.hourKey || "used", burned);
+
     let next = briefingFromSpares(current, 6);
     try {
       const fresh = await Promise.race([
@@ -263,6 +272,7 @@ export const markUsed = createServerFn({ method: "POST" })
         new Promise<RawStory[]>((resolve) => setTimeout(() => resolve([]), 8_000)),
       ]);
       const pool = fresh.length ? fresh : await storiesFromTicker();
+      // Fill empty spares + maybe strengthen briefing from live scan only
       if (pool.length) next = absorbFindsIntoPayload(next, pool);
     } catch (err) {
       console.error("[markUsed-ingest]", err instanceof Error ? err.message : err);
