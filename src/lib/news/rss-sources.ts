@@ -156,6 +156,7 @@ export const TELEGRAM_SOURCES: TelegramSource[] = [
   { name: "אלאח'באריה אלסוריה", channel: "SyriaNewsAgency" },
   { name: "רויא ניוז", channel: "RoyaNews" },
   { name: "וואע", channel: "INAnew" },
+  // Israeli TG — tip-off only (never publish as source of record)
   { name: "אבו עלי אקספרס", channel: "AbuAliExpress", indicator: true },
   { name: "דסק ערבים", channel: "kan11arabic", indicator: true },
   { name: "טאבנאק", channel: "tabnaknews" },
@@ -177,7 +178,6 @@ export const TELEGRAM_SOURCES: TelegramSource[] = [
   { name: "משהח סוריה", channel: "SyrianMFA" },
   { name: "הגנה אזרחית סוריה", channel: "SyriaCivilDefence" },
   { name: "רודאו ערבית", channel: "RudawArabic" },
-  { name: "NetBlocks", channel: "netblocks" },
 ];
 
 export const X_HANDLES = [
@@ -254,15 +254,16 @@ export const X_HANDLES = [
 ];
 
 /** Owner X (Twitter) source lists — monitor for exclusives; always open the primary outlet. */
-export const X_LISTS: { name: string; id: string; url: string }[] = [
-  { name: "list-1", id: "2028039297878634889", url: "https://x.com/i/lists/2028039297878634889" },
-  { name: "list-2", id: "193997610", url: "https://x.com/i/lists/193997610" },
-  { name: "list-3", id: "193992434", url: "https://x.com/i/lists/193992434" },
-  { name: "list-4", id: "1359519988156157954", url: "https://x.com/i/lists/1359519988156157954" },
-  { name: "list-5", id: "194023773", url: "https://x.com/i/lists/194023773" },
-  { name: "list-6", id: "2029309781169905773", url: "https://x.com/i/lists/2029309781169905773" },
-  { name: "list-7", id: "194326098", url: "https://x.com/i/lists/194326098" },
-  { name: "list-8", id: "1619207287297511424", url: "https://x.com/i/lists/1619207287297511424" },
+/** Owner X lists — tip-off only (never publish list/member tweets as source of record). Find the primary outlet. */
+export const X_LISTS: { name: string; id: string; url: string; tipOff: true }[] = [
+  { name: "list-1", id: "2028039297878634889", url: "https://x.com/i/lists/2028039297878634889", tipOff: true },
+  { name: "list-2", id: "193997610", url: "https://x.com/i/lists/193997610", tipOff: true },
+  { name: "list-3", id: "193992434", url: "https://x.com/i/lists/193992434", tipOff: true },
+  { name: "list-4", id: "1359519988156157954", url: "https://x.com/i/lists/1359519988156157954", tipOff: true },
+  { name: "list-5", id: "194023773", url: "https://x.com/i/lists/194023773", tipOff: true },
+  { name: "list-6", id: "2029309781169905773", url: "https://x.com/i/lists/2029309781169905773", tipOff: true },
+  { name: "list-7", id: "194326098", url: "https://x.com/i/lists/194326098", tipOff: true },
+  { name: "list-8", id: "1619207287297511424", url: "https://x.com/i/lists/1619207287297511424", tipOff: true },
 ];
 
 /** Prefer these hosts when an exclusive is attributed through a secondary paper. */

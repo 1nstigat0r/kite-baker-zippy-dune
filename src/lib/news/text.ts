@@ -208,26 +208,49 @@ function clip(text: string, max: number) {
   return `${s.slice(0, Math.max(1, max - 1)).trimEnd()}…`;
 }
 
+/** Israeli strike / kinetic ops — KEEP (Lebanon, Gaza, Syria, Yemen, Iran…). */
+export function isIsraeliStrike(text: string) {
+  const t = text ?? "";
+  return /תקיפ(?:ה|ות)\s*ישראל(?:ית|יות)?|תקיפ(?:ת|ות)\s*(?:צה["״]ל|חיל האוויר)|צה["״]ל\s*(?:תקף|תקפו|הפציץ|הפציצו|תקף)|הפצצ(?:ה|ות)\s*ישראל|כטב["״]מ\s*ישרא|מטוס(?:י)?\s*(?:קרב\s*)?ישרא|ישראל\s*תקפ(?:ה|ו)|strike(?:s)?\s*(?:by\s*)?(?:israel|the idf|idf)|(?:israel|idf)\s*(?:strike|struck|bombed|airstrike)|תקיפה\s*(?:בדרום\s*)?לבנון|תקיפ(?:ה|ות)\s*(?:בעזה|ברצועה|בסוריה|בתימן|באיראן)/i.test(
+    t,
+  );
+}
+
+/**
+ * Israeli political / official voice — DROP from briefing.
+ * Exception: kinetic strikes (see isIsraeliStrike) are interesting.
+ */
 export function isIsraeliVoice(speaker: string, body: string, url = "") {
-  const t = `${speaker} ${body} ${url}`;
+  const blob = `${speaker} ${body} ${url}`;
+  if (isIsraeliStrike(blob)) return false;
+
   if (
     /אבו עלי|כאן 11|דסק ערבים|ynet|עמית סגל|יחזקאלי|jpost|jerusalempost|timesofisrael|israelhayom|mako\.|walla\.|n12|kan11|inn\.co/i.test(
-      t,
+      blob,
     )
   ) {
     return true;
   }
   if (
-    /^(נתניהו|שר הביטחון|משהב["״]ט|צה["״]ל|הלוי|זמיר|קץ|כץ|לשכת רמ["״]מ)$/.test(
+    /^(נתניהו|ביבי|שר הביטחון|משהב["״]ט|צה["״]ל|הלוי|זמיר|קץ|כץ|גלנט|סמוטריץ|בן גביר|לשכת רמ["״]מ|גורמים ישראליים|גורם ישראלי)$/.test(
       speaker.trim(),
     )
   ) {
     return true;
   }
+  // Statements / spin from Israeli officials — not desk material
   if (
-    /נתניהו|שר הביטחון|לשכת רמ["״]מ|צה["״]ל הנחה|גורמים ישראליים/.test(body) &&
-    !/עלי אלטאהר|תקיפ(?:ה|ות) ישראלית/.test(body)
+    /(?:נתניהו|ביבי|לשכת רמ["״]מ|שר הביטחון|משהב["״]ט|גלנט|סמוטריץ'|סמוטריץ|בן גביר|הלוי|זמיר|\bnetanyahu\b|\bbibi\b)/i.test(
+      blob,
+    ) &&
+    /(?:אמר|מסר|הצהיר|טען|הודיע|לדברי|לפי|said|says|told|statement|brief)/i.test(blob)
   ) {
+    return true;
+  }
+  if (/גורמים ישראליים|גורם ישראלי|בכיר ישראלי|גורמים ביטחוניים ישראליים|israeli official|israeli sources? say/i.test(blob)) {
+    return true;
+  }
+  if (/צה["״]ל הנחה|צה["״]ל מוסר|דובר צה["״]ל|idf spokesperson|idf says/i.test(blob) && !isIsraeliStrike(blob)) {
     return true;
   }
   return false;
@@ -449,9 +472,10 @@ export function isJunkItem(speaker: string, body: string, url = "") {
   if (bd.length < 8) return true;
   const t = `${speaker ?? ""} ${bd} ${url ?? ""}`;
   if (JUNK_RE.test(t)) return true;
-  if (MEDIA_IL_RE.test(t) && !/נתניהו|שר הביטחון|צה["״]ל|לשכת רמ["״]מ/.test(bd)) {
-    return true;
-  }
+  // Israeli media / tip-offs — never source of record
+  if (MEDIA_IL_RE.test(t)) return true;
+  // Bibi / Israeli officials talk — drop; kinetic strikes stay (isIsraeliVoice false)
+  if (isIsraeliVoice(speaker ?? "", bd, url ?? "")) return true;
   if (/^\s*https?:\/\//i.test(bd)) return true;
   if (/2026-\d{2}-\d{2}T/.test(bd) && bd.length < 48) return true;
   if (!hasHebrew(bd) && bd.length < 24) return true;

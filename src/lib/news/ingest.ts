@@ -90,6 +90,7 @@ function parseTelegram(
   html: string,
   channel: string,
   source: string,
+  indicator = false,
 ): RawStory[] {
   const chunks = html.split(/class="tgme_widget_message /);
   const items: RawStory[] = [];
@@ -112,6 +113,7 @@ function parseTelegram(
       publishedAt: parsePossiblyUtc(time)?.toISOString() ?? null,
       arena: resolveArena(`${title} ${body}`),
       via: "telegram",
+      indicator: indicator || undefined,
     });
   }
   return items;
@@ -162,7 +164,7 @@ export async function ingestStories(force = false): Promise<RawStory[]> {
       }
       const html = await fetchText(`https://t.me/s/${job.src.channel}`, 5000);
       if (!html) return [] as RawStory[];
-      return parseTelegram(html, job.src.channel, job.src.name);
+      return parseTelegram(html, job.src.channel, job.src.name, !!job.src.indicator);
     },
   );
 
@@ -190,8 +192,11 @@ export async function ingestStories(force = false): Promise<RawStory[]> {
     return Date.now() - d.getTime() < 36 * 60 * 60 * 1000;
   });
 
+  const publishable = recent.filter((story) => !story.indicator);
+  const tips = recent.filter((story) => story.indicator);
+
   await insertTicker(
-    recent.slice(0, 140).map((story) => ({
+    publishable.slice(0, 140).map((story) => ({
       id: storyId(story.url),
       title: story.title,
       titleHe: hasHebrew(story.title) ? story.title : null,
@@ -202,7 +207,11 @@ export async function ingestStories(force = false): Promise<RawStory[]> {
     })),
   );
 
-  return recent.filter((story) => !story.publishedAt || isTodayIsrael(story.publishedAt));
+  // Tips first (marked indicator) then publishable — compose drops tip-offs but can boost matches.
+  const today = [...tips, ...publishable].filter(
+    (story) => !story.publishedAt || isTodayIsrael(story.publishedAt),
+  );
+  return today;
 }
 
 export function storiesForPrompt(stories: RawStory[], limit = 50) {

@@ -6,6 +6,8 @@ import {
   formatOutlet,
   hasHebrew,
   isJunkItem,
+  isIsraeliStrike,
+  isIsraeliVoice,
   sameEvent,
   shapeCopy,
   shortenSpeaker,
@@ -101,7 +103,9 @@ function interestScore(text: string, publishedAt?: string | null) {
   let s = 0;
   if (/גורמים ל-|בלעדי|מסר(?:ו)? ל|דווח ב-/.test(text)) s += 6;
   if (/משה["״]מ|הורמוז|חיזבאללה|חות|קאליבאף|טראמפ|עלי אלטאהר|תקיפ|טיל/.test(text)) s += 4;
-  if (/איראן|לבנון|תימן|עיראק|כווית|סעודי|סוריה/.test(text)) s += 2;
+  if (/איראן|לבנון|תימן|עיראק|כווית|סעודי|סוריה|עזה/.test(text)) s += 2;
+  if (isIsraeliStrike(text)) s += 7;
+  if (isIsraeliVoice("", text) && !isIsraeliStrike(text)) s -= 12;
   if (publishedAt) {
     const tms = Date.parse(publishedAt);
     if (Number.isFinite(tms)) s += Math.max(0, 5 - (Date.now() - tms) / 3_600_000);
@@ -130,7 +134,9 @@ function storyToItem(story: RawStory): BriefingItem | null {
     // Wrap English remainder as desk attribution line
     cleaned.speaker = cleaned.speaker || `דווח ב-${outlet || story.source}`;
   }
-  if (/אבו עלי|כאן 11|דסק ערבים|ynet|עמית סגל|יחזקאלי/i.test(story.source)) return null;
+  if (story.indicator) return null;
+  if (/אבו עלי|כאן 11|דסק ערבים|ynet|עמית סגל|יחזקאלי|מוסד|idf|צה["״]?ל/i.test(story.source)) return null;
+  if (isIsraeliVoice(story.source, `${story.title} ${cleaned.body}`, story.url) && !isIsraeliStrike(`${story.title} ${cleaned.body}`)) return null;
   return mkItem(
     cleaned.speaker || `דווח ב-${outlet || story.source}`,
     cleaned.body,
@@ -139,16 +145,36 @@ function storyToItem(story: RawStory): BriefingItem | null {
   );
 }
 
+function tipTokens(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .split(/\s+/)
+    .filter((w) => w.length >= 4);
+}
+
 function fromStories(
   stories: RawStory[],
   seen: Set<string>,
   previous: string[],
 ): BriefingPayload {
-  const ranked = [...stories].sort(
-    (a, b) =>
-      interestScore(`${b.title} ${b.source}`, b.publishedAt) -
-      interestScore(`${a.title} ${a.source}`, a.publishedAt),
-  );
+  const tips = stories.filter((s) => s.indicator);
+  const tipBag = tips.flatMap((t) => tipTokens(t.title));
+  const ranked = [...stories]
+    .filter((s) => !s.indicator)
+    .sort((a, b) => {
+      const tipBoost = (s: RawStory) => {
+        const toks = tipTokens(s.title);
+        if (!toks.length || !tipBag.length) return 0;
+        const hits = toks.filter((w) => tipBag.includes(w)).length;
+        return hits >= 2 ? 8 : hits === 1 ? 3 : 0;
+      };
+      return (
+        interestScore(`${b.title} ${b.source}`, b.publishedAt) +
+        tipBoost(b) -
+        (interestScore(`${a.title} ${a.source}`, a.publishedAt) + tipBoost(a))
+      );
+    });
   const arenas = new Map<ArenaId, BriefingItem[]>();
   const spares: SpareItem[] = [];
   const covered = [...previous];
