@@ -216,9 +216,12 @@ function Home() {
       scanningRef.current = true;
       try {
         const scanned = await scanMinute({ data: {} });
-        const finds = scanned.items ?? [];
+        const finds = scanned?.items ?? [];
+        if (typeof console !== "undefined") {
+          console.info("[scanMinute]", scanned?.count ?? finds.length, scanned?.error ?? null);
+        }
         setTickerItems((prev) => {
-          const next = mergeTicker(prev, finds, loadBurnedUrls());
+          const next = mergeTicker(prev, finds, new Set()); // burns apply at pack/used, not while accumulating
           saveLocalTicker(next);
           return next;
         });
@@ -270,7 +273,7 @@ function Home() {
       })
       .filter((row) => row.text.length > 8);
     if (!live.length) {
-      return [{ source: "עדכון", text: "סורק מבזקים כל דקה…", url: "#" }];
+      return [{ source: "עדכון", text: "סורק מבזקים… אם זה נשאר דקה — הסריקה נכשלת בשרת", url: "#" }];
     }
     return [...live, ...live];
   }, [tickerItems]);

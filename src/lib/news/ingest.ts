@@ -150,6 +150,53 @@ function rotate<T>(items: T[], cursor: number, take: number): T[] {
 
 export type IngestMode = "full" | "hot";
 
+/** Minute ticker scan with ZERO store/meta — Vercel PGLite must not block this. */
+export async function pureHotScan(): Promise<RawStory[]> {
+  const rssCursor = Math.floor(Date.now() / 60_000) % Math.max(RSS_SOURCES.length, 1);
+  const tgPool = TELEGRAM_SOURCES.filter((src) => !src.indicator);
+  const tgCursor = Math.floor(Date.now() / 60_000) % Math.max(tgPool.length, 1);
+  const rssBatch = rotate(RSS_SOURCES, rssCursor, 5);
+  const tgBatch = rotate(tgPool, tgCursor, 6);
+  const jobs = [
+    ...rssBatch.map((src) => ({ kind: "rss" as const, src })),
+    ...tgBatch.map((src) => ({ kind: "tg" as const, src })),
+  ];
+
+  const batches = await poolMap(jobs, 5, async (job) => {
+    try {
+      if (job.kind === "rss") {
+        const xml = await fetchText(job.src.url, 4000);
+        if (!xml || !/[<](rss|feed|item|entry)/i.test(xml)) return [] as RawStory[];
+        return parseRss(xml, job.src.name);
+      }
+      const html = await fetchText(`https://t.me/s/${job.src.channel}`, 4000);
+      if (!html) return [] as RawStory[];
+      return parseTelegram(html, job.src.channel, job.src.name);
+    } catch {
+      return [] as RawStory[];
+    }
+  });
+
+  const merged: RawStory[] = [];
+  const seen = new Set<string>();
+  for (const group of batches) {
+    for (const story of group) {
+      const key = story.url.replace(/\/$/, "");
+      if (seen.has(key)) continue;
+      seen.add(key);
+      merged.push(story);
+    }
+  }
+  merged.sort((a, b) => {
+    const ta = a.publishedAt ? Date.parse(a.publishedAt) : 0;
+    const tb = b.publishedAt ? Date.parse(b.publishedAt) : 0;
+    return tb - ta;
+  });
+  return merged.slice(0, 40);
+}
+
+
+
 export async function ingestStories(
   force = false,
   mode: IngestMode = "full",

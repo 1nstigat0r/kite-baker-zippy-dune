@@ -7,7 +7,7 @@ import {
   localizeHeadline,
 } from "./compose";
 import { CURRENT_BRIEFING } from "./desk";
-import { ingestStories } from "./ingest";
+import { ingestStories, pureHotScan } from "./ingest";
 import { shortenPayload } from "./shorten";
 import {
   addSeen,
@@ -187,21 +187,21 @@ function storiesToTicker(stories: RawStory[]): TickerItem[] {
 
 export const scanMinute = createServerFn({ method: "POST" }).validator((input?: unknown) => input ?? {}).handler(async () => {
   let stories: RawStory[] = [];
+  let error: string | null = null;
   try {
     stories = await Promise.race([
-      ingestStories(true, "hot"),
-      new Promise<RawStory[]>((resolve) => setTimeout(() => resolve([]), 18_000)),
+      pureHotScan(),
+      new Promise<RawStory[]>((resolve) => setTimeout(() => resolve([]), 16_000)),
     ]);
   } catch (err) {
-    console.error("[scanMinute]", err instanceof Error ? err.message : err);
+    error = err instanceof Error ? err.message : String(err);
+    console.error("[scanMinute]", error);
   }
-  try {
-    await setMeta("last_ingest_at", new Date().toISOString());
-    await localizeTicker();
-  } catch {
-    /* ignore store */
-  }
-  return { items: storiesToTicker(stories) };
+  return {
+    items: storiesToTicker(stories),
+    count: stories.length,
+    error,
+  };
 });
 
 export const composeFromTicker = createServerFn({ method: "POST" })
