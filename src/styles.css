@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -16,7 +17,7 @@
   --color-navy-2: #1a3f73;
   --color-crimson: #8b1e2d;
   --radius-lg: 0.85rem;
-  --font-sans: "Carlito", "Calibri", "Segoe UI", sans-serif;
+  --font-sans: "Calibri", "Carlito", "Segoe UI", sans-serif;
 }
 
 @layer base {
@@ -44,7 +45,7 @@
 }
 
 .ticker-track {
-  animation: ticker-run 48s linear infinite;
+  animation: ticker-run 72s linear infinite;
   align-items: center;
 }
 

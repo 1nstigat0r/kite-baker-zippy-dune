@@ -193,11 +193,9 @@ export function BriefingDoc({
         </button>
       </div>
 
-      {used ? (
-        <p className="mb-4 rounded-lg bg-gold/15 px-4 py-3 text-sm text-fg-on-dark shadow-[0_8px_24px_rgba(0,0,0,0.28)]">
-          סריקה חיה עד נעילה ({scanDueLabel ?? "כ־40 דק׳"}): ממצאים חדשים מחליפים את החלש בעדכון, ואם לא — את החלש בספיירים.
-        </p>
-      ) : null}
+      <p className="mb-4 rounded-lg bg-navy-2/80 px-4 py-3 text-sm text-fg-on-dark shadow-[0_8px_24px_rgba(0,0,0,0.28)]">
+        מבזקים נסרקים כל דקה. העדכון הבא ייארז ב־{scanDueLabel ?? ":45"} מהמבזקים החזקים, והשאר לספיירים.
+      </p>
 
       <section className="rounded-lg bg-surface px-5 py-6 text-fg shadow-[0_14px_0_0_rgba(12,28,55,0.55),0_22px_40px_rgba(0,0,0,0.45)] sm:px-8 sm:py-8">
         <div className="mb-6 flex items-start justify-between gap-3 border-b border-line/60 pb-4">

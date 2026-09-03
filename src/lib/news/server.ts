@@ -33,7 +33,7 @@ import {
 } from "./store";
 import { fingerprint, hasHebrew } from "./text";
 import { hourKey, hourLabelFromKey, israelParts } from "./time";
-import { briefingHasContent, briefingItemCount, type BriefingPayload, type RawStory } from "./types";
+import { briefingHasContent, briefingItemCount, type ArenaId, type BriefingPayload, type RawStory, type TickerItem } from "./types";
 
 const inflight = new Map<string, Promise<void>>();
 
@@ -136,7 +136,7 @@ async function storiesFromTicker(): Promise<RawStory[]> {
     url: item.url,
     source: item.source,
     publishedAt: item.publishedAt,
-    arena: item.arena,
+    arena: (item.arena as ArenaId | null) ?? null,
     via: "rss" as const,
   }));
 }
@@ -160,43 +160,7 @@ async function refineActiveDraft() {
 let refineInflight: Promise<void> | null = null;
 
 async function tickScan() {
-  const parts = israelParts();
-  const dayPrefix = `${parts.year}-${parts.month}-${parts.day}`;
-  const [latest, scan] = await Promise.all([
-    getLatestReady(dayPrefix),
-    getScanState(),
-  ]);
-
-  if (scan.scanning && scan.dueAt) {
-    const due = Date.parse(scan.dueAt);
-    if (Date.now() >= due) {
-      // Lock current draft — stop live swaps; wait for next «השתמשתי»
-      await clearScan();
-      return;
-    }
-    const last = await getMeta("last_ingest_at");
-    if (!last || Date.now() - Date.parse(last) > 3 * 60_000) {
-      kickIngest();
-    }
-    if (!refineInflight) {
-      refineInflight = refineActiveDraft()
-        .catch((err) => {
-          console.error("[refine]", err instanceof Error ? err.message : err);
-        })
-        .finally(() => {
-          refineInflight = null;
-        });
-    }
-    return;
-  }
-
-  if (!latest || latest.id !== hourKey()) {
-    const id = hourKey();
-    if (inflight.has(id)) return;
-    await claimBriefing(id, true);
-    const task = generateForHour(id).finally(() => inflight.delete(id));
-    inflight.set(id, task);
-  }
+  // Minute ticker + :45 pack are client-driven (local ticker survives Vercel cold start).
 }
 
 
@@ -207,44 +171,56 @@ export const getDashboard = createServerFn({ method: "POST" })
     return buildDashboard(data.hourKey);
   });
 
-export const refreshTicker = createServerFn({ method: "POST" }).handler(
-  async () => {
-    await ingestStories(true, "hot");
-    await setMeta("last_ingest_at", new Date().toISOString());
-    await localizeTicker();
-    await pruneTicker(16);
-    await tickScan();
-    const scan = await getScanState();
-    const draftId = (await getMeta("active_draft_id")) || undefined;
-    return buildDashboard(scan.scanning ? draftId : undefined);
-  },
-);
+function storiesToTicker(stories: RawStory[]): TickerItem[] {
+  return stories.slice(0, 40).map((story) => ({
+    id: story.url.slice(-24) || story.url,
+    title: story.title,
+    titleHe: hasHebrew(story.title) ? story.title : localizeHeadline(story.title, story.source),
+    source: story.source,
+    url: story.url,
+    publishedAt: story.publishedAt,
+    arena: story.arena,
+  }));
+}
+
+export const scanMinute = createServerFn({ method: "POST" }).validator((input?: unknown) => input ?? {}).handler(async () => {
+  const stories = await Promise.race([
+    ingestStories(true, "hot"),
+    new Promise<RawStory[]>((resolve) => setTimeout(() => resolve([]), 22_000)),
+  ]);
+  await setMeta("last_ingest_at", new Date().toISOString());
+  await localizeTicker();
+  return { items: storiesToTicker(stories) };
+});
+
+export const composeFromTicker = createServerFn({ method: "POST" })
+  .validator((input: { items: TickerItem[] }) => input)
+  .handler(async ({ data }) => {
+    const stories: RawStory[] = data.items.map((item) => ({
+      title: item.titleHe || item.title,
+      url: item.url,
+      source: item.source,
+      publishedAt: item.publishedAt,
+      arena: (item.arena as import("./types").ArenaId | null) ?? null,
+      via: "rss" as const,
+    }));
+    const id = hourKey();
+    const live = composeLiveOnly({ stories, previous: [], seen: [] });
+    if (briefingItemCount(live) === 0) return buildDashboard(id);
+    await claimBriefing(id, true);
+    await saveBriefing(id, await shortenPayload(live));
+    await setMeta("active_draft_id", id);
+    await setMeta("last_pack_id", id);
+    return buildDashboard(id);
+  });
+
+export const refreshTicker = createServerFn({ method: "POST" }).handler(async () => {
+  return buildDashboard();
+});
 
 export const ensureBriefing = createServerFn({ method: "POST" })
   .validator((input: { hourKey?: string; force?: boolean } | undefined) => input ?? {})
   .handler(async ({ data }) => {
-    await tickScan();
-    if (data.force) {
-      const id = data.hourKey ?? hourKey();
-      inflight.delete(id);
-      await claimBriefing(id, true);
-      const task = generateForHour(id).finally(() => inflight.delete(id));
-      inflight.set(id, task);
-      // Wait a bit so first paint can get content when possible
-      await Promise.race([
-        task,
-        new Promise((r) => setTimeout(r, 12_000)),
-      ]);
-      return buildDashboard(id);
-    }
-    // If no ready briefing yet, wait briefly for in-flight generation
-    const id = data.hourKey ?? hourKey();
-    if (inflight.has(id)) {
-      await Promise.race([
-        inflight.get(id),
-        new Promise((r) => setTimeout(r, 10_000)),
-      ]);
-    }
     return buildDashboard(data.hourKey);
   });
 
@@ -296,41 +272,10 @@ export const markUsed = createServerFn({ method: "POST" })
     };
 
     let next = stripBurnedUrls(briefingFromSpares(current, 6));
-    try {
-      const fresh = await Promise.race([
-        ingestStories(true, "hot"),
-        new Promise<RawStory[]>((resolve) => setTimeout(() => resolve([]), 20_000)),
-      ]);
-      const pool = (fresh.length ? fresh : await storiesFromTicker()).filter(
-        (story) => !burnedUrls.has(story.url),
-      );
-      const nextCount = briefingItemCount(next);
-      if (nextCount < 4 && pool.length) {
-        const parts = israelParts();
-        const dayPrefix = `${parts.year}-${parts.month}-${parts.day}`;
-        const [seen, previous] = await Promise.all([
-          listSeen(dayPrefix),
-          previousBodies(dayPrefix, data.hourKey),
-        ]);
-        const live = composeLiveOnly({ stories: pool, previous, seen });
-        if (briefingItemCount(live) > 0) next = live;
-        else next = absorbFindsIntoPayload(next, pool);
-      } else if (pool.length) {
-        next = absorbFindsIntoPayload(next, pool);
-      }
-      next = stripBurnedUrls(next);
-    } catch (err) {
-      console.error("[markUsed-ingest]", err instanceof Error ? err.message : err);
-    }
+    // Ticker restarts on the client; do not block used on a live ingest.
 
     if (briefingItemCount(next) === 0) {
       next = stripBurnedUrls(briefingFromSpares(current, 6));
-    }
-    if (briefingItemCount(next) === 0) {
-      next = stripBurnedUrls(structuredClone(CURRENT_BRIEFING));
-    }
-    if (briefingItemCount(next) === 0) {
-      next = structuredClone(CURRENT_BRIEFING);
     }
 
     const nowId = hourKey();
@@ -338,7 +283,7 @@ export const markUsed = createServerFn({ method: "POST" })
     await saveBriefing(nowId, await shortenPayload(next));
     await setMeta("active_draft_id", nowId);
     await markBriefingUsed(data.hourKey);
-    kickIngest();
+    await clearScan();
     return buildDashboard(nowId);
   });
 

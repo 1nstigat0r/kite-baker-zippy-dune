@@ -173,25 +173,11 @@ export async function ingestStories(
   let concurrency = 10;
 
   if (mode === "hot") {
+    // Compact desk list — scan all of it every minute.
     concurrency = 8;
-    const rssCursor = Number((await getMeta("ingest_rss_cursor")) || "0") || 0;
-    const tgCursor = Number((await getMeta("ingest_tg_cursor")) || "0") || 0;
-    const rssBatch = rotate(RSS_SOURCES, rssCursor, 10);
-    const tgPool = TELEGRAM_SOURCES.filter((src) => !src.indicator);
-    const tgBatch = rotate(tgPool, tgCursor, 8);
-    await Promise.all([
-      setMeta(
-        "ingest_rss_cursor",
-        String(RSS_SOURCES.length ? (rssCursor + rssBatch.length) % RSS_SOURCES.length : 0),
-      ),
-      setMeta(
-        "ingest_tg_cursor",
-        String(tgPool.length ? (tgCursor + tgBatch.length) % tgPool.length : 0),
-      ),
-    ]);
     jobs = [
-      ...rssBatch.map((src) => ({ kind: "rss" as const, src })),
-      ...tgBatch.map((src) => ({ kind: "tg" as const, src })),
+      ...RSS_SOURCES.map((src) => ({ kind: "rss" as const, src })),
+      ...TELEGRAM_SOURCES.filter((src) => !src.indicator).map((src) => ({ kind: "tg" as const, src })),
     ];
   } else {
     jobs = [
@@ -205,11 +191,11 @@ export async function ingestStories(
     concurrency,
     async (job) => {
       if (job.kind === "rss") {
-        const xml = await fetchText(job.src.url, 5000);
+        const xml = await fetchText(job.src.url, mode === "hot" ? 3500 : 5000);
         if (!xml || !/[<](rss|feed|item|entry)/i.test(xml)) return [] as RawStory[];
         return parseRss(xml, job.src.name);
       }
-      const html = await fetchText(`https://t.me/s/${job.src.channel}`, 5000);
+      const html = await fetchText(`https://t.me/s/${job.src.channel}`, mode === "hot" ? 3500 : 5000);
       if (!html) return [] as RawStory[];
       return parseTelegram(html, job.src.channel, job.src.name);
     },

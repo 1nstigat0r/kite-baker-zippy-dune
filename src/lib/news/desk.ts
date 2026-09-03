@@ -6,6 +6,7 @@ import {
   type BriefingItem,
   type BriefingPayload,
   type SpareItem,
+  type TickerItem,
 } from "./types";
 import { formatHeDateTime, hourLabelFromKey, hourKey, todayDateLabel } from "./time";
 
@@ -210,7 +211,9 @@ const USED_KEY = "idkun-used-at-v10";
 const PAYLOAD_KEY = "idkun-payload-v10";
 const ORIG_KEY = "idkun-orig-ids-v10";
 const QUEUE_KEY = "idkun-queue-at-v10";
-const BURN_URLS_KEY = "idkun-burned-urls-v9";
+const BURN_URLS_KEY = "idkun-burned-urls-v11";
+const TICKER_KEY = "idkun-ticker-v11";
+const PACK_KEY = "idkun-last-pack-v11";
 
 function lsGet(key: string): string | null {
   try {
@@ -228,6 +231,34 @@ function lsSet(key: string, value: string) {
   } catch {
     /* iframe */
   }
+}
+
+
+export function loadLocalTicker(): TickerItem[] {
+  try {
+    const raw = lsGet(TICKER_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as TickerItem[];
+    return Array.isArray(parsed) ? parsed.filter((row) => row && row.url && (row.titleHe || row.title)) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveLocalTicker(items: TickerItem[]) {
+  lsSet(TICKER_KEY, JSON.stringify(items.slice(0, 16)));
+}
+
+export function clearLocalTicker() {
+  lsSet(TICKER_KEY, "[]");
+}
+
+export function loadLastPack(): string | null {
+  return lsGet(PACK_KEY);
+}
+
+export function saveLastPack(id: string) {
+  lsSet(PACK_KEY, id);
 }
 
 export function loadUsedAt(): number | null {

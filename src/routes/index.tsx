@@ -1,4 +1,3 @@
-import { RefreshCw } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { BriefingDoc } from "@/components/briefing-doc";
@@ -8,9 +7,11 @@ import {
   TICKER,
   activePayload,
   burnSeedBriefingUrls,
+  clearLocalTicker,
   clearUsedLocal,
-  formatDue,
-  isScanning,
+  loadBurnedUrls,
+  loadLastPack,
+  loadLocalTicker,
   loadOriginalIds,
   loadQueueAt,
   loadUsedAt,
@@ -18,25 +19,29 @@ import {
   markUsedLocal,
   payloadItemCount,
   persistPayloadLocal,
+  saveLastPack,
+  saveLocalTicker,
   saveQueueAt,
-  scanDueAt,
   stripBurned,
 } from "@/lib/news/desk";
 import {
   addSpare,
+  composeFromTicker,
   ensureBriefing,
   getDashboard,
   markUsed,
   persistPayload,
-  refreshTicker,
+  scanMinute,
   swapSpare,
 } from "@/lib/news/server";
+import { mergeTicker, nextPackLabel, shouldPackHour } from "@/lib/news/ticker-loop";
 import { displayShort } from "@/lib/news/display-short";
 import {
   briefingHasContent,
   type BriefingPayload,
   type DashboardData,
   type SpareItem,
+  type TickerItem,
 } from "@/lib/news/types";
 
 export const Route = createFileRoute("/")({
@@ -135,7 +140,9 @@ function Home() {
   const [hourKey, setHourKey] = useState(picked.hourKey);
   const [originalIds, setOriginalIds] = useState<string[]>([]);
   const [tickKey, setTickKey] = useState(0);
-  const [scanningTicker, setScanningTicker] = useState(false);
+  const [tickerItems, setTickerItems] = useState<TickerItem[]>(() => loadLocalTicker());
+  const packingRef = useRef(false);
+  const scanningRef = useRef(false);
   const queueAt = useRef(0);
   const originalsRef = useRef<string[]>([]);
   const scanQueueRef = useRef<SpareItem[]>([]);
@@ -204,75 +211,69 @@ function Home() {
         }
       }
     };
+    const runScan = async () => {
+      if (scanningRef.current) return;
+      scanningRef.current = true;
+      try {
+        const scanned = await scanMinute({ data: {} });
+        const finds = scanned.items ?? [];
+        setTickerItems((prev) => {
+          const next = mergeTicker(prev, finds, loadBurnedUrls());
+          saveLocalTicker(next);
+          return next;
+        });
+        const packId = shouldPackHour();
+        if (packId && loadLastPack() !== packId && !packingRef.current) {
+          const pool = loadLocalTicker();
+          if (pool.length) {
+            packingRef.current = true;
+            const next = await composeFromTicker({ data: { items: pool } });
+            applyDash(next);
+            clearLocalTicker();
+            setTickerItems([]);
+            saveLastPack(packId);
+            packingRef.current = false;
+          }
+        }
+      } catch {
+        packingRef.current = false;
+      } finally {
+        scanningRef.current = false;
+        setTickKey((k) => k + 1);
+      }
+    };
+    void runScan();
     const poll = window.setInterval(() => {
       void getDashboard({ data: {} }).then(applyDash).catch(() => undefined);
-    }, 12_000);
+    }, 20_000);
     const tick = window.setInterval(() => {
-      void onRefreshTicker();
-    }, 30_000);
+      void runScan();
+    }, 60_000);
     return () => {
       window.clearInterval(poll);
       window.clearInterval(tick);
     };
   }, []);
 
-  const scanning = Boolean(usedAt) && (isScanning(usedAt) || dash.scanningNext);
-  const due =
-    (dash.scanDueLabel && dash.scanningNext ? dash.scanDueLabel : null) ||
-    (usedAt ? formatDue(scanDueAt(usedAt)) : null);
+  const scanning = false;
+  const due = nextPackLabel();
   const total = Math.max(originalIds.length, 1);
   const replaced = 0;
 
-  const deskUrlSet = useMemo(() => {
-    const s = new Set<string>();
-    for (const arena of payload.arenas) {
-      for (const item of arena.items) {
-        if (item.url) s.add(item.url);
-        if (item.shortUrl) s.add(item.shortUrl);
-      }
-    }
-    for (const item of payload.spares ?? []) {
-      if (item.url) s.add(item.url);
-      if (item.shortUrl) s.add(item.shortUrl);
-    }
-    return s;
-  }, [payload]);
-
   const tickerRows = useMemo(() => {
-    const live = dash.ticker
+    const live = tickerItems
       .map((row) => {
         const text = (row.titleHe || row.title || "").replace(/\*\*/g, "");
         const source = row.source || "מבזק";
         const url = displayShort(undefined, row.url) || row.url;
-        return { source, text, url, raw: row.url };
+        return { source, text, url };
       })
-      .filter((row) => row.text.length > 8)
-      .filter((row) => !deskUrlSet.has(row.raw) && !deskUrlSet.has(row.url));
-    // Prefer live scan ticker; static TICKER only if still empty, and never desk dupes.
-    const fallback = TICKER.filter((row) => !deskUrlSet.has(row.url));
-    const base = live.length ? live : fallback;
-    return [...base, ...base];
-  }, [dash.ticker, deskUrlSet]);
-
-  async function onRefreshTicker() {
-    setScanningTicker(true);
-    setTickKey((k) => k + 1);
-    try {
-      const next = await refreshTicker();
-      setDash(next);
-      const p = pickPayload(next);
-      if (briefingHasContent(next.briefing) || briefingHasContent(next.latestBriefing)) {
-        setPayload(p.payload);
-        setHeader(p.header);
-        setHourKey(p.hourKey);
-        persistPayloadLocal(p.payload);
-      }
-    } catch {
-      /* keep */
-    } finally {
-      setScanningTicker(false);
+      .filter((row) => row.text.length > 8);
+    if (!live.length) {
+      return [{ source: "עדכון", text: "סורק מבזקים כל דקה…", url: "#" }];
     }
-  }
+    return [...live, ...live];
+  }, [tickerItems]);
 
   async function onUsed() {
     markUsedLocal(payload);
@@ -304,6 +305,9 @@ function Home() {
       setHeader(p.header);
       setHourKey(p.hourKey);
       persistPayloadLocal(cleaned);
+      clearLocalTicker();
+      setTickerItems([]);
+      saveLastPack("");
       scanQueueRef.current = (cleaned.spares ?? next.scanQueue ?? []).slice(0, 10);
     } catch {
       const { briefingFromSpares } = await import("@/lib/news/compose");
@@ -311,6 +315,8 @@ function Home() {
       if (local.arenas.reduce((s, a) => s + a.items.length, 0) === 0) local = payload;
       setPayload(local);
       persistPayloadLocal(local);
+      clearLocalTicker();
+      setTickerItems([]);
       scanQueueRef.current = local.spares.slice(0, 10);
     }
   }
@@ -367,19 +373,11 @@ function Home() {
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,var(--color-bg)_0%,var(--color-bg-mid)_42%,var(--color-navy)_100%)]">
       <header className="sticky top-0 z-20 border-b border-gold/30 bg-bg/95 backdrop-blur">
-        <div className="flex h-12 items-center">
-          <button
-            type="button"
-            onClick={() => void onRefreshTicker()}
-            className="inline-flex h-full shrink-0 items-center gap-2 border-e border-gold/30 bg-navy px-3 text-xs font-semibold text-fg-on-dark hover:bg-navy-2 sm:px-4"
-          >
-            <RefreshCw className={`size-3.5 ${scanningTicker ? "animate-spin" : ""}`} />
-            רענון מבזקים
-          </button>
-          <div className="flex h-full min-w-0 flex-1 items-center overflow-hidden">
+        <div className="flex h-16 items-center sm:h-20">
+          <div className="flex h-full min-w-0 flex-1 items-center overflow-hidden border-b border-gold/25">
             <div
               key={tickKey}
-              className="ticker-track flex h-full w-max items-center gap-10 whitespace-nowrap px-4 text-sm text-fg-on-dark"
+              className="ticker-track flex h-full w-max items-center gap-12 whitespace-nowrap px-5 text-base text-fg-on-dark sm:text-lg"
             >
               {tickerRows.map((row, i) => (
                 <a
