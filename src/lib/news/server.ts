@@ -1,9 +1,9 @@
-import { CURRENT_BRIEFING } from "./desk";
 import { createServerFn } from "@tanstack/react-start";
 import {
   absorbFindsIntoPayload,
+  briefingFromSpares,
   composeBriefing,
-  emergencyBriefing,
+  composeLiveOnly,
   localizeHeadline,
 } from "./compose";
 import { ingestStories } from "./ingest";
@@ -15,8 +15,6 @@ import {
   buildDashboard,
   claimBriefing,
   clearScan,
-  clearTicker,
-  ensureDeskGeneration,
   failBriefing,
   getBriefing,
   getLatestReady,
@@ -29,12 +27,13 @@ import {
   previousBodies,
   pruneTicker,
   saveBriefing,
+  seedTicker,
   setMeta,
   swapSpareItem,
 } from "./store";
 import { fingerprint, hasHebrew } from "./text";
 import { hourKey, hourLabelFromKey, israelParts } from "./time";
-import { briefingHasContent, type BriefingPayload, type RawStory } from "./types";
+import { briefingHasContent, briefingItemCount, type BriefingPayload, type RawStory } from "./types";
 
 const inflight = new Map<string, Promise<void>>();
 
@@ -52,33 +51,14 @@ async function localizeTicker() {
   if (he.length) await applyTickerHe(he);
 }
 
-function isSeedPayload(payload: BriefingPayload | undefined | null) {
-  if (!payload) return true;
-  const seed = new Set(
-    [
-      ...CURRENT_BRIEFING.arenas.flatMap((a) => a.items.map((i) => i.url)),
-      ...CURRENT_BRIEFING.spares.map((i) => i.url),
-    ].filter(Boolean),
-  );
-  const items = payload.arenas.flatMap((a) => a.items);
-  if (items.length === 0) return true;
-  const hits = items.filter((i) => seed.has(i.url)).length;
-  return hits >= Math.ceil(items.length * 0.6);
-}
-
-function isSeedDash(dash: { briefing?: { payload: BriefingPayload } | null; latestBriefing?: { payload: BriefingPayload } | null }) {
-  const p = dash.briefing?.payload ?? dash.latestBriefing?.payload;
-  return isSeedPayload(p);
-}
-
 async function generateForHour(id: string) {
   const parts = israelParts();
   const dayPrefix = `${parts.year}-${parts.month}-${parts.day}`;
   try {
     const stories = await Promise.race([
-      ingestStories(true, "fast"),
+      ingestStories(true, "hot"),
       new Promise<RawStory[]>((resolve) => {
-        setTimeout(() => resolve([]), 20_000);
+        setTimeout(() => resolve([]), 22_000);
       }),
     ]);
     const [seen, previous, ticker] = await Promise.all([
@@ -107,34 +87,23 @@ async function generateForHour(id: string) {
       seen,
     });
 
-    let payload = result.payload;
-    let itemCount = payload.arenas.reduce((n, a) => n + a.items.length, 0);
-    if (itemCount === 0) {
-      console.error("[briefing] empty compose", id, "stories", (stories.length ? stories : fromTicker).length);
-      const pool = stories.length ? stories : fromTicker;
-      payload = emergencyBriefing(pool);
-      itemCount = payload.arenas.reduce((n, a) => n + a.items.length, 0);
-      if (itemCount === 0 && pool.length === 0) {
-        payload = structuredClone(CURRENT_BRIEFING);
-        kickIngest();
-      }
-    }
-    await saveBriefing(id, await shortenPayload(payload));
+    await saveBriefing(id, await shortenPayload(result.payload));
     const prints: string[] = [];
-    for (const arena of payload.arenas) {
+    for (const arena of result.payload.arenas) {
       for (const item of arena.items) {
         prints.push(fingerprint(item.url, `${item.speaker} ${item.body}`));
       }
     }
-    for (const item of payload.spares) {
+    for (const item of result.payload.spares) {
       prints.push(fingerprint(item.url, `${item.speaker} ${item.body}`));
     }
     await addSeen(id, prints);
     if (result.tickerHe.length) {
       await applyTickerHe(result.tickerHe);
+      await seedTicker(result.tickerHe);
     }
     await localizeTicker();
-    await pruneTicker(24);
+    await pruneTicker(16);
   } catch (err) {
     const message = err instanceof Error ? err.message : "generation failed";
     console.error("[briefing]", id, message);
@@ -148,9 +117,9 @@ function kickIngest() {
   if (ingestKick) return;
   ingestKick = (async () => {
     await setMeta("last_ingest_at", new Date().toISOString());
-    await ingestStories(true, "full");
+    await ingestStories(false);
     await localizeTicker();
-    await pruneTicker(24);
+    await pruneTicker(16);
   })()
     .catch((err) => {
       console.error("[scan-ingest]", err instanceof Error ? err.message : err);
@@ -215,9 +184,8 @@ async function tickScan() {
     return;
   }
 
-  const id = hourKey();
-  const staleSeed = latest && latest.id === id && isSeedPayload(latest.payload);
-  if (!latest || latest.id !== id || staleSeed) {
+  if (!latest || latest.id !== hourKey()) {
+    const id = hourKey();
     if (inflight.has(id)) return;
     await claimBriefing(id, true);
     const task = generateForHour(id).finally(() => inflight.delete(id));
@@ -229,18 +197,16 @@ async function tickScan() {
 export const getDashboard = createServerFn({ method: "POST" })
   .validator((input: { hourKey?: string } | undefined) => input ?? {})
   .handler(async ({ data }) => {
-    await ensureDeskGeneration();
     await tickScan();
     return buildDashboard(data.hourKey);
   });
 
 export const refreshTicker = createServerFn({ method: "POST" }).handler(
   async () => {
-    await ensureDeskGeneration();
-    await ingestStories(true, "fast");
+    await ingestStories(false);
     await setMeta("last_ingest_at", new Date().toISOString());
     await localizeTicker();
-    await pruneTicker(24);
+    await pruneTicker(16);
     await tickScan();
     const scan = await getScanState();
     const draftId = (await getMeta("active_draft_id")) || undefined;
@@ -251,24 +217,22 @@ export const refreshTicker = createServerFn({ method: "POST" }).handler(
 export const ensureBriefing = createServerFn({ method: "POST" })
   .validator((input: { hourKey?: string; force?: boolean } | undefined) => input ?? {})
   .handler(async ({ data }) => {
-    const wiped = await ensureDeskGeneration();
     await tickScan();
-    const id = data.hourKey ?? hourKey();
-    const dash = await buildDashboard(id);
-    const has =
-      briefingHasContent(dash.briefing) || briefingHasContent(dash.latestBriefing);
-    const seedish = isSeedDash(dash);
-    if (data.force || wiped || !has || seedish) {
+    if (data.force) {
+      const id = data.hourKey ?? hourKey();
       inflight.delete(id);
       await claimBriefing(id, true);
       const task = generateForHour(id).finally(() => inflight.delete(id));
       inflight.set(id, task);
+      // Wait a bit so first paint can get content when possible
       await Promise.race([
         task,
-        new Promise((r) => setTimeout(r, 22_000)),
+        new Promise((r) => setTimeout(r, 12_000)),
       ]);
       return buildDashboard(id);
     }
+    // If no ready briefing yet, wait briefly for in-flight generation
+    const id = data.hourKey ?? hourKey();
     if (inflight.has(id)) {
       await Promise.race([
         inflight.get(id),
@@ -295,22 +259,70 @@ export const markUsed = createServerFn({ method: "POST" })
 
     // Burn consumed briefing items — never recycle into spares
     const burned: string[] = [];
+    const burnedUrls = new Set<string>();
+    const takeUrl = (url?: string | null) => {
+      if (url) burnedUrls.add(url);
+    };
     for (const arena of current.arenas) {
       for (const item of arena.items) {
         burned.push(fingerprint(item.url, `${item.speaker} ${item.body}`));
+        takeUrl(item.url);
+        takeUrl(item.shortUrl);
       }
     }
-    for (const item of current.spares) {
-      burned.push(fingerprint(item.url, `${item.speaker} ${item.body}`));
+    for (const spare of current.spares ?? []) {
+      takeUrl(spare.url);
+      takeUrl(spare.shortUrl);
     }
     if (burned.length) await addSeen(data.hourKey || "used", burned);
 
+    const stripBurnedUrls = (payload: BriefingPayload): BriefingPayload => {
+      if (burnedUrls.size === 0) return payload;
+      return {
+        ...payload,
+        arenas: payload.arenas
+          .map((arena) => ({
+            ...arena,
+            items: arena.items.filter((item) => !burnedUrls.has(item.url) && !burnedUrls.has(item.shortUrl ?? "")),
+          }))
+          .filter((arena) => arena.items.length > 0),
+        spares: (payload.spares ?? []).filter(
+          (item) => !burnedUrls.has(item.url) && !burnedUrls.has(item.shortUrl ?? ""),
+        ),
+      };
+    };
+
+    let next = stripBurnedUrls(briefingFromSpares(current, 6));
+    try {
+      const fresh = await Promise.race([
+        ingestStories(true, "hot"),
+        new Promise<RawStory[]>((resolve) => setTimeout(() => resolve([]), 20_000)),
+      ]);
+      const pool = (fresh.length ? fresh : await storiesFromTicker()).filter(
+        (story) => !burnedUrls.has(story.url),
+      );
+      const nextCount = briefingItemCount(next);
+      if (nextCount < 4 && pool.length) {
+        const parts = israelParts();
+        const dayPrefix = `${parts.year}-${parts.month}-${parts.day}`;
+        const [seen, previous] = await Promise.all([
+          listSeen(dayPrefix),
+          previousBodies(dayPrefix, data.hourKey),
+        ]);
+        next = composeLiveOnly({ stories: pool, previous, seen });
+      } else if (pool.length) {
+        next = absorbFindsIntoPayload(next, pool);
+      }
+      next = stripBurnedUrls(next);
+    } catch (err) {
+      console.error("[markUsed-ingest]", err instanceof Error ? err.message : err);
+    }
+
     const nowId = hourKey();
     await claimBriefing(nowId, true);
-    await markBriefingUsed(data.hourKey);
+    await saveBriefing(nowId, await shortenPayload(next));
     await setMeta("active_draft_id", nowId);
-    // Full live compose — not reshuffle of the same stale spares/ticker.
-    await generateForHour(nowId);
+    await markBriefingUsed(data.hourKey);
     kickIngest();
     return buildDashboard(nowId);
   });

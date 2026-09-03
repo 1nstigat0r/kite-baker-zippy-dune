@@ -156,28 +156,8 @@ export const TELEGRAM_SOURCES: TelegramSource[] = [
   { name: "אלאח'באריה אלסוריה", channel: "SyriaNewsAgency" },
   { name: "רויא ניוז", channel: "RoyaNews" },
   { name: "וואע", channel: "INAnew" },
-  // Israeli TG — tip-off only (never publish as source of record)
   { name: "אבו עלי אקספרס", channel: "AbuAliExpress", indicator: true },
   { name: "דסק ערבים", channel: "kan11arabic", indicator: true },
-  { name: "טאבנאק", channel: "tabnaknews" },
-  { name: "וחיד אונליין", channel: "vahidonline" },
-  { name: "עסאר חבר", channel: "asrkhabar" },
-  { name: "פארס פוליטי", channel: "Farspolitics" },
-  { name: "אירנא ערבית", channel: "IRNAarabic" },
-  { name: "אלעחד TV", channel: "alahadtv" },
-  { name: "TRT ערבית", channel: "TRTArabi" },
-  { name: "SDF Press", channel: "sdfpress" },
-  { name: "ANHA", channel: "ANHA_Hawar" },
-  { name: "צאבין פלוס", channel: "SabereenPlus" },
-  { name: "ג'וסור", channel: "JusoorNews" },
-  { name: "שאם TV", channel: "ShamTV" },
-  { name: "סאם ניוז", channel: "SamNewsSyria" },
-  { name: "אולטרה פלסטין", channel: "UltraPalestine" },
-  { name: "קדס מדיה", channel: "QudsMedia" },
-  { name: "מוחמד עבד אלסלאם", channel: "abdusalamsanaa" },
-  { name: "משהח סוריה", channel: "SyrianMFA" },
-  { name: "הגנה אזרחית סוריה", channel: "SyriaCivilDefence" },
-  { name: "רודאו ערבית", channel: "RudawArabic" },
 ];
 
 export const X_HANDLES = [
@@ -254,16 +234,15 @@ export const X_HANDLES = [
 ];
 
 /** Owner X (Twitter) source lists — monitor for exclusives; always open the primary outlet. */
-/** Owner X lists — catalog only, NOT ingested (no Twitter API; tip-off for humans). */
-export const X_LISTS: { name: string; id: string; url: string; tipOff: true }[] = [
-  { name: "list-1", id: "2028039297878634889", url: "https://x.com/i/lists/2028039297878634889", tipOff: true },
-  { name: "list-2", id: "193997610", url: "https://x.com/i/lists/193997610", tipOff: true },
-  { name: "list-3", id: "193992434", url: "https://x.com/i/lists/193992434", tipOff: true },
-  { name: "list-4", id: "1359519988156157954", url: "https://x.com/i/lists/1359519988156157954", tipOff: true },
-  { name: "list-5", id: "194023773", url: "https://x.com/i/lists/194023773", tipOff: true },
-  { name: "list-6", id: "2029309781169905773", url: "https://x.com/i/lists/2029309781169905773", tipOff: true },
-  { name: "list-7", id: "194326098", url: "https://x.com/i/lists/194326098", tipOff: true },
-  { name: "list-8", id: "1619207287297511424", url: "https://x.com/i/lists/1619207287297511424", tipOff: true },
+export const X_LISTS: { name: string; id: string; url: string }[] = [
+  { name: "list-1", id: "2028039297878634889", url: "https://x.com/i/lists/2028039297878634889" },
+  { name: "list-2", id: "193997610", url: "https://x.com/i/lists/193997610" },
+  { name: "list-3", id: "193992434", url: "https://x.com/i/lists/193992434" },
+  { name: "list-4", id: "1359519988156157954", url: "https://x.com/i/lists/1359519988156157954" },
+  { name: "list-5", id: "194023773", url: "https://x.com/i/lists/194023773" },
+  { name: "list-6", id: "2029309781169905773", url: "https://x.com/i/lists/2029309781169905773" },
+  { name: "list-7", id: "194326098", url: "https://x.com/i/lists/194326098" },
+  { name: "list-8", id: "1619207287297511424", url: "https://x.com/i/lists/1619207287297511424" },
 ];
 
 /** Prefer these hosts when an exclusive is attributed through a secondary paper. */

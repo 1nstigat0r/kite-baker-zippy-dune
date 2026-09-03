@@ -206,11 +206,11 @@ export const BRIEFING_HEADER = briefingHeaderNow();
 export const SWAP_EVERY_MS = 12_000;
 export const SCAN_MS = 40 * 60 * 1000;
 
-const USED_KEY = "idkun-used-at-v9";
-const PAYLOAD_KEY = "idkun-payload-v9";
-const BURNED_KEY = "idkun-burned-urls-v9";
-const ORIG_KEY = "idkun-orig-ids-v9";
-const QUEUE_KEY = "idkun-queue-at-v9";
+const USED_KEY = "idkun-used-at-v8";
+const PAYLOAD_KEY = "idkun-payload-v8";
+const ORIG_KEY = "idkun-orig-ids-v8";
+const QUEUE_KEY = "idkun-queue-at-v8";
+const BURN_URLS_KEY = "idkun-burned-urls-v8";
 
 function lsGet(key: string): string | null {
   try {
@@ -256,10 +256,60 @@ export function saveQueueAt(n: number) {
   lsSet(QUEUE_KEY, String(n));
 }
 
+export function loadBurnedUrls(): Set<string> {
+  try {
+    const raw = lsGet(BURN_URLS_KEY);
+    if (!raw) return new Set();
+    const parsed = JSON.parse(raw) as string[];
+    return new Set(Array.isArray(parsed) ? parsed.filter((u) => typeof u === "string" && u) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function persistBurnedUrls(urls: Set<string>) {
+  lsSet(BURN_URLS_KEY, JSON.stringify([...urls].slice(-500)));
+}
+
+function collectPayloadUrls(payload: BriefingPayload): string[] {
+  const urls: string[] = [];
+  for (const arena of payload.arenas) {
+    for (const item of arena.items) {
+      if (item.url) urls.push(item.url);
+      if (item.shortUrl) urls.push(item.shortUrl);
+    }
+  }
+  for (const spare of payload.spares ?? []) {
+    if (spare.url) urls.push(spare.url);
+    if (spare.shortUrl) urls.push(spare.shortUrl);
+  }
+  return urls;
+}
+
+export function stripBurned(payload: BriefingPayload): BriefingPayload {
+  const burned = loadBurnedUrls();
+  if (burned.size === 0) return payload;
+  return {
+    ...payload,
+    arenas: payload.arenas
+      .map((arena) => ({
+        ...arena,
+        items: arena.items.filter((item) => !burned.has(item.url) && !burned.has(item.shortUrl ?? "")),
+      }))
+      .filter((arena) => arena.items.length > 0),
+    spares: (payload.spares ?? []).filter(
+      (item) => !burned.has(item.url) && !burned.has(item.shortUrl ?? ""),
+    ),
+  };
+}
+
 export function markUsedLocal(payload: BriefingPayload) {
   lsSet(USED_KEY, String(Date.now()));
   lsSet(ORIG_KEY, JSON.stringify(listItemIds(payload)));
   lsSet(QUEUE_KEY, "0");
+  const burned = loadBurnedUrls();
+  for (const url of collectPayloadUrls(payload)) burned.add(url);
+  persistBurnedUrls(burned);
 }
 
 export function scanDueAt(usedAt: number) {
@@ -271,85 +321,23 @@ export function isScanning(usedAt: number | null) {
   return Date.now() < scanDueAt(usedAt);
 }
 
-export function emptyBriefing(): BriefingPayload {
-  return { arenas: [], spares: [], desk: 1 };
-}
-
 export function activePayload(): BriefingPayload {
   const raw = lsGet(PAYLOAD_KEY);
   if (raw) {
     try {
       const parsed = JSON.parse(raw) as BriefingPayload;
-      if (parsed?.arenas?.length || parsed?.spares?.length) return parsed;
+      const stripped = stripBurned(parsed);
+      const count = stripped.arenas.reduce((sum, arena) => sum + arena.items.length, 0);
+      if (count > 0) return stripped;
     } catch {
       /* ignore */
     }
   }
-  return structuredClone(CURRENT_BRIEFING);
-}
-
-/** One-shot: drop pre-v9 caches that still held static exclusives. */
-export function purgeLegacyDeskCache() {
-  try {
-    if (typeof localStorage === "undefined") return;
-    for (const k of [
-      "idkun-payload-v7",
-      "idkun-payload-v8",
-      "idkun-used-at-v7",
-      "idkun-used-at-v8",
-      "idkun-orig-ids-v7",
-      "idkun-orig-ids-v8",
-      "idkun-queue-at-v7",
-      "idkun-queue-at-v8",
-      "idkun-burned-urls-v8",
-    ]) {
-      localStorage.removeItem(k);
-    }
-  } catch {
-    /* ignore */
-  }
+  return stripBurned(structuredClone(CURRENT_BRIEFING));
 }
 
 export function persistPayloadLocal(payload: BriefingPayload) {
   lsSet(PAYLOAD_KEY, JSON.stringify(payload));
-}
-
-export function loadBurnedUrls(): string[] {
-  try {
-    const raw = lsGet(BURNED_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as string[];
-    return Array.isArray(parsed) ? parsed.filter((u) => typeof u === "string") : [];
-  } catch {
-    return [];
-  }
-}
-
-export function burnUrls(urls: string[]) {
-  const set = new Set(loadBurnedUrls());
-  for (const u of urls) if (u) set.add(u);
-  lsSet(BURNED_KEY, JSON.stringify([...set].slice(-400)));
-}
-
-export function filterBurned(payload: BriefingPayload): BriefingPayload {
-  const burned = new Set(loadBurnedUrls());
-  if (burned.size === 0) return payload;
-  return {
-    desk: payload.desk,
-    arenas: payload.arenas
-      .map((a) => ({ ...a, items: a.items.filter((i) => !burned.has(i.url)) }))
-      .filter((a) => a.items.length > 0),
-    spares: payload.spares.filter((i) => !burned.has(i.url)),
-  };
-}
-
-export function clearLocalDeskCache() {
-  try {
-    if (typeof localStorage === "undefined") return;
-    localStorage.removeItem(PAYLOAD_KEY);
-  } catch {
-    /* ignore */
-  }
 }
 
 export function formatDue(ts: number) {

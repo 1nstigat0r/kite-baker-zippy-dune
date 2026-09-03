@@ -82,9 +82,7 @@ export type RawStory = {
   source: string;
   publishedAt: string | null;
   arena: ArenaId | null;
-  via: "rss" | "telegram" | "x-list";
-  /** Israeli TG / tip lists — scan only; never publish as source of record. */
-  indicator?: boolean;
+  via: "rss" | "telegram";
 };
 
 export const DESK_STYLE = 1;

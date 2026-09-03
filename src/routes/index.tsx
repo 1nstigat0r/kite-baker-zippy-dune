@@ -5,6 +5,7 @@ import { BriefingDoc } from "@/components/briefing-doc";
 import {
   BRIEFING_HEADER,
   CURRENT_BRIEFING,
+  TICKER,
   formatDue,
   isScanning,
   loadOriginalIds,
@@ -12,14 +13,10 @@ import {
   loadUsedAt,
   markUsedLocal,
   persistPayloadLocal,
-  burnUrls,
-  filterBurned,
-  clearLocalDeskCache,
-  purgeLegacyDeskCache,
   saveQueueAt,
   scanDueAt,
+  stripBurned,
 } from "@/lib/news/desk";
-import { hourLabelFromKey, hourKey as nowHourKey, todayDateLabel } from "@/lib/news/time";
 import {
   addSpare,
   ensureBriefing,
@@ -50,23 +47,30 @@ export const Route = createFileRoute("/")({
 });
 
 function seedDash(): DashboardData {
-  const seed = structuredClone(CURRENT_BRIEFING);
   return {
     briefing: {
       id: "seed",
-      hourLabel: hourLabelFromKey(nowHourKey()),
-      dateLabel: todayDateLabel(),
+      hourLabel: "21:00",
+      dateLabel: "3 בספטמבר",
       generatedAt: new Date().toISOString(),
       status: "ready",
-      payload: filterBurned(seed),
+      payload: structuredClone(CURRENT_BRIEFING),
     },
     latestBriefing: null,
     hours: [],
-    ticker: [],
-    scanQueue: seed.spares.slice(0, 6),
-    currentHourKey: nowHourKey(),
-    currentClock: hourLabelFromKey(nowHourKey()),
-    currentDateLabel: todayDateLabel(),
+    ticker: TICKER.map((row, i) => ({
+      id: `t${i}`,
+      title: row.text,
+      titleHe: `${row.source}: ${row.text}`,
+      source: row.source,
+      url: row.url,
+      publishedAt: null,
+      arena: null,
+    })),
+    scanQueue: CURRENT_BRIEFING.spares.slice(0, 6),
+    currentHourKey: "seed",
+    currentClock: "21:00",
+    currentDateLabel: "3 בספטמבר",
     generatingHour: null,
     scanningNext: false,
     scanDueAt: null,
@@ -75,7 +79,7 @@ function seedDash(): DashboardData {
 }
 
 function pickPayload(dash: DashboardData | null): { hourKey: string; header: string; payload: BriefingPayload } {
-  const fallback = filterBurned(structuredClone(CURRENT_BRIEFING));
+  const fallback = structuredClone(CURRENT_BRIEFING);
   if (!dash) {
     return { hourKey: "seed", header: BRIEFING_HEADER, payload: fallback };
   }
@@ -85,18 +89,15 @@ function pickPayload(dash: DashboardData | null): { hourKey: string; header: str
     null;
   if (!view) {
     return {
-      hourKey: dash.currentHourKey || "seed",
-      header:
-        dash.currentDateLabel && dash.currentClock
-          ? `עדכון | ${dash.currentDateLabel}, ${dash.currentClock}`
-          : BRIEFING_HEADER,
+      hourKey: dash.currentHourKey,
+      header: `עדכון | ${dash.currentDateLabel}, ${dash.currentClock}`,
       payload: fallback,
     };
   }
   return {
     hourKey: view.id,
     header: `עדכון | ${view.dateLabel}, ${view.hourLabel}`,
-    payload: filterBurned(view.payload),
+    payload: view.payload,
   };
 }
 
@@ -116,8 +117,6 @@ function Home() {
   const scanQueueRef = useRef<SpareItem[]>([]);
 
   useEffect(() => {
-    purgeLegacyDeskCache();
-    clearLocalDeskCache();
     const used = loadUsedAt();
     const orig = loadOriginalIds();
     originalsRef.current = orig;
@@ -128,19 +127,7 @@ function Home() {
     setPayload(p.payload);
     setHeader(p.header);
     setHourKey(p.hourKey);
-    scanQueueRef.current = (initial?.scanQueue ?? []).slice(0, 10);
-    void ensureBriefing({ data: { force: true } })
-      .then((next) => {
-        setDash(next);
-        const q = pickPayload(next);
-        if (briefingHasContent(next.briefing) || briefingHasContent(next.latestBriefing)) {
-          setPayload(q.payload);
-          setHeader(q.header);
-          setHourKey(q.hourKey);
-          persistPayloadLocal(q.payload);
-        }
-      })
-      .catch(() => undefined);
+    scanQueueRef.current = (initial?.scanQueue ?? CURRENT_BRIEFING.spares).slice(0, 10);
   }, []);
 
   useEffect(() => {
@@ -179,27 +166,17 @@ function Home() {
   const replaced = 0;
 
   const tickerRows = useMemo(() => {
-    const used = new Set(
-      [
-        ...payload.arenas.flatMap((a) => a.items.map((i) => i.url)),
-        ...payload.spares.map((i) => i.url),
-      ]
-        .filter(Boolean)
-        .map((u) => u.replace(/\/$/, "")),
-    );
     const live = dash.ticker
       .map((row) => {
         const text = (row.titleHe || row.title || "").replace(/\*\*/g, "");
         const source = row.source || "מבזק";
         const url = displayShort(undefined, row.url) || row.url;
-        return { source, text, url, raw: row.url };
+        return { source, text, url };
       })
-      .filter((row) => row.text.length > 8)
-      .filter((row) => !used.has((row.raw || "").replace(/\/$/, "")));
-    const base = live.length ? live : [];
-    if (!base.length) return [];
+      .filter((row) => row.text.length > 8);
+    const base = live.length ? live : TICKER;
     return [...base, ...base];
-  }, [dash.ticker, payload]);
+  }, [dash.ticker]);
 
   async function onRefreshTicker() {
     setScanningTicker(true);
@@ -222,11 +199,6 @@ function Home() {
   }
 
   async function onUsed() {
-    burnUrls([
-      ...payload.arenas.flatMap((a) => a.items.map((i) => i.url)),
-      ...payload.spares.map((i) => i.url),
-    ].filter(Boolean));
-    clearLocalDeskCache();
     markUsedLocal(payload);
     const ids = payload.arenas.flatMap((a) => a.items.map((i) => i.id));
     originalsRef.current = ids;
@@ -243,26 +215,18 @@ function Home() {
       });
       setDash(next);
       const p = pickPayload(next);
-      const clean = filterBurned(p.payload);
-      setPayload(clean);
+      const cleaned = stripBurned(p.payload);
+      setPayload(cleaned);
       setHeader(p.header);
       setHourKey(p.hourKey);
-      persistPayloadLocal(clean);
-      scanQueueRef.current = (clean.spares ?? []).slice(0, 10);
+      persistPayloadLocal(cleaned);
+      scanQueueRef.current = (cleaned.spares ?? next.scanQueue ?? []).slice(0, 10);
     } catch {
-      try {
-        const forced = await ensureBriefing({ data: { force: true } });
-        setDash(forced);
-        const p = pickPayload(forced);
-        setPayload(p.payload);
-        setHeader(p.header);
-        setHourKey(p.hourKey);
-        persistPayloadLocal(p.payload);
-        scanQueueRef.current = (p.payload.spares ?? []).slice(0, 10);
-      } catch {
-        setPayload(filterBurned(structuredClone(CURRENT_BRIEFING)));
-        clearLocalDeskCache();
-      }
+      const { briefingFromSpares } = await import("@/lib/news/compose");
+      const local = stripBurned(briefingFromSpares(payload, 6));
+      setPayload(local);
+      persistPayloadLocal(local);
+      scanQueueRef.current = local.spares.slice(0, 10);
     }
   }
 

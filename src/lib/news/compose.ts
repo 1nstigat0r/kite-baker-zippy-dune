@@ -6,8 +6,6 @@ import {
   formatOutlet,
   hasHebrew,
   isJunkItem,
-  isIsraeliStrike,
-  isIsraeliVoice,
   sameEvent,
   shapeCopy,
   shortenSpeaker,
@@ -99,13 +97,15 @@ function prunePayload(payload: BriefingPayload, previous: string[]): BriefingPay
   return ensureItemIds({ ...payload, arenas, spares, desk: DESK_STYLE });
 }
 
+function seedPayload(): BriefingPayload {
+  return ensureItemIds(structuredClone(CURRENT_BRIEFING));
+}
+
 function interestScore(text: string, publishedAt?: string | null) {
   let s = 0;
   if (/גורמים ל-|בלעדי|מסר(?:ו)? ל|דווח ב-/.test(text)) s += 6;
   if (/משה["״]מ|הורמוז|חיזבאללה|חות|קאליבאף|טראמפ|עלי אלטאהר|תקיפ|טיל/.test(text)) s += 4;
-  if (/איראן|לבנון|תימן|עיראק|כווית|סעודי|סוריה|עזה/.test(text)) s += 2;
-  if (isIsraeliStrike(text)) s += 7;
-  if (isIsraeliVoice("", text) && !isIsraeliStrike(text)) s -= 12;
+  if (/איראן|לבנון|תימן|עיראק|כווית|סעודי|סוריה/.test(text)) s += 2;
   if (publishedAt) {
     const tms = Date.parse(publishedAt);
     if (Number.isFinite(tms)) s += Math.max(0, 5 - (Date.now() - tms) / 3_600_000);
@@ -128,14 +128,13 @@ function storyToItem(story: RawStory): BriefingItem | null {
     story.url,
   );
   if (!cleaned.body || isJunkItem(cleaned.speaker, cleaned.body, story.url)) return null;
-  // Prefer Hebrew; still allow strong English exclusives (deskHeadline may leave Latin).
+  // Require some Hebrew after shaping, or accept desk substitutions that left Latin brands
+  if (!hasHebrew(cleaned.body) && cleaned.body.length < 40) return null;
   if (!hasHebrew(cleaned.body)) {
-    if (cleaned.body.length < 28) return null;
+    // Wrap English remainder as desk attribution line
     cleaned.speaker = cleaned.speaker || `דווח ב-${outlet || story.source}`;
   }
-  if (story.indicator) return null;
-  if (/אבו עלי|כאן 11|דסק ערבים|ynet|עמית סגל|יחזקאלי|מוסד|idf|צה["״]?ל/i.test(story.source)) return null;
-  if (isIsraeliVoice(story.source, `${story.title} ${cleaned.body}`, story.url) && !isIsraeliStrike(`${story.title} ${cleaned.body}`)) return null;
+  if (/אבו עלי|כאן 11|דסק ערבים|ynet|עמית סגל|יחזקאלי/i.test(story.source)) return null;
   return mkItem(
     cleaned.speaker || `דווח ב-${outlet || story.source}`,
     cleaned.body,
@@ -144,36 +143,16 @@ function storyToItem(story: RawStory): BriefingItem | null {
   );
 }
 
-function tipTokens(title: string) {
-  return title
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}\s]/gu, " ")
-    .split(/\s+/)
-    .filter((w) => w.length >= 4);
-}
-
 function fromStories(
   stories: RawStory[],
   seen: Set<string>,
   previous: string[],
 ): BriefingPayload {
-  const tips = stories.filter((s) => s.indicator);
-  const tipBag = tips.flatMap((t) => tipTokens(t.title));
-  const ranked = [...stories]
-    .filter((s) => !s.indicator)
-    .sort((a, b) => {
-      const tipBoost = (s: RawStory) => {
-        const toks = tipTokens(s.title);
-        if (!toks.length || !tipBag.length) return 0;
-        const hits = toks.filter((w) => tipBag.includes(w)).length;
-        return hits >= 2 ? 8 : hits === 1 ? 3 : 0;
-      };
-      return (
-        interestScore(`${b.title} ${b.source}`, b.publishedAt) +
-        tipBoost(b) -
-        (interestScore(`${a.title} ${a.source}`, a.publishedAt) + tipBoost(a))
-      );
-    });
+  const ranked = [...stories].sort(
+    (a, b) =>
+      interestScore(`${b.title} ${b.source}`, b.publishedAt) -
+      interestScore(`${a.title} ${a.source}`, a.publishedAt),
+  );
   const arenas = new Map<ArenaId, BriefingItem[]>();
   const spares: SpareItem[] = [];
   const covered = [...previous];
@@ -276,7 +255,12 @@ function capBriefing(payload: BriefingPayload, max = 6): BriefingPayload {
   });
 }
 
-function padSpares(payload: BriefingPayload, stories: RawStory[], previous: string[]): BriefingPayload {
+function padSpares(
+  payload: BriefingPayload,
+  stories: RawStory[],
+  previous: string[],
+  fromSeed = true,
+): BriefingPayload {
   if (payload.spares.length >= 10) return payload;
   const covered = [
     ...previous,
@@ -300,50 +284,18 @@ function padSpares(payload: BriefingPayload, stories: RawStory[], previous: stri
     covered.push(itemText(row));
     seenUrls.add(row.url);
   }
-  // Do not pad from CURRENT_BRIEFING seed — that resurrects burned exclusives.
-  return ensureItemIds({ ...payload, spares: spares.slice(0, 10) });
-}
-
-
-/** Last-resort filler when filters wipe everything — still better than empty card. */
-export function emergencyBriefing(stories: RawStory[]): BriefingPayload {
-  const arenas = new Map<ArenaId, BriefingItem[]>();
-  const spares: SpareItem[] = [];
-  let n = 0;
-  for (const story of stories) {
-    if (story.indicator) continue;
-    const title = (story.title || "").replace(/\s+/g, " ").trim();
-    if (title.length < 20) continue;
-    const arenaId = (story.arena && ARENA_META[story.arena] ? story.arena : resolveArena(title)) as ArenaId;
-    const id = arenaId in ARENA_META ? arenaId : ("intl" as ArenaId);
-    const outlet = formatOutlet(story.source) || story.source;
-    const row = mkItem(
-      `דווח ב-${outlet}`,
-      hasHebrew(title) ? title : title,
-      story.url,
-      story.publishedAt,
-    );
-    if (n < 6) {
-      const list = arenas.get(id) ?? [];
-      list.push(row);
-      arenas.set(id, list);
-      n += 1;
-    } else if (spares.length < 10) {
-      spares.push({ ...row, id: makeId("s", row.url), arena: id });
+  // pad from seed if still short (skipped for live-only compose)
+  if (fromSeed && spares.length < 10) {
+    for (const spare of seedPayload().spares) {
+      if (spares.length >= 10) break;
+      if (seenUrls.has(spare.url)) continue;
+      if (covered.some((p) => sameEvent(p, itemText(spare)))) continue;
+      spares.push(spare);
+      covered.push(itemText(spare));
+      seenUrls.add(spare.url);
     }
   }
-  return ensureItemIds(
-    decorateArenas({
-      desk: DESK_STYLE,
-      arenas: ARENA_ORDER.filter((id) => arenas.get(id)?.length).map((id) => ({
-        id,
-        title: ARENA_META[id].title,
-        flags: ARENA_META[id].flags,
-        items: arenas.get(id)!,
-      })),
-      spares,
-    }),
-  );
+  return ensureItemIds({ ...payload, spares: spares.slice(0, 10) });
 }
 
 /** Rule-based desk composer — no XAI / no api.x.ai. */
@@ -354,9 +306,20 @@ export async function composeBriefing(input: {
   seen: Set<string> | string[];
 }) {
   const seen = input.seen instanceof Set ? input.seen : new Set(input.seen);
-  // NEVER recycle CURRENT_BRIEFING seed — resurrects used exclusives after cold starts.
+  const seed = prunePayload(seedPayload(), input.previous);
   const live = fromStories(input.stories, seen, input.previous);
-  let capped = capBriefing(prunePayload(live, input.previous), 6);
+  const liveCount = live.arenas.reduce((s, a) => s + a.items.length, 0);
+  // Prefer live stories; seed only fills gaps when fetch is thin
+  const merged =
+    liveCount >= 4
+      ? mergeUnique(live, seed, input.previous)
+      : mergeUnique(seed, live, input.previous);
+  let capped = capBriefing(merged, 6);
+  // Ensure 4–8: if under 4 after prune, keep seed items
+  const count = capped.arenas.reduce((s, a) => s + a.items.length, 0);
+  if (count < 4) {
+    capped = capBriefing(mergeUnique(seedPayload(), capped, []), 6);
+  }
   capped = padSpares(capped, input.stories, input.previous);
   const payload = decorateArenas(capped);
 
@@ -380,6 +343,29 @@ export async function composeBriefing(input: {
   return { payload, tickerHe };
 }
 
+/**
+ * Live-only desk from scanned stories. Never merges CURRENT_BRIEFING seed.
+ * Empty live pool → empty arenas + spares (caller may keep a prior payload).
+ */
+export function composeLiveOnly(input: {
+  stories: RawStory[];
+  previous: string[];
+  seen: Set<string> | string[];
+}): BriefingPayload {
+  const seen = input.seen instanceof Set ? input.seen : new Set(input.seen);
+  const live = fromStories(input.stories, seen, input.previous);
+  const liveCount = live.arenas.reduce((s, a) => s + a.items.length, 0);
+  if (liveCount === 0) {
+    return ensureItemIds({
+      desk: DESK_STYLE,
+      arenas: [],
+      spares: [],
+    });
+  }
+  let capped = capBriefing(live, 6);
+  capped = padSpares(capped, input.stories, input.previous, false);
+  return decorateArenas(capped);
+}
 
 export function itemInterest(item: { speaker: string; body: string; publishedAt?: string | null }) {
   return interestScore(itemText(item), item.publishedAt);

@@ -90,7 +90,6 @@ function parseTelegram(
   html: string,
   channel: string,
   source: string,
-  indicator = false,
 ): RawStory[] {
   const chunks = html.split(/class="tgme_widget_message /);
   const items: RawStory[] = [];
@@ -113,7 +112,6 @@ function parseTelegram(
       publishedAt: parsePossiblyUtc(time)?.toISOString() ?? null,
       arena: resolveArena(`${title} ${body}`),
       via: "telegram",
-      indicator: indicator || undefined,
     });
   }
   return items;
@@ -140,87 +138,82 @@ async function poolMap<T, R>(items: T[], size: number, fn: (item: T) => Promise<
   return out;
 }
 
-export type IngestMode = "fast" | "full";
+function rotate<T>(items: T[], cursor: number, take: number): T[] {
+  if (items.length === 0 || take <= 0) return [];
+  const start = ((cursor % items.length) + items.length) % items.length;
+  const n = Math.min(take, items.length);
+  const out: T[] = [];
+  for (let i = 0; i < n; i += 1) {
+    out.push(items[(start + i) % items.length]!);
+  }
+  return out;
+}
 
-const FAST_RSS: { name: string; url: string }[] = [
-  { name: "BBC", url: "https://feeds.bbci.co.uk/news/world/middle_east/rss.xml" },
-  { name: "אלג'זירה", url: "https://www.aljazeera.com/xml/rss/all.xml" },
-  { name: "MEE", url: "https://www.middleeasteye.net/rss.xml" },
-  { name: "ה-Guardian", url: "https://www.theguardian.com/world/middleeast/rss" },
-  { name: "איראן אינטרנשיונל", url: "https://www.iranintl.com/feed" },
-  { name: "פראנס 24", url: "https://www.france24.com/en/middle-east/rss" },
-];
-
-/** Primary TG only — never the owner's full dump. */
-const FAST_TG = [
-  "farsna",
-  "tasnimnews",
-  "IRNAofficial",
-  "mehrnews",
-  "almanarnews",
-  "almayadeen",
-  "almasirah",
-  "NourNews_IR",
-].map((channel) => {
-  const row = TELEGRAM_SOURCES.find((s) => s.channel.toLowerCase() === channel.toLowerCase());
-  return row ?? { name: channel, channel };
-});
-
-/** A few agency X handles via public RSS mirrors (no official API, fail-soft). */
-const FAST_X = [
-  "FarsNews_Agency",
-  "tasnimnews",
-  "IRNA_English",
-  "AlMayadeenNews",
-  "almanarnews",
-  "AlMasirahTV",
-].map((handle) => ({
-  name: handle,
-  url: `https://nitter.privacydev.net/${handle}/rss`,
-}));
+export type IngestMode = "full" | "hot";
 
 export async function ingestStories(
   force = false,
   mode: IngestMode = "full",
 ): Promise<RawStory[]> {
   const last = await getMeta("ticker_at");
-  if (!force && last) {
+  if (!force && mode !== "hot" && last) {
     const then = Number(last);
     if (Number.isFinite(then) && Date.now() - then < 75_000) {
       return [];
     }
   }
-  try {
+  // Hot path skips ticker_at so a background full ingest can still run.
+  if (mode === "full") {
     await setMeta("ticker_at", String(Date.now()));
-  } catch {
-    /* ingest must still return stories if meta is down */
   }
 
-  const tgBatch =
-    mode === "fast"
-      ? FAST_TG
-      : TELEGRAM_SOURCES.filter((s) => !s.indicator).slice(0, 12);
-  const jobs = [
-    ...(mode === "fast" ? FAST_RSS : RSS_SOURCES.slice(0, 20)).map((src) => ({
-      kind: "rss" as const,
-      src,
-    })),
-    ...tgBatch.map((src) => ({ kind: "tg" as const, src })),
-    ...FAST_X.map((src) => ({ kind: "x" as const, src })),
-  ];
+  type RssJob = { kind: "rss"; src: (typeof RSS_SOURCES)[number] };
+  type TgJob = { kind: "tg"; src: (typeof TELEGRAM_SOURCES)[number] };
+  let jobs: Array<RssJob | TgJob>;
+  let concurrency = 10;
 
-  const batches = await poolMap(jobs, 8, async (job) => {
-    if (job.kind === "rss" || job.kind === "x") {
-      const xml = await fetchText(job.src.url, 3500);
-      if (!xml || !/[<](rss|feed|item|entry)/i.test(xml)) return [] as RawStory[];
-      return parseRss(xml, job.src.name).map((row) =>
-        job.kind === "x" ? { ...row, via: "x-list" as const } : row,
-      );
-    }
-    const html = await fetchText(`https://t.me/s/${job.src.channel}`, 3500);
-    if (!html) return [] as RawStory[];
-    return parseTelegram(html, job.src.channel, job.src.name, false);
-  });
+  if (mode === "hot") {
+    concurrency = 8;
+    const rssCursor = Number((await getMeta("ingest_rss_cursor")) || "0") || 0;
+    const tgCursor = Number((await getMeta("ingest_tg_cursor")) || "0") || 0;
+    const rssBatch = rotate(RSS_SOURCES, rssCursor, 10);
+    const tgPool = TELEGRAM_SOURCES.filter((src) => !src.indicator);
+    const tgBatch = rotate(tgPool, tgCursor, 8);
+    await Promise.all([
+      setMeta(
+        "ingest_rss_cursor",
+        String(RSS_SOURCES.length ? (rssCursor + rssBatch.length) % RSS_SOURCES.length : 0),
+      ),
+      setMeta(
+        "ingest_tg_cursor",
+        String(tgPool.length ? (tgCursor + tgBatch.length) % tgPool.length : 0),
+      ),
+    ]);
+    jobs = [
+      ...rssBatch.map((src) => ({ kind: "rss" as const, src })),
+      ...tgBatch.map((src) => ({ kind: "tg" as const, src })),
+    ];
+  } else {
+    jobs = [
+      ...RSS_SOURCES.map((src) => ({ kind: "rss" as const, src })),
+      ...TELEGRAM_SOURCES.map((src) => ({ kind: "tg" as const, src })),
+    ];
+  }
+
+  const batches = await poolMap(
+    jobs,
+    concurrency,
+    async (job) => {
+      if (job.kind === "rss") {
+        const xml = await fetchText(job.src.url, 5000);
+        if (!xml || !/[<](rss|feed|item|entry)/i.test(xml)) return [] as RawStory[];
+        return parseRss(xml, job.src.name);
+      }
+      const html = await fetchText(`https://t.me/s/${job.src.channel}`, 5000);
+      if (!html) return [] as RawStory[];
+      return parseTelegram(html, job.src.channel, job.src.name);
+    },
+  );
 
   const merged: RawStory[] = [];
   const seen = new Set<string>();
@@ -239,7 +232,6 @@ export async function ingestStories(
     return tb - ta;
   });
 
-  // Keep last 36h — do NOT require "today Israel" (that emptied the desk at night).
   const recent = merged.filter((story) => {
     if (!story.publishedAt) return true;
     const d = parsePossiblyUtc(story.publishedAt);
@@ -247,35 +239,21 @@ export async function ingestStories(
     return Date.now() - d.getTime() < 36 * 60 * 60 * 1000;
   });
 
-  const publishable = recent.filter((story) => !story.indicator);
-  const tips = recent.filter((story) => story.indicator);
+  await insertTicker(
+    recent.slice(0, 140).map((story) => ({
+      id: storyId(story.url),
+      title: story.title,
+      titleHe: hasHebrew(story.title) ? story.title : null,
+      source: story.source,
+      url: story.url,
+      publishedAt: story.publishedAt,
+      arena: story.arena,
+    })),
+  );
 
-  try {
-    await insertTicker(
-      publishable.slice(0, 140).map((story) => ({
-        id: storyId(story.url),
-        title: story.title,
-        titleHe: hasHebrew(story.title) ? story.title : null,
-        source: story.source,
-        url: story.url,
-        publishedAt: story.publishedAt,
-        arena: story.arena,
-      })),
-    );
-  } catch {
-    /* still return stories */
-  }
-
-  // Prefer today's items first, but keep the full 36h pool for compose.
-  const preferred = [...tips, ...publishable].sort((a, b) => {
-    const at = a.publishedAt && isTodayIsrael(a.publishedAt) ? 1 : 0;
-    const bt = b.publishedAt && isTodayIsrael(b.publishedAt) ? 1 : 0;
-    if (bt !== at) return bt - at;
-    const ta = a.publishedAt ? Date.parse(a.publishedAt) : 0;
-    const tb = b.publishedAt ? Date.parse(b.publishedAt) : 0;
-    return tb - ta;
-  });
-  return preferred;
+  // Hot scan feeds compose immediately — keep the 36h window, do not require today-IL.
+  if (mode === "hot") return recent;
+  return recent.filter((story) => !story.publishedAt || isTodayIsrael(story.publishedAt));
 }
 
 export function storiesForPrompt(stories: RawStory[], limit = 50) {
