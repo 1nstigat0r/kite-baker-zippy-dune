@@ -394,6 +394,30 @@ export async function setMeta(key: string, value: string) {
 
 export const SCAN_LEAD_MS = 40 * 60 * 1000;
 
+
+const DESK_GEN = "v10-live-only";
+
+/** Wipe briefings/ticker/seen when code gen changes — kills stuck static exclusives. */
+export async function ensureDeskGeneration() {
+  const sql = await getSql();
+  const cur = await getMeta("desk_gen");
+  if (cur === DESK_GEN) return false;
+  await sql`delete from briefings`;
+  await sql`delete from ticker_items`;
+  await sql`delete from seen_stories`;
+  await setMeta("desk_gen", DESK_GEN);
+  await setMeta("scan_status", "");
+  await setMeta("next_due_at", "");
+  await setMeta("active_draft_id", "");
+  await setMeta("last_ingest_at", "");
+  return true;
+}
+
+export async function clearTicker() {
+  const sql = await getSql();
+  await sql`delete from ticker_items`;
+}
+
 export async function getScanState() {
   const [status, due, consumed] = await Promise.all([
     getMeta("scan_status"),
@@ -462,12 +486,23 @@ export async function buildDashboard(selectedHour?: string): Promise<DashboardDa
       ? latest
       : briefing;
   const scanQueue = (view?.payload.spares ?? []).slice(0, 10);
+  const usedUrls = new Set<string>();
+  for (const arena of view?.payload.arenas ?? []) {
+    for (const item of arena.items) if (item.url) usedUrls.add(item.url.replace(/\/$/, ""));
+  }
+  for (const item of view?.payload.spares ?? []) {
+    if (item.url) usedUrls.add(item.url.replace(/\/$/, ""));
+  }
+  // Ticker = live ingest only; never mirror briefing/spares lines.
+  const tickerFresh = ticker.filter(
+    (row) => !usedUrls.has((row.url || "").replace(/\/$/, "")),
+  );
 
   return {
     briefing: briefing ?? null,
     latestBriefing: latest,
     hours: [...hourSet.values()].sort((a, b) => (a.id < b.id ? 1 : -1)),
-    ticker,
+    ticker: tickerFresh.length ? tickerFresh : ticker.slice(0, 8),
     scanQueue,
     currentHourKey: current,
     currentClock: formatHeClock(now),

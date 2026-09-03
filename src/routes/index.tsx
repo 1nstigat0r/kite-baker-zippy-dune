@@ -4,7 +4,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { BriefingDoc } from "@/components/briefing-doc";
 import {
   BRIEFING_HEADER,
-  TICKER,
   formatDue,
   isScanning,
   loadOriginalIds,
@@ -166,17 +165,27 @@ function Home() {
   const replaced = 0;
 
   const tickerRows = useMemo(() => {
+    const used = new Set(
+      [
+        ...payload.arenas.flatMap((a) => a.items.map((i) => i.url)),
+        ...payload.spares.map((i) => i.url),
+      ]
+        .filter(Boolean)
+        .map((u) => u.replace(/\/$/, "")),
+    );
     const live = dash.ticker
       .map((row) => {
         const text = (row.titleHe || row.title || "").replace(/\*\*/g, "");
         const source = row.source || "מבזק";
         const url = displayShort(undefined, row.url) || row.url;
-        return { source, text, url };
+        return { source, text, url, raw: row.url };
       })
-      .filter((row) => row.text.length > 8);
-    const base = live.length ? live : TICKER;
+      .filter((row) => row.text.length > 8)
+      .filter((row) => !used.has((row.raw || "").replace(/\/$/, "")));
+    const base = live.length ? live : [];
+    if (!base.length) return [];
     return [...base, ...base];
-  }, [dash.ticker]);
+  }, [dash.ticker, payload]);
 
   async function onRefreshTicker() {
     setScanningTicker(true);
@@ -227,11 +236,19 @@ function Home() {
       persistPayloadLocal(clean);
       scanQueueRef.current = (clean.spares ?? []).slice(0, 10);
     } catch {
-      const { briefingFromSpares } = await import("@/lib/news/compose");
-      const local = briefingFromSpares(payload, 6);
-      setPayload(local);
-      persistPayloadLocal(local);
-      scanQueueRef.current = local.spares.slice(0, 10);
+      try {
+        const forced = await ensureBriefing({ data: { force: true } });
+        setDash(forced);
+        const p = pickPayload(forced);
+        setPayload(p.payload);
+        setHeader(p.header);
+        setHourKey(p.hourKey);
+        persistPayloadLocal(p.payload);
+        scanQueueRef.current = (p.payload.spares ?? []).slice(0, 10);
+      } catch {
+        setPayload(emptyBriefing());
+        clearLocalDeskCache();
+      }
     }
   }
 

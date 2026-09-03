@@ -1,7 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import {
   absorbFindsIntoPayload,
-  briefingFromSpares,
   composeBriefing,
   localizeHeadline,
 } from "./compose";
@@ -14,6 +13,8 @@ import {
   buildDashboard,
   claimBriefing,
   clearScan,
+  clearTicker,
+  ensureDeskGeneration,
   failBriefing,
   getBriefing,
   getLatestReady,
@@ -26,7 +27,6 @@ import {
   previousBodies,
   pruneTicker,
   saveBriefing,
-  seedTicker,
   setMeta,
   swapSpareItem,
 } from "./store";
@@ -97,12 +97,12 @@ async function generateForHour(id: string) {
       prints.push(fingerprint(item.url, `${item.speaker} ${item.body}`));
     }
     await addSeen(id, prints);
+    // Do NOT seedTicker from briefing — that made ticker identical to עדכון/spares.
     if (result.tickerHe.length) {
       await applyTickerHe(result.tickerHe);
-      await seedTicker(result.tickerHe);
     }
     await localizeTicker();
-    await pruneTicker(16);
+    await pruneTicker(24);
   } catch (err) {
     const message = err instanceof Error ? err.message : "generation failed";
     console.error("[briefing]", id, message);
@@ -116,9 +116,9 @@ function kickIngest() {
   if (ingestKick) return;
   ingestKick = (async () => {
     await setMeta("last_ingest_at", new Date().toISOString());
-    await ingestStories(false);
+    await ingestStories(true);
     await localizeTicker();
-    await pruneTicker(16);
+    await pruneTicker(24);
   })()
     .catch((err) => {
       console.error("[scan-ingest]", err instanceof Error ? err.message : err);
@@ -196,16 +196,19 @@ async function tickScan() {
 export const getDashboard = createServerFn({ method: "POST" })
   .validator((input: { hourKey?: string } | undefined) => input ?? {})
   .handler(async ({ data }) => {
+    await ensureDeskGeneration();
     await tickScan();
     return buildDashboard(data.hourKey);
   });
 
 export const refreshTicker = createServerFn({ method: "POST" }).handler(
   async () => {
-    await ingestStories(false);
+    await ensureDeskGeneration();
+    await clearTicker();
+    await ingestStories(true);
     await setMeta("last_ingest_at", new Date().toISOString());
     await localizeTicker();
-    await pruneTicker(16);
+    await pruneTicker(24);
     await tickScan();
     const scan = await getScanState();
     const draftId = (await getMeta("active_draft_id")) || undefined;
@@ -216,20 +219,20 @@ export const refreshTicker = createServerFn({ method: "POST" }).handler(
 export const ensureBriefing = createServerFn({ method: "POST" })
   .validator((input: { hourKey?: string; force?: boolean } | undefined) => input ?? {})
   .handler(async ({ data }) => {
+    const wiped = await ensureDeskGeneration();
     await tickScan();
     const id = data.hourKey ?? hourKey();
-    let dash = await buildDashboard(id);
+    const dash = await buildDashboard(id);
     const has =
       briefingHasContent(dash.briefing) || briefingHasContent(dash.latestBriefing);
-    // Regenerate when forced OR when nothing live yet (never leave static seed).
-    if (data.force || !has) {
+    if (data.force || wiped || !has) {
       inflight.delete(id);
       await claimBriefing(id, true);
       const task = generateForHour(id).finally(() => inflight.delete(id));
       inflight.set(id, task);
       await Promise.race([
         task,
-        new Promise((r) => setTimeout(r, 18_000)),
+        new Promise((r) => setTimeout(r, 20_000)),
       ]);
       return buildDashboard(id);
     }
@@ -264,26 +267,17 @@ export const markUsed = createServerFn({ method: "POST" })
         burned.push(fingerprint(item.url, `${item.speaker} ${item.body}`));
       }
     }
-    if (burned.length) await addSeen(data.hourKey || "used", burned);
-
-    let next = briefingFromSpares(current, 6);
-    try {
-      const fresh = await Promise.race([
-        ingestStories(false),
-        new Promise<RawStory[]>((resolve) => setTimeout(() => resolve([]), 8_000)),
-      ]);
-      const pool = fresh.length ? fresh : await storiesFromTicker();
-      // Fill empty spares + maybe strengthen briefing from live scan only
-      if (pool.length) next = absorbFindsIntoPayload(next, pool);
-    } catch (err) {
-      console.error("[markUsed-ingest]", err instanceof Error ? err.message : err);
+    for (const item of current.spares) {
+      burned.push(fingerprint(item.url, `${item.speaker} ${item.body}`));
     }
+    if (burned.length) await addSeen(data.hourKey || "used", burned);
 
     const nowId = hourKey();
     await claimBriefing(nowId, true);
-    await saveBriefing(nowId, await shortenPayload(next));
-    await setMeta("active_draft_id", nowId);
     await markBriefingUsed(data.hourKey);
+    await setMeta("active_draft_id", nowId);
+    // Full live compose — not reshuffle of the same stale spares/ticker.
+    await generateForHour(nowId);
     kickIngest();
     return buildDashboard(nowId);
   });
