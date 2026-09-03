@@ -395,12 +395,65 @@ export function isUsDomesticOffDesk(text: string) {
   return /\bvance\b|jd vance|גיי די|uber\b|nigeria|congress|senate|white house|campaign|ohio|governor|midterm/i.test(x);
 }
 
-export function skipArabForUsPolitics(text: string, source: string) {
-  if (!/אלג'זירה|אלערביה|אלחדת|aljazeera|ajanews|ajmubasher|aja news/i.test(source)) return false;
+type OriginHome = "us" | "iran" | "lebanon" | "yemen" | "iraq" | "gulf" | "russia" | "uk" | "qatar";
+
+function outletHome(source: string): OriginHome | null {
+  const s = `${source ?? ""}`;
+  if (/אלג'זירה|aljazeera|ajanews|aj mubasher|aja news|קדס|quds/i.test(s)) return "qatar";
+  if (/אלערביה|אלחדת|alarabiya|alhadath|אלשרק|aawsat|אלערבי אלג|alaraby|ארם|erem/i.test(s)) return "gulf";
+  if (/פארס|תסנים|אירנא|מהר|נור|irib|snn|fars|tasnim|irna|mehr|nour|presstv/i.test(s)) return "iran";
+  if (/אלג'דיד|mtv|אלמיאדין|אלמנאר|אלאח'באר|אלדיאר|aljadeed|almayadeen|almanar|al-akhbar|addiyar|דיאר/i.test(s)) return "lebanon";
+  if (/אלמסירה|חות|ansarollah|almasirah/i.test(s)) return "yemen";
+  if (/נאיה|סברין|שפק|ina|naya|sabren|shafaq/i.test(s)) return "iraq";
+  if (/רויטרס|reuters|ה-nyt|ה-wsj|washington post|washington journal|cnn|abc|politico|bloomberg|fox|axios|ap\b|וושינגטון|white house/i.test(s)) return "us";
+  if (/ה-telegraph|bbc|guardian|the times/i.test(s)) return "uk";
+  if (/ספוטניק|rt\b|תאס|tass/i.test(s)) return "russia";
+  if (/spa|wam|קטר|qna|kuna|עארב ניוז|arab news/i.test(s)) return "gulf";
+  return null;
+}
+
+function speakerHome(text: string): OriginHome | null {
   const x = text ?? "";
-  const usPol = /\bvance\b|jd vance|גיי די|uber\b|nigeria|congress|senate|white house|campaign|midterm/i.test(x);
-  const me = /\biran\b|israel|gaza|hormuz|hezbollah|lebanon|syria|yemen|iraq|איראן|עזה|חיזבאללה|הורמוז|לבנון|סוריה/i.test(x);
-  return usPol && !me;
+  if (/טראמפ|\btrump\b|ואנס|\bvance\b|רוביו|\brubio\b|הבית הלבן|white house|pentagon|state department|הפנטגון|מחלקת המדינה|הגסת'|\bhegseth\b|וויטקוף|\bwitkoff\b|ביידן|\bbiden\b|הארים|\bharris\b|congress|senate|cia\b|centcom/i.test(x)) return "us";
+  if (/חמינאי|חמאנאי|פזשכיאן|קאליבאף|חסד["״]ם|משה["״]מ|אראקצ'י|\bkhamenei\b|pezeshkian|qalibaf|irgc|ara[gq]chi/i.test(x)) return "iran";
+  if (/נסראללה|חיזבאללה|נעים קאסם|עון|ברי|מיקאתי|nasrallah|hezbollah|berri|aoun|mikati/i.test(x)) return "lebanon";
+  if (/חות['׳]?ים|אנצאר אללה|משרע|houthi|ansarollah/i.test(x)) return "yemen";
+  if (/סודאני|חשד|כתאיב|עצאיב|sudani|hashd|kataib|pmu/i.test(x)) return "iraq";
+  if (/פוטין|קרמלין|לברוב|\bputin\b|lavrov|kremlin/i.test(x)) return "russia";
+  if (/סטארמר|דאונינג|\bstarmer\b|downing street/i.test(x)) return "uk";
+  if (/בן סלמאן|בן זאיד|תמים|mbs|mbz|\btamim\b/i.test(x)) return "gulf";
+  return null;
+}
+
+function isDirectToThisOutlet(text: string, source: string) {
+  const x = text ?? "";
+  if (/(?:גורמים ל-|מסר(?:ו)? ל-|בראיון (?:ל|עם)|בשיחה עם|told|interview(?:ed)? (?:with|to)|speaking (?:to|with)|exclusive (?:to|with))/i.test(x)) {
+    const o = formatOutlet(source);
+    const blob = `${source} ${o}`;
+    const tokens = blob.split(/[\s,./-]+/).filter((w) => w.length >= 3);
+    for (const tok of tokens) {
+      if (new RegExp(tok.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(x)) return true;
+    }
+    // "גורמים ל-X" where X is this desk's source name
+    if (/גורמים ל-|מסר(?:ו)? ל-|בראיון ל/.test(x)) return true;
+  }
+  return false;
+}
+
+/**
+ * Drop relays: a US official quoted on Al Jazeera, an Iranian statement on Reuters, etc.
+ * Keep only when this outlet IS the speaker's home, or they spoke directly to it.
+ */
+export function isOffPrimarySource(text: string, source: string) {
+  if (isDirectToThisOutlet(text, source)) return false;
+  const who = speakerHome(text);
+  const where = outletHome(source);
+  if (!who || !where) return false;
+  if (who === where) return false;
+  // US/UK/west pool can host each other for western officials
+  if (who === "us" && (where === "us" || where === "uk")) return false;
+  if (who === "uk" && (where === "uk" || where === "us")) return false;
+  return true;
 }
 
 export function shortenSpeaker(name: string) {

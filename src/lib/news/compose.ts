@@ -7,6 +7,7 @@ import {
   formatOutlet,
   hasHebrew,
   isJunkItem,
+  isOffPrimarySource,
   sameEvent,
   shapeCopy,
   shortenSpeaker,
@@ -134,6 +135,7 @@ function storyToItem(story: RawStory): BriefingItem | null {
     cleaned.speaker = cleaned.speaker || attributionLead(story.source);
   }
   if (/אבו עלי|כאן 11|דסק ערבים|ynet|עמית סגל|יחזקאלי/i.test(story.source)) return null;
+  if (isOffPrimarySource(`${story.title} ${cleaned.body}`, story.source)) return null;
   return mkItem(
     cleaned.speaker || attributionLead(story.source),
     cleaned.body,
