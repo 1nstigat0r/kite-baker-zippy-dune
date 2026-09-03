@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "עדכון",
+      "hasCanvas": false,
+      "bodyTextLen": 3015,
+      "bodyTextHash": "2c7cb611f7b2a424b04b56591b7c9bc3ae1f1073e80c829217f8b514b5f8d831",
+      "bodyTextPrefix": "רענון מבזקים גורמים ל-MTV חיזבאללה בלמו ניסיון התקדמות לעבר עלי ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "עדכון",
+      "hasCanvas": false,
+      "bodyTextLen": 3015,
+      "bodyTextHash": "2c7cb611f7b2a424b04b56591b7c9bc3ae1f1073e80c829217f8b514b5f8d831",
+      "bodyTextPrefix": "רענון מבזקים גורמים ל-MTV חיזבאללה בלמו ניסיון התקדמות לעבר עלי ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}
