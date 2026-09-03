@@ -29,6 +29,8 @@ import {
   sortArenas,
 } from "./types";
 import { arenaPresentation } from "./text";
+import { translateToHebrew } from "./translate";
+import type { TickerItem } from "./types";
 
 function decorateArenas(payload: BriefingPayload): BriefingPayload {
   return {
@@ -562,4 +564,81 @@ export function absorbFindsIntoPayload(
 export function localizeHeadline(title: string, source: string) {
   const he = deskHeadline(title);
   return he.slice(0, 160);
+}
+
+export async function localizeHeadlineAsync(title: string, _source: string) {
+  const he = await translateToHebrew(title);
+  return he.slice(0, 160);
+}
+
+export function tickerToSpare(item: TickerItem): SpareItem | null {
+  const body = toDeskHebrew(item.titleHe || item.title || "").replace(/\*\*/g, "");
+  if (!body || body.length < 8) return null;
+  const speaker = attributionLead(item.source);
+  let arenaId = resolveArena(`${speaker} ${body}`, item.arena);
+  if (!ARENA_META[arenaId]) arenaId = "intl";
+  return {
+    id: makeId("s", item.url),
+    speaker,
+    body,
+    url: item.url,
+    publishedAt: item.publishedAt || new Date().toISOString(),
+    arena: arenaId,
+  };
+}
+
+/** Manual pack: briefing from current spares, leftover spares stay. Does not burn. */
+export function packSparesNow(payload: BriefingPayload, max = 6): BriefingPayload {
+  const sparePool = [...(payload.spares ?? [])].sort(
+    (a, b) => itemInterest(b) - itemInterest(a),
+  );
+  if (sparePool.length === 0) return payload;
+
+  const picked: SpareItem[] = [];
+  const covered: string[] = [];
+  for (const row of sparePool) {
+    if (picked.length >= max) break;
+    const t = itemText(row);
+    if (covered.some((p) => sameEvent(p, t))) continue;
+    picked.push(row);
+    covered.push(t);
+  }
+  const pickedIds = new Set(picked.map((r) => r.id));
+  const leftover = sparePool.filter((r) => !pickedIds.has(r.id));
+
+  const arenas = new Map<ArenaId, BriefingItem[]>();
+  for (const row of picked) {
+    let arenaId = resolveArena(itemText(row), row.arena);
+    if (!ARENA_META[arenaId]) arenaId = "intl";
+    const list = arenas.get(arenaId) ?? [];
+    list.push({
+      id: makeId("i", row.url || row.id),
+      speaker: row.speaker,
+      body: row.body,
+      url: row.url,
+      shortUrl: row.shortUrl,
+      publishedAt: row.publishedAt,
+    });
+    arenas.set(arenaId, list);
+  }
+
+  const ordered = ARENA_ORDER.filter((id) => arenas.get(id)?.length).map((id) => {
+    const items = (arenas.get(id) ?? []).sort(
+      (a, b) => itemInterest(b) - itemInterest(a),
+    );
+    return {
+      id,
+      title: ARENA_META[id].title,
+      flags: ARENA_META[id].flags,
+      items,
+    };
+  });
+
+  return decorateArenas(
+    ensureItemIds({
+      desk: DESK_STYLE,
+      arenas: ordered,
+      spares: leftover.slice(0, 10),
+    }),
+  );
 }

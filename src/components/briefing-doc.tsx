@@ -11,6 +11,7 @@ import {
   type BriefingArena,
   type BriefingItem,
   type BriefingPayload,
+  type TickerItem,
 } from "@/lib/news/types";
 import { cn } from "@/lib/utils";
 
@@ -102,6 +103,9 @@ export function BriefingDoc({
   onUsed,
   onSwap,
   onAdd,
+  onPackSpares,
+  onAddTickerToSpare,
+  tickerItems = [],
   used,
   scanDueLabel,
   replaced = 0,
@@ -113,6 +117,9 @@ export function BriefingDoc({
   onUsed: () => void;
   onSwap?: (spareId: string, itemId: string) => void;
   onAdd?: (spareId: string) => void;
+  onPackSpares?: () => void;
+  onAddTickerToSpare?: (url: string) => void;
+  tickerItems?: TickerItem[];
   used: boolean;
   scanDueLabel: string | null;
   replaced?: number;
@@ -178,7 +185,15 @@ export function BriefingDoc({
 
   return (
     <div>
-      <div className="mb-5 flex items-center justify-end gap-4">
+      <div className="mb-5 flex flex-wrap items-center justify-end gap-3">
+        <button
+          type="button"
+          onClick={() => onPackSpares?.()}
+          disabled={!onPackSpares || spares.length === 0}
+          className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border border-gold/40 bg-navy-2 px-4 py-2 text-sm font-semibold text-fg-on-dark shadow-[0_6px_0_0_rgba(7,20,40,0.7)] disabled:opacity-40"
+        >
+          עדכון מהספיירים
+        </button>
         <button
           type="button"
           onClick={onUsed}
@@ -226,6 +241,43 @@ export function BriefingDoc({
           </div>
         ))}
       </section>
+
+      {tickerItems.filter((row) => /[\u0590-\u05FF]/.test(row.titleHe || row.title || "")).length > 0 ? (
+        <section className="mt-8 rounded-lg border border-gold/25 bg-navy-2/50 px-4 py-5 shadow-[0_12px_0_0_rgba(7,20,40,0.7),0_20px_36px_rgba(0,0,0,0.4)] sm:px-6">
+          <h2 className="mb-1 text-right text-base font-semibold text-fg-on-dark">מבזקים</h2>
+          <p className="mb-4 text-right text-xs text-fg-on-dark/70">«לספייר» מכניס את הידיעה לרשימת הספיירים.</p>
+          <ol className="space-y-3">
+            {tickerItems
+              .filter((row) => /[\u0590-\u05FF]/.test(row.titleHe || row.title || ""))
+              .filter((row, i, all) => all.findIndex((x) => x.url === row.url) === i)
+              .map((row, i) => {
+                const text = (row.titleHe || row.title || "").replace(/\*\*/g, "");
+                return (
+                  <li key={row.url + i} className="rounded-lg border border-line/40 bg-surface px-3 py-3 sm:px-4">
+                    <div className="flex gap-3">
+                      <div className="min-w-0 flex-1 text-fg">
+                        <p className="text-pretty text-base leading-relaxed">
+                          <span className="tabular-nums text-muted">{i + 1}. </span>
+                          <span className="font-semibold text-gold-deep">{row.source}</span>{" "}
+                          {text}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => onAddTickerToSpare?.(row.url)}
+                        disabled={!onAddTickerToSpare}
+                        className="inline-flex min-h-10 shrink-0 items-center justify-center gap-1 rounded-md border border-line bg-surface-2 px-2.5 text-xs font-semibold text-navy shadow-[0_4px_0_0_rgba(12,28,55,0.18)] disabled:opacity-40"
+                      >
+                        <Plus className="size-3.5" />
+                        לספייר
+                      </button>
+                    </div>
+                  </li>
+                );
+              })}
+          </ol>
+        </section>
+      ) : null}
 
       {spares.length > 0 ? (
         <section className="mt-8 rounded-lg border border-gold/25 bg-navy-2/50 px-4 py-5 shadow-[0_12px_0_0_rgba(7,20,40,0.7),0_20px_36px_rgba(0,0,0,0.4)] sm:px-6">

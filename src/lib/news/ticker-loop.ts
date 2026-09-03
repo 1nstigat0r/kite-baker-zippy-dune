@@ -1,4 +1,5 @@
 import type { TickerItem } from "./types";
+import { hasHebrew } from "./text";
 
 export const MAX_TICKER = 12;
 
@@ -35,7 +36,9 @@ export function mergeTicker(
     const prev = byUrl.get(key);
     if (!prev || tickerInterest(row) > tickerInterest(prev)) byUrl.set(key, row);
   }
-  const ranked = [...byUrl.values()].sort((a, b) => tickerInterest(b) - tickerInterest(a));
+  const ranked = [...byUrl.values()]
+    .filter((row) => hasHebrew(row.titleHe || ""))
+    .sort((a, b) => tickerInterest(b) - tickerInterest(a));
   return ranked.slice(0, max);
 }
 

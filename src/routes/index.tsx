@@ -34,11 +34,14 @@ import {
   scanMinute,
   swapSpare,
 } from "@/lib/news/server";
+import { packSparesNow, tickerToSpare } from "@/lib/news/compose";
+import { formatHeDateTime } from "@/lib/news/time";
 import { mergeTicker, nextPackLabel, shouldPackHour } from "@/lib/news/ticker-loop";
 import { displayShort } from "@/lib/news/display-short";
-import { formatOutlet } from "@/lib/news/text";
+import { formatOutlet, hasHebrew } from "@/lib/news/text";
 import {
   briefingHasContent,
+  briefingItemCount,
   type BriefingPayload,
   type DashboardData,
   type SpareItem,
@@ -267,12 +270,12 @@ function Home() {
   const tickerRows = useMemo(() => {
     const live = tickerItems
       .map((row) => {
-        const text = (row.titleHe || row.title || "").replace(/\*\*/g, "");
+        const text = (row.titleHe || "").replace(/\*\*/g, "");
         const source = formatOutlet(row.source || "מבזק");
         const url = displayShort(undefined, row.url) || row.url;
         return { source, text, url };
       })
-      .filter((row) => row.text.length > 8);
+      .filter((row) => row.text.length > 8 && hasHebrew(row.text));
     if (!live.length) {
       return [{ source: "עדכון", text: "סורק מבזקים כל דקה…", url: "#" }];
     }
@@ -356,6 +359,35 @@ function Home() {
     if (next) void onChange(next);
   }
 
+  function onPackSpares() {
+    const next = packSparesNow(payload, 6);
+    if (briefingItemCount(next) === 0) return;
+    setPayload(next);
+    setHeader(`עדכון | ${formatHeDateTime(new Date())}`);
+    persistPayloadLocal(next);
+    if (hourKey && hourKey !== "seed") {
+      void persistPayload({ data: { hourKey, payload: next } }).then(setDash).catch(() => undefined);
+    }
+  }
+
+  function onAddTickerToSpare(url: string) {
+    const row = tickerItems.find((item) => item.url === url);
+    if (!row) return;
+    const spare = tickerToSpare(row);
+    if (!spare) return;
+    const known = new Set([
+      ...payload.arenas.flatMap((a) => a.items.map((i) => i.url)),
+      ...payload.spares.map((s) => s.url),
+    ]);
+    if (known.has(spare.url)) return;
+    const next = { ...payload, spares: [spare, ...payload.spares].slice(0, 10) };
+    setPayload(next);
+    persistPayloadLocal(next);
+    if (hourKey && hourKey !== "seed") {
+      void persistPayload({ data: { hourKey, payload: next } }).then(setDash).catch(() => undefined);
+    }
+  }
+
   async function onAdd(spareId: string) {
     if (hourKey && hourKey !== "seed") {
       try {
@@ -408,6 +440,9 @@ function Home() {
           onUsed={() => void onUsed()}
           onSwap={(spareId, itemId) => void onSwap(spareId, itemId)}
           onAdd={(spareId) => void onAdd(spareId)}
+          onPackSpares={onPackSpares}
+          onAddTickerToSpare={onAddTickerToSpare}
+          tickerItems={tickerItems}
           used={scanning}
           scanDueLabel={due}
           replaced={replaced}

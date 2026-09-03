@@ -74,7 +74,8 @@ const FLAG_HINTS: { re: RegExp; code: string }[] = [
 ];
 
 const OUTLET_ALIASES: Record<string, string> = {
-  reuters: "רויטרס",
+  reuters: "Reuters",
+  "רויטרס": "Reuters",
   "the new york times": "ה-NYT",
   nyt: "ה-NYT",
   "ה-nyt": "ה-NYT",
@@ -85,8 +86,8 @@ const OUTLET_ALIASES: Record<string, string> = {
   "washington post": "ה-Washington Post",
   "the washington post": "ה-Washington Post",
   "הוושינגטון פוסט": "ה-Washington Post",
-  "washington journal": "ה-Washington Journal",
-  "the washington journal": "ה-Washington Journal",
+  "washington journal": "ה-WSJ",
+  "the washington journal": "ה-WSJ",
   cnn: "CNN",
   abc: "ABC",
   politico: "Politico",
@@ -136,6 +137,27 @@ const OUTLET_ALIASES: Record<string, string> = {
   "tehran times": "טהראן טיימס",
   "daily sabah": "Daily Sabah",
   "the national": "The National",
+  irib: "רשות השידור האיראנית",
+  iribnews: "רשות השידור האיראנית",
+  snn: "SNN",
+  snntv: "SNN",
+  farsna: "פארס",
+  tasnimnews: "תסנים",
+  irna_1313: "אירנא",
+  mehrnews: "מהר",
+  nournews: "נור ניוז",
+  nournews_ir: "נור ניוז",
+  almanar: "אלמנאר",
+  almayadeen: "אלמיאדין",
+  aljadeed: "אלג'דיד",
+  "al-akhbar": "אלאח'באר",
+  akhbar: "אלאח'באר",
+  addiyar: "אלדיאר",
+  almasirah: "אלמסירה",
+  alarabiya: "אלערביה",
+  alhadath: "אלחדת'",
+  mtv: "MTV",
+  mtvlebanon: "MTV",
 };
 
 const SPEAKER_ALIASES: [RegExp, string][] = [

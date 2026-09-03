@@ -10,7 +10,7 @@ export type TelegramSource = {
 };
 
 export const RSS_SOURCES: RssSource[] = [
-  { name: "רויטרס", url: "https://feeds.reuters.com/reuters/worldNews" },
+  { name: "Reuters", url: "https://feeds.reuters.com/reuters/worldNews" },
   { name: "ה-WSJ", url: "https://feeds.a.dj.com/rss/RSSWorldNews.xml" },
   { name: "ה-Washington Post", url: "https://feeds.washingtonpost.com/rss/world" },
   { name: "ה-NYT", url: "https://rss.nytimes.com/services/xml/rss/nyt/MiddleEast.xml" },
@@ -37,7 +37,7 @@ export const TELEGRAM_SOURCES: TelegramSource[] = [
   { name: "תסנים", channel: "Tasnimnews" },
   { name: "פארס", channel: "farsna" },
   { name: "מהר", channel: "mehrnews" },
-  { name: "IRIB", channel: "iribnews" },
+  { name: "רשות השידור האיראנית", channel: "iribnews" },
   { name: "SNN", channel: "snntv" },
   { name: "אירנא", channel: "irna_1313" },
   { name: "נור ניוז", channel: "Nournews_ir" },

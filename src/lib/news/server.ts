@@ -5,6 +5,7 @@ import {
   composeBriefing,
   composeLiveOnly,
   localizeHeadline,
+  localizeHeadlineAsync,
 } from "./compose";
 import { CURRENT_BRIEFING } from "./desk";
 import { ingestStories, pureHotScan } from "./ingest";
@@ -171,16 +172,28 @@ export const getDashboard = createServerFn({ method: "POST" })
     return buildDashboard(data.hourKey);
   });
 
-function storiesToTicker(stories: RawStory[]): TickerItem[] {
-  return stories.slice(0, 40).map((story) => ({
-    id: story.url.slice(-24) || story.url,
-    title: story.title,
-    titleHe: localizeHeadline(story.title, story.source),
-    source: formatOutlet(story.source),
-    url: story.url,
-    publishedAt: story.publishedAt,
-    arena: story.arena,
-  }));
+async function storiesToTicker(stories: RawStory[]): Promise<TickerItem[]> {
+  const slice = stories.slice(0, 40);
+  const out: TickerItem[] = [];
+  for (let i = 0; i < slice.length; i += 4) {
+    const chunk = slice.slice(i, i + 4);
+    const rows = await Promise.all(
+      chunk.map(async (story) => {
+        const titleHe = await localizeHeadlineAsync(story.title, story.source);
+        return {
+          id: story.url.slice(-24) || story.url,
+          title: story.title,
+          titleHe,
+          source: formatOutlet(story.source),
+          url: story.url,
+          publishedAt: story.publishedAt,
+          arena: story.arena,
+        };
+      }),
+    );
+    out.push(...rows);
+  }
+  return out;
 }
 
 export const scanMinute = createServerFn({ method: "POST" }).validator((input?: unknown) => input ?? {}).handler(async () => {
@@ -196,7 +209,7 @@ export const scanMinute = createServerFn({ method: "POST" }).validator((input?: 
     console.error("[scanMinute]", error);
   }
   return {
-    items: storiesToTicker(stories),
+    items: await storiesToTicker(stories),
     count: stories.length,
     error,
   };
