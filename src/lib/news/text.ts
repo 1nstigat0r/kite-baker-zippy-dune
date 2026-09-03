@@ -405,12 +405,27 @@ export function toDeskHebrew(text: string) {
     [/النظام الصهيوني/g, "ישראל"],
     [/العدوان الصهيوني/g, "תקיפות ישראליות"],
     [/رژیم صهیونیستی/g, "ישראל"],
+    [/\bAl-?Jazeera\b/gi, "אלג'זירה"],
+    [/\bAl-?Manar\b/gi, "אלמנאר"],
+    [/\bAl-?Mayadeen\b/gi, "אלמיאדין"],
+    [/\bAl-?Akhbar\b/gi, "אלאח'באר"],
+    [/\bAl-?Hadath\b/gi, "אלחדת'"],
+    [/\bAl-?Arabiya\b/gi, "אלערביה"],
+    [/\bAl-?Jadeed\b/gi, "אלג'דיד"],
+    [/\bAl-?Masirah\b/gi, "אלמסירה"],
+    [/\bAl-?Quds\b/gi, "קדס"],
+    [/צבא ישראלי הורג/g, "צה\"ל הרג"],
   ];
   for (const [re, to] of pairs) s = s.replace(re, to);
   s = s
     .replace(/המשך התוקפנות של ישראל/g, "תקיפות ישראליות")
     .replace(/התוקפנות של ישראל/g, "תקיפות ישראליות");
-  return collapse(s);
+  return collapse(stripAlHyphen(s));
+}
+
+/** Arabic article אל is glued: אלג'זירה, never אל-ג'זירה. */
+export function stripAlHyphen(text: string) {
+  return (text ?? "").replace(/אל[\-־–—]\s*/g, "אל");
 }
 
 /** Leftover enemy-desk phrasing that was not recast into an Israeli desk report. */
@@ -472,7 +487,7 @@ export function formatOutlet(source: string) {
   if (OUTLET_ALIASES[name.toLowerCase()]) return OUTLET_ALIASES[name.toLowerCase()];
   if (OUTLET_ALIASES[name]) return OUTLET_ALIASES[name];
   // Arabic outlets: never "אל-ג'זירה" / "קודס"
-  name = name.replace(/^אל-/u, "אל").replace(/קודס/g, "קדס");
+  name = stripAlHyphen(name).replace(/קודס/g, "קדס");
   return name;
 }
 
@@ -491,6 +506,7 @@ export function isWeakDeskCopy(text: string) {
   if (/…\s*$|\.\.\.\s*$/.test(s)) return true;
   if (/#|📷|🎥|📹/.test(s)) return true;
   if (/The New York Times|Washington Post|^Al Jazeera|reported in/i.test(s)) return true;
+  if (/אל-/.test(s)) return true;
   if (/אומרים תושבים|residents say/i.test(s)) return true;
   if (/([\u0590-\u05FF])\1{2,}/.test(s)) return true;
   if (/^(?:החלה|מתחילים|מתחילה)\s+(?:תקיפה|פינוי)/.test(s) && s.length < 48) return true;
