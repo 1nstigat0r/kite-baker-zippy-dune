@@ -217,21 +217,22 @@ export const ensureBriefing = createServerFn({ method: "POST" })
   .validator((input: { hourKey?: string; force?: boolean } | undefined) => input ?? {})
   .handler(async ({ data }) => {
     await tickScan();
-    if (data.force) {
-      const id = data.hourKey ?? hourKey();
+    const id = data.hourKey ?? hourKey();
+    let dash = await buildDashboard(id);
+    const has =
+      briefingHasContent(dash.briefing) || briefingHasContent(dash.latestBriefing);
+    // Regenerate when forced OR when nothing live yet (never leave static seed).
+    if (data.force || !has) {
       inflight.delete(id);
       await claimBriefing(id, true);
       const task = generateForHour(id).finally(() => inflight.delete(id));
       inflight.set(id, task);
-      // Wait a bit so first paint can get content when possible
       await Promise.race([
         task,
-        new Promise((r) => setTimeout(r, 12_000)),
+        new Promise((r) => setTimeout(r, 18_000)),
       ]);
       return buildDashboard(id);
     }
-    // If no ready briefing yet, wait briefly for in-flight generation
-    const id = data.hourKey ?? hourKey();
     if (inflight.has(id)) {
       await Promise.race([
         inflight.get(id),

@@ -4,7 +4,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { BriefingDoc } from "@/components/briefing-doc";
 import {
   BRIEFING_HEADER,
-  CURRENT_BRIEFING,
   TICKER,
   formatDue,
   isScanning,
@@ -16,6 +15,8 @@ import {
   burnUrls,
   filterBurned,
   clearLocalDeskCache,
+  emptyBriefing,
+  purgeLegacyDeskCache,
   saveQueueAt,
   scanDueAt,
 } from "@/lib/news/desk";
@@ -49,31 +50,24 @@ export const Route = createFileRoute("/")({
 });
 
 function seedDash(): DashboardData {
+  const empty = emptyBriefing();
   return {
     briefing: {
       id: "seed",
-      hourLabel: "21:00",
-      dateLabel: "3 בספטמבר",
+      hourLabel: "",
+      dateLabel: "",
       generatedAt: new Date().toISOString(),
-      status: "ready",
-      payload: filterBurned(structuredClone(CURRENT_BRIEFING)),
+      status: "generating",
+      payload: empty,
     },
     latestBriefing: null,
     hours: [],
-    ticker: TICKER.map((row, i) => ({
-      id: `t${i}`,
-      title: row.text,
-      titleHe: `${row.source}: ${row.text}`,
-      source: row.source,
-      url: row.url,
-      publishedAt: null,
-      arena: null,
-    })),
-    scanQueue: CURRENT_BRIEFING.spares.slice(0, 6),
+    ticker: [],
+    scanQueue: [],
     currentHourKey: "seed",
-    currentClock: "21:00",
-    currentDateLabel: "3 בספטמבר",
-    generatingHour: null,
+    currentClock: "",
+    currentDateLabel: "",
+    generatingHour: "seed",
     scanningNext: false,
     scanDueAt: null,
     scanDueLabel: null,
@@ -81,7 +75,7 @@ function seedDash(): DashboardData {
 }
 
 function pickPayload(dash: DashboardData | null): { hourKey: string; header: string; payload: BriefingPayload } {
-  const fallback = structuredClone(CURRENT_BRIEFING);
+  const fallback = emptyBriefing();
   if (!dash) {
     return { hourKey: "seed", header: BRIEFING_HEADER, payload: fallback };
   }
@@ -91,8 +85,11 @@ function pickPayload(dash: DashboardData | null): { hourKey: string; header: str
     null;
   if (!view) {
     return {
-      hourKey: dash.currentHourKey,
-      header: `עדכון | ${dash.currentDateLabel}, ${dash.currentClock}`,
+      hourKey: dash.currentHourKey || "seed",
+      header:
+        dash.currentDateLabel && dash.currentClock
+          ? `עדכון | ${dash.currentDateLabel}, ${dash.currentClock}`
+          : BRIEFING_HEADER,
       payload: fallback,
     };
   }
@@ -119,6 +116,7 @@ function Home() {
   const scanQueueRef = useRef<SpareItem[]>([]);
 
   useEffect(() => {
+    purgeLegacyDeskCache();
     const used = loadUsedAt();
     const orig = loadOriginalIds();
     originalsRef.current = orig;
@@ -129,7 +127,7 @@ function Home() {
     setPayload(p.payload);
     setHeader(p.header);
     setHourKey(p.hourKey);
-    scanQueueRef.current = (initial?.scanQueue ?? CURRENT_BRIEFING.spares).slice(0, 10);
+    scanQueueRef.current = (initial?.scanQueue ?? []).slice(0, 10);
   }, []);
 
   useEffect(() => {
