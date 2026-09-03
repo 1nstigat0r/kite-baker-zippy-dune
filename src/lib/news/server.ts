@@ -6,6 +6,7 @@ import {
   composeLiveOnly,
   localizeHeadline,
   localizeHeadlineAsync,
+  composeTickerItem,
 } from "./compose";
 import { CURRENT_BRIEFING } from "./desk";
 import { ingestStories, pureHotScan } from "./ingest";
@@ -177,21 +178,8 @@ async function storiesToTicker(stories: RawStory[]): Promise<TickerItem[]> {
   const out: TickerItem[] = [];
   for (let i = 0; i < slice.length; i += 4) {
     const chunk = slice.slice(i, i + 4);
-    const rows = await Promise.all(
-      chunk.map(async (story) => {
-        const titleHe = await localizeHeadlineAsync(story.title, story.source);
-        return {
-          id: story.url.slice(-24) || story.url,
-          title: story.title,
-          titleHe,
-          source: formatOutlet(story.source),
-          url: story.url,
-          publishedAt: story.publishedAt,
-          arena: story.arena,
-        };
-      }),
-    );
-    out.push(...rows);
+    const rows = await Promise.all(chunk.map((story) => composeTickerItem(story)));
+    out.push(...rows.filter((row): row is TickerItem => row !== null));
   }
   return out;
 }

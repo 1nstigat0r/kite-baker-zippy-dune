@@ -6,9 +6,13 @@ import {
   attributionLead,
   formatOutlet,
   hasHebrew,
+  isIsraeliStrike,
+  isIsraeliVoice,
   isJunkItem,
   isOffPrimarySource,
+  isUsDomesticOffDesk,
   sameEvent,
+  tooMuchLatin,
   shapeCopy,
   shortenSpeaker,
   toDeskHebrew,
@@ -130,14 +134,12 @@ function storyToItem(story: RawStory): BriefingItem | null {
     story.url,
   );
   if (!cleaned.body || isJunkItem(cleaned.speaker, cleaned.body, story.url)) return null;
-  // Require some Hebrew after shaping, or accept desk substitutions that left Latin brands
-  if (!hasHebrew(cleaned.body) && cleaned.body.length < 40) return null;
-  if (!hasHebrew(cleaned.body)) {
-    // Wrap English remainder as desk attribution line
-    cleaned.speaker = cleaned.speaker || attributionLead(story.source);
-  }
+  if (!hasHebrew(cleaned.body) || tooMuchLatin(cleaned.body)) return null;
   if (/אבו עלי|כאן 11|דסק ערבים|ynet|עמית סגל|יחזקאלי/i.test(story.source)) return null;
-  if (isOffPrimarySource(`${story.title} ${cleaned.body}`, story.source)) return null;
+  const blob = `${cleaned.speaker} ${cleaned.body} ${story.title}`;
+  if (isOffPrimarySource(blob, story.source)) return null;
+  if (isIsraeliVoice(cleaned.speaker, cleaned.body, story.url) && !isIsraeliStrike(cleaned.body)) return null;
+  if (isUsDomesticOffDesk(blob)) return null;
   return mkItem(
     cleaned.speaker || attributionLead(story.source),
     cleaned.body,
@@ -569,6 +571,23 @@ export function localizeHeadline(title: string, source: string) {
 export async function localizeHeadlineAsync(title: string, _source: string) {
   const he = await translateToHebrew(title);
   return he.slice(0, 160);
+}
+
+export async function composeTickerItem(story: RawStory): Promise<TickerItem | null> {
+  const he = await localizeHeadlineAsync(story.title, story.source);
+  const item = storyToItem({ ...story, title: he });
+  if (!item) return null;
+  const body = item.body.replace(/\*\*/g, "").replace(/^דחוף\s*[|｜]\s*/, "");
+  if (!hasHebrew(body) || tooMuchLatin(body) || body.length < 12) return null;
+  return {
+    id: story.url.slice(-24) || story.url,
+    title: story.title,
+    titleHe: body,
+    source: formatOutlet(story.source),
+    url: story.url,
+    publishedAt: story.publishedAt,
+    arena: resolveArena(`${item.speaker} ${body}`, story.arena),
+  };
 }
 
 export function tickerToSpare(item: TickerItem): SpareItem | null {

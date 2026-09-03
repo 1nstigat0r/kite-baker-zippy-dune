@@ -38,7 +38,7 @@ import { packSparesNow, tickerToSpare } from "@/lib/news/compose";
 import { formatHeDateTime } from "@/lib/news/time";
 import { mergeTicker, nextPackLabel, shouldPackHour } from "@/lib/news/ticker-loop";
 import { displayShort } from "@/lib/news/display-short";
-import { formatOutlet, hasHebrew } from "@/lib/news/text";
+import { attributionLead, formatOutlet, hasHebrew } from "@/lib/news/text";
 import {
   briefingHasContent,
   briefingItemCount,
@@ -271,7 +271,7 @@ function Home() {
     const live = tickerItems
       .map((row) => {
         const text = (row.titleHe || "").replace(/\*\*/g, "");
-        const source = formatOutlet(row.source || "מבזק");
+        const source = attributionLead(row.source || "מבזק");
         const url = displayShort(undefined, row.url) || row.url;
         return { source, text, url };
       })
@@ -416,16 +416,32 @@ function Home() {
               className="ticker-track flex h-full w-max items-center gap-12 whitespace-nowrap px-5 text-base text-fg-on-dark sm:text-lg"
             >
               {tickerRows.map((row, i) => (
-                <a
-                  key={row.url + i}
-                  href={row.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 leading-none hover:text-gold"
-                >
-                  <span className="font-semibold text-gold">{row.source}</span>
-                  <span className="text-fg-on-dark/90">{row.text}</span>
-                </a>
+                <span key={row.url + i} className="inline-flex items-center gap-1.5 leading-none">
+                  {row.url !== "#" ? (
+                    <button
+                      type="button"
+                      aria-label="הוסף לספיירים"
+                      title="לספייר"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onAddTickerToSpare(row.url);
+                      }}
+                      className="inline-flex size-5 shrink-0 items-center justify-center rounded-full border border-gold/55 text-[11px] font-bold text-gold hover:bg-gold hover:text-bg"
+                    >
+                      +
+                    </button>
+                  ) : null}
+                  <a
+                    href={row.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 hover:text-gold"
+                  >
+                    <span className="font-semibold text-gold">{row.source}</span>
+                    <span className="text-fg-on-dark/90">{row.text}</span>
+                  </a>
+                </span>
               ))}
             </div>
           </div>
@@ -441,8 +457,6 @@ function Home() {
           onSwap={(spareId, itemId) => void onSwap(spareId, itemId)}
           onAdd={(spareId) => void onAdd(spareId)}
           onPackSpares={onPackSpares}
-          onAddTickerToSpare={onAddTickerToSpare}
-          tickerItems={tickerItems}
           used={scanning}
           scanDueLabel={due}
           replaced={replaced}

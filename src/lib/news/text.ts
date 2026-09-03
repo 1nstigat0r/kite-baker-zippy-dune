@@ -274,12 +274,27 @@ export function isIsraeliVoice(speaker: string, body: string, url = "") {
     return true;
   }
   if (
-    /נתניהו|שר הביטחון|לשכת רמ["״]מ|צה["״]ל הנחה|גורמים ישראליים/.test(body) &&
+    /נתניהו|שר הביטחון|לשכת רמ["״]מ|צה["״]ל הנחה|גורמים ישראליים|גורם ביטחוני|פקיד צבאי|דובר צה["״]ל|הרמטכ["״]ל|הלוי|זמיר/.test(body) &&
     !/עלי אלטאהר|תקיפ(?:ה|ות) ישראלית/.test(body)
   ) {
     return true;
   }
+  if (/idf spokesman|israeli (?:army|military|official)|דובר צה["״]ל|פקיד צבאי ישראלי/i.test(t) && !isIsraeliStrike(body)) {
+    return true;
+  }
   return false;
+}
+
+export function isIsraeliStrike(text: string) {
+  return /תקיפ(?:ה|ות) ישראלית|ישראל תקפ|כטב["״]מ ישראלי|תקיפה בלבנון|תקיפה בעזה|airstrike|israeli strike/i.test(text ?? "");
+}
+
+export function tooMuchLatin(text: string) {
+  const s = text ?? "";
+  const he = (s.match(/[\u0590-\u05FF]/g) || []).length;
+  const la = (s.match(/[A-Za-z]/g) || []).length;
+  if (he === 0) return la > 8;
+  return la > 12 && la > he * 0.55;
 }
 
 export function hasHebrew(text: string) {
@@ -413,8 +428,9 @@ export function attributionLead(source: string) {
 
 export function isUsDomesticOffDesk(text: string) {
   const x = text ?? "";
-  if (REGION_RE.test(x) || DESK_RE.test(x)) return false;
-  return /\bvance\b|jd vance|גיי די|uber\b|nigeria|congress|senate|white house|campaign|ohio|governor|midterm/i.test(x);
+  if (REGION_RE.test(x)) return false;
+  if (/hormuz|hezbollah|houthi|irgc|\biran\b|lebanon|syria|yemen|gaza|iraq|איראן|לבנון|סוריה|תימן|עזה|הורמוז|חיזבאללה|חות/i.test(x)) return false;
+  return /\bvance\b|ואנס|גיי די|\btrump\b|טראמפ|uber\b|nigeria|congress|senate|white house|הבית הלבן|campaign|ohio|governor|midterm|burgum|groundbreaking|\barch\b/i.test(x);
 }
 
 type OriginHome = "us" | "iran" | "lebanon" | "yemen" | "iraq" | "gulf" | "russia" | "uk" | "qatar";
@@ -436,7 +452,7 @@ function outletHome(source: string): OriginHome | null {
 
 function speakerHome(text: string): OriginHome | null {
   const x = text ?? "";
-  if (/טראמפ|\btrump\b|ואנס|\bvance\b|רוביו|\brubio\b|הבית הלבן|white house|pentagon|state department|הפנטגון|מחלקת המדינה|הגסת'|\bhegseth\b|וויטקוף|\bwitkoff\b|ביידן|\bbiden\b|הארים|\bharris\b|congress|senate|cia\b|centcom/i.test(x)) return "us";
+  if (/טראמפ|\btrump\b|ואנס|\bvance\b|רוביו|\brubio\b|הבית הלבן|white house|pentagon|state department|הפנטגון|מחלקת המדינה|הגסת'|\bhegseth\b|וויטקוף|\bwitkoff\b|ביידן|\bbiden\b|הארים|\bharris\b|congress|senate|cia\b|centcom|סגן נשיא|نائب الرئيس|فانس|ترامب|البيت الأبيض/i.test(x)) return "us";
   if (/חמינאי|חמאנאי|פזשכיאן|קאליבאף|חסד["״]ם|משה["״]מ|אראקצ'י|\bkhamenei\b|pezeshkian|qalibaf|irgc|ara[gq]chi/i.test(x)) return "iran";
   if (/נסראללה|חיזבאללה|נעים קאסם|עון|ברי|מיקאתי|nasrallah|hezbollah|berri|aoun|mikati/i.test(x)) return "lebanon";
   if (/חות['׳]?ים|אנצאר אללה|משרע|houthi|ansarollah/i.test(x)) return "yemen";
@@ -456,8 +472,6 @@ function isDirectToThisOutlet(text: string, source: string) {
     for (const tok of tokens) {
       if (new RegExp(tok.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(x)) return true;
     }
-    // "גורמים ל-X" where X is this desk's source name
-    if (/גורמים ל-|מסר(?:ו)? ל-|בראיון ל/.test(x)) return true;
   }
   return false;
 }
