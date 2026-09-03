@@ -1,9 +1,11 @@
-import { ArrowLeftRight, Check, Copy, Plus } from "lucide-react";
+import { ArrowLeftRight, Check, Copy, Pencil, Plus, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { ArenaFlags } from "@/components/flags";
 import { displayShort } from "@/lib/news/display-short";
 import {
   applyAdd,
+  applyEditItem,
+  applyRemoveItem,
   applySwap,
   arenaPresentation,
   briefingItemCount,
@@ -42,27 +44,97 @@ function linkHref(item: BriefingItem) {
   return displayShort(item.shortUrl, item.url);
 }
 
-function ItemBlock({ n, item }: { n: number; item: BriefingItem }) {
+function ItemBlock({
+  n,
+  item,
+  onEdit,
+  onRemove,
+}: {
+  n: number;
+  item: BriefingItem;
+  onEdit: (id: string, patch: { speaker: string; body: string }) => void;
+  onRemove: (id: string) => void;
+}) {
   const href = linkHref(item);
+  const [editing, setEditing] = useState(false);
+  const [speaker, setSpeaker] = useState(item.speaker);
+  const [body, setBody] = useState(item.body.replace(/\*\*/g, ""));
+
+  const btn =
+    "inline-flex size-8 items-center justify-center rounded-md border border-line bg-surface-2 text-navy shadow-[0_3px_0_0_rgba(12,28,55,0.18)] hover:bg-gold/20";
+
   return (
-    <article className="mb-7 text-right">
-      <p className="text-pretty text-[1.05rem] leading-relaxed text-fg">
-        <span className="ms-1 tabular-nums text-muted">{n}. </span>
-        <Lead item={item} />
-      </p>
-      {href ? (
-        <p className="mt-1.5 text-sm">
-          <a
-            href={href}
-            target="_blank"
-            rel="noreferrer"
-            className="text-gold-deep underline decoration-line-strong underline-offset-4 hover:text-fg"
-            dir="ltr"
-          >
-            {href}
-          </a>
-        </p>
-      ) : null}
+    <article className="mb-7 flex items-start gap-3">
+      <div className="min-w-0 flex-1 text-right">
+        {editing ? (
+          <div className="space-y-2">
+            <input
+              value={speaker}
+              onChange={(e) => setSpeaker(e.target.value)}
+              className="w-full rounded-md border border-line bg-surface-2 px-2 py-1.5 text-sm text-fg"
+              dir="rtl"
+            />
+            <textarea
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              rows={3}
+              className="w-full rounded-md border border-line bg-surface-2 px-2 py-1.5 text-sm leading-relaxed text-fg"
+              dir="rtl"
+            />
+            <div className="flex justify-start gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  onEdit(item.id, { speaker, body });
+                  setEditing(false);
+                }}
+                className="rounded-md bg-gold px-3 py-1.5 text-xs font-semibold text-bg"
+              >
+                שמור
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSpeaker(item.speaker);
+                  setBody(item.body.replace(/\*\*/g, ""));
+                  setEditing(false);
+                }}
+                className="rounded-md border border-line px-3 py-1.5 text-xs font-semibold text-navy"
+              >
+                ביטול
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <p className="text-pretty text-[1.05rem] leading-relaxed text-fg">
+              <span className="ms-1 tabular-nums text-muted">{n}. </span>
+              <Lead item={item} />
+            </p>
+            {href ? (
+              <p className="mt-1.5 text-sm">
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-gold-deep underline decoration-line-strong underline-offset-4 hover:text-fg"
+                  dir="ltr"
+                >
+                  {href}
+                </a>
+              </p>
+            ) : null}
+          </>
+        )}
+      </div>
+      <div className="flex shrink-0 flex-col gap-1.5">
+        <button type="button" aria-label="עריכה" title="עריכה" onClick={() => setEditing(true)} className={btn}>
+          <Pencil className="size-3.5" />
+        </button>
+        <button type="button" aria-label="מחיקה" title="מחיקה" onClick={() => onRemove(item.id)} className={btn}>
+          <Trash2 className="size-3.5" />
+        </button>
+      </div>
     </article>
   );
 }
@@ -231,7 +303,19 @@ export function BriefingDoc({
               <ArenaFlags codes={arena.flags} />
             </h2>
             {items.map(({ n, item }) => (
-              <ItemBlock key={item.id} n={n} item={item} />
+              <ItemBlock
+                key={item.id}
+                n={n}
+                item={item}
+                onEdit={(id, patch) => {
+                  const next = applyEditItem(payload, id, patch);
+                  if (next) onChange(next);
+                }}
+                onRemove={(id) => {
+                  const next = applyRemoveItem(payload, id);
+                  if (next) onChange(next);
+                }}
+              />
             ))}
           </div>
         ))}

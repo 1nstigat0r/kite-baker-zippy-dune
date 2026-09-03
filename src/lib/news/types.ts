@@ -262,6 +262,36 @@ export function applySwap(
   return next;
 }
 
+
+export function applyRemoveItem(payload: BriefingPayload, itemId: string): BriefingPayload | null {
+  const next = clonePayload(payload);
+  const loc = findItemLoc(next.arenas, itemId);
+  if (!loc) return null;
+  const item = next.arenas[loc.ai].items[loc.ii];
+  next.arenas[loc.ai].items.splice(loc.ii, 1);
+  const drop = new Set([item.id, item.url, item.shortUrl ?? ""]);
+  next.spares = next.spares.filter(
+    (row) => !drop.has(row.id) && !drop.has(row.url) && !drop.has(row.shortUrl ?? ""),
+  );
+  next.arenas = sortArenas(next.arenas);
+  return next;
+}
+
+export function applyEditItem(
+  payload: BriefingPayload,
+  itemId: string,
+  patch: { speaker?: string; body?: string },
+): BriefingPayload | null {
+  const next = clonePayload(payload);
+  const loc = findItemLoc(next.arenas, itemId);
+  if (!loc) return null;
+  const item = next.arenas[loc.ai].items[loc.ii];
+  if (patch.speaker !== undefined) item.speaker = patch.speaker.trim();
+  if (patch.body !== undefined) item.body = patch.body.trim();
+  if (!item.body) return null;
+  return next;
+}
+
 export function applyAdd(payload: BriefingPayload, spareId: string): BriefingPayload | null {
   if (briefingItemCount(payload) >= 8) return null;
   const next = clonePayload(payload);
