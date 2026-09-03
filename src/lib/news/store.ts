@@ -230,7 +230,7 @@ export async function pruneTicker(keep = 16) {
   `;
   const ranked = rows
     .map(mapTicker)
-    .filter((item) => hasHebrew(item.titleHe ?? "") || hasHebrew(item.title))
+    .filter((item) => (item.titleHe ?? item.title ?? "").trim().length > 12)
     .sort((a, b) => tickerScore(b) - tickerScore(a));
   if (ranked.length <= keep) return;
   const drop = ranked.slice(keep);
@@ -395,7 +395,7 @@ export async function setMeta(key: string, value: string) {
 export const SCAN_LEAD_MS = 40 * 60 * 1000;
 
 
-const DESK_GEN = "v10-live-only";
+const DESK_GEN = "v11-rss-first";
 
 /** Wipe briefings/ticker/seen when code gen changes — kills stuck static exclusives. */
 export async function ensureDeskGeneration() {

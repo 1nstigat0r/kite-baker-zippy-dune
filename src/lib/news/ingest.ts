@@ -140,7 +140,15 @@ async function poolMap<T, R>(items: T[], size: number, fn: (item: T) => Promise<
   return out;
 }
 
-export async function ingestStories(force = false): Promise<RawStory[]> {
+export type IngestMode = "fast" | "full";
+
+/** Top Telegram primaries for the fast path (Vercel time budget). */
+const FAST_TG = TELEGRAM_SOURCES.filter((s) => !s.indicator).slice(0, 18);
+
+export async function ingestStories(
+  force = false,
+  mode: IngestMode = "full",
+): Promise<RawStory[]> {
   const last = await getMeta("ticker_at");
   if (!force && last) {
     const then = Number(last);
@@ -150,23 +158,28 @@ export async function ingestStories(force = false): Promise<RawStory[]> {
   }
   await setMeta("ticker_at", String(Date.now()));
 
-  const batches = await poolMap(
-    [
-      ...RSS_SOURCES.map((src) => ({ kind: "rss" as const, src })),
-      ...TELEGRAM_SOURCES.map((src) => ({ kind: "tg" as const, src })),
-    ],
-    10,
-    async (job) => {
-      if (job.kind === "rss") {
-        const xml = await fetchText(job.src.url, 5000);
-        if (!xml || !/[<](rss|feed|item|entry)/i.test(xml)) return [] as RawStory[];
-        return parseRss(xml, job.src.name);
-      }
-      const html = await fetchText(`https://t.me/s/${job.src.channel}`, 5000);
-      if (!html) return [] as RawStory[];
-      return parseTelegram(html, job.src.channel, job.src.name, !!job.src.indicator);
-    },
-  );
+  // Fast: all RSS + small TG. Full: RSS + all TG (incl. indicator tips).
+  const jobs =
+    mode === "fast"
+      ? [
+          ...RSS_SOURCES.map((src) => ({ kind: "rss" as const, src })),
+          ...FAST_TG.map((src) => ({ kind: "tg" as const, src })),
+        ]
+      : [
+          ...RSS_SOURCES.map((src) => ({ kind: "rss" as const, src })),
+          ...TELEGRAM_SOURCES.map((src) => ({ kind: "tg" as const, src })),
+        ];
+
+  const batches = await poolMap(jobs, mode === "fast" ? 12 : 10, async (job) => {
+    if (job.kind === "rss") {
+      const xml = await fetchText(job.src.url, mode === "fast" ? 7000 : 5000);
+      if (!xml || !/[<](rss|feed|item|entry)/i.test(xml)) return [] as RawStory[];
+      return parseRss(xml, job.src.name);
+    }
+    const html = await fetchText(`https://t.me/s/${job.src.channel}`, mode === "fast" ? 7000 : 5000);
+    if (!html) return [] as RawStory[];
+    return parseTelegram(html, job.src.channel, job.src.name, !!job.src.indicator);
+  });
 
   const merged: RawStory[] = [];
   const seen = new Set<string>();
@@ -185,6 +198,7 @@ export async function ingestStories(force = false): Promise<RawStory[]> {
     return tb - ta;
   });
 
+  // Keep last 36h — do NOT require "today Israel" (that emptied the desk at night).
   const recent = merged.filter((story) => {
     if (!story.publishedAt) return true;
     const d = parsePossiblyUtc(story.publishedAt);
@@ -207,11 +221,16 @@ export async function ingestStories(force = false): Promise<RawStory[]> {
     })),
   );
 
-  // Tips first (marked indicator) then publishable — compose drops tip-offs but can boost matches.
-  const today = [...tips, ...publishable].filter(
-    (story) => !story.publishedAt || isTodayIsrael(story.publishedAt),
-  );
-  return today;
+  // Prefer today's items first, but keep the full 36h pool for compose.
+  const preferred = [...tips, ...publishable].sort((a, b) => {
+    const at = a.publishedAt && isTodayIsrael(a.publishedAt) ? 1 : 0;
+    const bt = b.publishedAt && isTodayIsrael(b.publishedAt) ? 1 : 0;
+    if (bt !== at) return bt - at;
+    const ta = a.publishedAt ? Date.parse(a.publishedAt) : 0;
+    const tb = b.publishedAt ? Date.parse(b.publishedAt) : 0;
+    return tb - ta;
+  });
+  return preferred;
 }
 
 export function storiesForPrompt(stories: RawStory[], limit = 50) {

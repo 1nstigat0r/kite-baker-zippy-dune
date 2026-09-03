@@ -216,7 +216,12 @@ export function BriefingDoc({
             <span className="mt-2 inline-block h-[3px] w-16 bg-gold" />
           </h1>
         </div>
-        {numbered.map(({ arena, items }) => (
+        {numbered.length === 0 ? (
+          <p className="py-10 text-center text-sm text-muted">
+            סורק מקורות עכשיו… רענון מבזקים או המתן כמה שניות.
+          </p>
+        ) : (
+          numbered.map(({ arena, items }) => (
           <div key={arena.id} className="mb-2">
             <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-navy">
               <span>{arena.title}</span>
@@ -226,7 +231,8 @@ export function BriefingDoc({
               <ItemBlock key={item.id} n={n} item={item} />
             ))}
           </div>
-        ))}
+          ))
+        )}
       </section>
 
       {spares.length > 0 ? (

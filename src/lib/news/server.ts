@@ -55,9 +55,9 @@ async function generateForHour(id: string) {
   const dayPrefix = `${parts.year}-${parts.month}-${parts.day}`;
   try {
     const stories = await Promise.race([
-      ingestStories(true),
+      ingestStories(true, "fast"),
       new Promise<RawStory[]>((resolve) => {
-        setTimeout(() => resolve([]), 22_000);
+        setTimeout(() => resolve([]), 25_000);
       }),
     ]);
     const [seen, previous, ticker] = await Promise.all([
@@ -86,6 +86,29 @@ async function generateForHour(id: string) {
       seen,
     });
 
+    const itemCount = result.payload.arenas.reduce((n, a) => n + a.items.length, 0);
+    if (itemCount === 0) {
+      // Don't lock an empty "ready" card — keep generating and kick fuller ingest.
+      console.error("[briefing] empty compose", id, "stories", stories.length);
+      kickIngest();
+      await failBriefing(id, "empty_compose");
+      // Retry once with whatever ticker already has
+      const more = await storiesFromTicker();
+      if (more.length) {
+        const retry = await composeBriefing({
+          hourLabel: hourLabelFromKey(id),
+          stories: more,
+          previous,
+          seen,
+        });
+        const n2 = retry.payload.arenas.reduce((n, a) => n + a.items.length, 0);
+        if (n2 > 0) {
+          await claimBriefing(id, true);
+          await saveBriefing(id, await shortenPayload(retry.payload));
+        }
+      }
+      return;
+    }
     await saveBriefing(id, await shortenPayload(result.payload));
     const prints: string[] = [];
     for (const arena of result.payload.arenas) {
@@ -116,7 +139,7 @@ function kickIngest() {
   if (ingestKick) return;
   ingestKick = (async () => {
     await setMeta("last_ingest_at", new Date().toISOString());
-    await ingestStories(true);
+    await ingestStories(true, "full");
     await localizeTicker();
     await pruneTicker(24);
   })()
@@ -205,7 +228,7 @@ export const refreshTicker = createServerFn({ method: "POST" }).handler(
   async () => {
     await ensureDeskGeneration();
     await clearTicker();
-    await ingestStories(true);
+    await ingestStories(true, "fast");
     await setMeta("last_ingest_at", new Date().toISOString());
     await localizeTicker();
     await pruneTicker(24);

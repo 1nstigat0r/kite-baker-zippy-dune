@@ -128,10 +128,9 @@ function storyToItem(story: RawStory): BriefingItem | null {
     story.url,
   );
   if (!cleaned.body || isJunkItem(cleaned.speaker, cleaned.body, story.url)) return null;
-  // Require some Hebrew after shaping, or accept desk substitutions that left Latin brands
-  if (!hasHebrew(cleaned.body) && cleaned.body.length < 40) return null;
+  // Prefer Hebrew; still allow strong English exclusives (deskHeadline may leave Latin).
   if (!hasHebrew(cleaned.body)) {
-    // Wrap English remainder as desk attribution line
+    if (cleaned.body.length < 28) return null;
     cleaned.speaker = cleaned.speaker || `דווח ב-${outlet || story.source}`;
   }
   if (story.indicator) return null;
