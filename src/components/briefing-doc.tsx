@@ -1,12 +1,13 @@
-import { ArrowLeftRight, Check, Plus } from "lucide-react";
+import { ArrowLeftRight, Check, Copy, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { ArenaFlags } from "@/components/flags";
-import { displayShort } from "@/lib/news/shorten";
+import { displayShort } from "@/lib/news/display-short";
 import {
   applyAdd,
   applySwap,
   arenaPresentation,
   briefingItemCount,
+  FLAG_EMOJI,
   type BriefingArena,
   type BriefingItem,
   type BriefingPayload,
@@ -71,11 +72,36 @@ function preview(item: BriefingItem) {
   return raw.length > 72 ? `${raw.slice(0, 72)}…` : raw;
 }
 
+function toWhatsAppBold(text: string) {
+  return text.replace(/\*\*([^*]+)\*\*/g, "*$1*");
+}
+
+function whatsAppText(header: string, payload: BriefingPayload) {
+  const lines: string[] = [header, ""];
+  let n = 0;
+  for (const arena of payload.arenas) {
+    const shown = arenaPresentation(arena.id, arena.items);
+    const flags = shown.flags.map((c) => FLAG_EMOJI[c] ?? "🌐").join("");
+    lines.push(`${shown.title} ${flags}`.trim());
+    for (const item of arena.items) {
+      n += 1;
+      const speaker = item.speaker ? `*${item.speaker}:* ` : "";
+      lines.push(`${n}. ${speaker}${toWhatsAppBold(item.body)}`);
+      const href = linkHref(item);
+      if (href) lines.push(href);
+      lines.push("");
+    }
+  }
+  return lines.join("\n").trim() + "\n";
+}
+
 export function BriefingDoc({
   header,
   payload,
   onChange,
   onUsed,
+  onSwap,
+  onAdd,
   used,
   scanDueLabel,
   replaced = 0,
@@ -85,12 +111,15 @@ export function BriefingDoc({
   payload: BriefingPayload;
   onChange: (next: BriefingPayload) => void;
   onUsed: () => void;
+  onSwap?: (spareId: string, itemId: string) => void;
+  onAdd?: (spareId: string) => void;
   used: boolean;
   scanDueLabel: string | null;
   replaced?: number;
   total?: number;
 }) {
   const [armed, setArmed] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const arenas = payload.arenas;
   const spares = payload.spares;
@@ -110,6 +139,11 @@ export function BriefingDoc({
   }, [arenas]);
 
   function swap(spareId: string, itemId: string) {
+    if (onSwap) {
+      setArmed(null);
+      onSwap(spareId, itemId);
+      return;
+    }
     const next = applySwap(payload, spareId, itemId);
     if (!next) return;
     setArmed(null);
@@ -117,9 +151,29 @@ export function BriefingDoc({
   }
 
   function add(spareId: string) {
+    if (onAdd) {
+      onAdd(spareId);
+      return;
+    }
     const next = applyAdd(payload, spareId);
     if (!next) return;
     onChange(next);
+  }
+
+  async function copyBriefing() {
+    const text = whatsAppText(header, payload);
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1800);
   }
 
   return (
@@ -150,7 +204,17 @@ export function BriefingDoc({
         </p>
       ) : null}
 
-      <section className="rounded-lg bg-surface px-5 py-6 text-fg shadow-[0_14px_0_0_rgba(12,28,55,0.55),0_22px_40px_rgba(0,0,0,0.45)] sm:px-8 sm:py-8">
+      <section className="relative rounded-lg bg-surface px-5 py-6 text-fg shadow-[0_14px_0_0_rgba(12,28,55,0.55),0_22px_40px_rgba(0,0,0,0.45)] sm:px-8 sm:py-8">
+        <button
+          type="button"
+          onClick={() => void copyBriefing()}
+          className="absolute start-3 top-3 inline-flex min-h-9 items-center gap-1.5 rounded-full border border-line bg-surface-2 px-3 text-xs font-semibold text-navy shadow-[0_4px_0_0_rgba(12,28,55,0.18)] hover:bg-gold/20"
+          aria-label={copied ? "הועתק" : "העתק את העדכון"}
+          title={copied ? "הועתק" : "העתק לוואטסאפ"}
+        >
+          <Copy className="size-3.5" />
+          {copied ? "הועתק" : "העתק"}
+        </button>
         {numbered.map(({ arena, items }) => (
           <div key={arena.id} className="mb-2">
             <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-navy">

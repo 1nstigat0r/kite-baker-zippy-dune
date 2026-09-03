@@ -1,9 +1,10 @@
-import { i as __toESM, n as __exportAll } from "../_runtime.mjs";
-import { L as require_react, _ as useRouter, f as createRouter, g as createRootRoute, h as createFileRoute, l as Scripts, m as lazyRouteComponent, p as Outlet, u as HeadContent, v as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
+import { o as __toESM } from "../_runtime.mjs";
+import { t as __exportAll } from "./rolldown-runtime-D7D4PA-g.mjs";
+import { R as require_react, _ as useRouter, f as createRouter, g as createRootRoute, h as createFileRoute, l as Scripts, m as lazyRouteComponent, p as Outlet, u as HeadContent, v as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
+import { n as TSS_SERVER_FUNCTION, r as getServerFnById, t as createServerFn } from "./ssr.mjs";
 import { t as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as union, i as string, n as number, r as object, t as literal } from "../_libs/zod.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BtRB9_fK.js
-var router_BtRB9_fK_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CU8Lv1sK.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function AppErrorComponent({ error }) {
@@ -272,7 +273,7 @@ function PreviewHostBridge() {
 	}, [router]);
 	return null;
 }
-var styles_default = "/assets/styles-CYe48FA6.css";
+var styles_default = "/assets/styles-D3Ul0fjC.css";
 var APP_NAME = "עדכון";
 var Route$1 = createRootRoute({
 	head: () => ({
@@ -330,13 +331,44 @@ var Route$1 = createRootRoute({
 		})]
 	})
 });
-var $$splitComponentImporter = () => import("./routes-cgLT9_AR.mjs");
-var rootRouteChildren = { IndexRoute: createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter, "component") }).update({
+var createSsrRpc = (functionId) => {
+	const url = "/_serverFn/" + functionId;
+	const serverFnMeta = { id: functionId };
+	const fn = async (...args) => {
+		return (await getServerFnById(functionId, { origin: "server" }))(...args);
+	};
+	return Object.assign(fn, {
+		url,
+		serverFnMeta,
+		[TSS_SERVER_FUNCTION]: true
+	});
+};
+var getDashboard = createServerFn({ method: "POST" }).validator((input) => input ?? {}).handler(createSsrRpc("a2cf23b9aabf6ccb2a24ceca4ea6f9c98c02d65008af47bfd56a58e0a373f6af"));
+var refreshTicker = createServerFn({ method: "POST" }).handler(createSsrRpc("d269074186cbf601e57c51ce43542d0d01822db2c614041cbd0fc905f8ca328c"));
+var ensureBriefing = createServerFn({ method: "POST" }).validator((input) => input ?? {}).handler(createSsrRpc("a7cd39d6671e03c7538ba75dcab24cf403917c42b70e5dc50a3dcfcd8f69b70f"));
+var markUsed = createServerFn({ method: "POST" }).validator((input) => input).handler(createSsrRpc("94430d18bbc6d35d31ac2a420fd4fa01ca2b6218496dcade152a647a580697fa"));
+var swapSpare = createServerFn({ method: "POST" }).validator((input) => input).handler(createSsrRpc("24966016c33554192dcdfa12ab2c81ae69c70541ba92e46c3b52ae875d2eab7e"));
+var addSpare = createServerFn({ method: "POST" }).validator((input) => input).handler(createSsrRpc("71ed602902a0a9f16ba89cfdc76fd7c4986e54e87f8c768867226ceadee6d5ab"));
+var persistPayload = createServerFn({ method: "POST" }).validator((input) => input).handler(createSsrRpc("d6037f94a4a83674860af48fa923199d169ff1dc4eb6a78bf2bbbefc506e4325"));
+var $$splitComponentImporter = () => import("./routes-5RGHKSWU.mjs");
+var Route = createFileRoute("/")({
+	loader: async () => {
+		try {
+			return await ensureBriefing({ data: {} });
+		} catch (err) {
+			console.error("[loader]", err);
+			return null;
+		}
+	},
+	component: lazyRouteComponent($$splitComponentImporter, "component")
+});
+var rootRouteChildren = { IndexRoute: Route.update({
 	id: "/",
 	path: "/",
 	getParentRoute: () => Route$1
 }) };
 var routeTree = Route$1._addFileChildren(rootRouteChildren)._addFileTypes();
+var router_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
 function getRouter() {
 	return createRouter({
 		routeTree,
@@ -344,4 +376,4 @@ function getRouter() {
 	});
 }
 //#endregion
-export { getRouter, router_BtRB9_fK_exports as t };
+export { markUsed as a, swapSpare as c, getDashboard as i, Route as n, persistPayload as o, addSpare as r, refreshTicker as s, router_exports as t };

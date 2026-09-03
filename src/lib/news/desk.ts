@@ -7,6 +7,7 @@ import {
   type BriefingPayload,
   type SpareItem,
 } from "./types";
+import { formatHeDateTime, hourLabelFromKey, hourKey, todayDateLabel } from "./time";
 
 function item(
   id: string,
@@ -44,6 +45,7 @@ function sortArenasPayload(payload: BriefingPayload): BriefingPayload {
   return { arenas: sortArenas(payload.arenas), spares: payload.spares };
 }
 
+/** Cold-start seed when ingest is empty — never invent URLs beyond this curated set. */
 export const CURRENT_BRIEFING: BriefingPayload = sortArenasPayload({
   arenas: [
     arena("lebanon", [
@@ -185,9 +187,6 @@ CURRENT_BRIEFING.spares = [
   ),
 ];
 
-/** Auto-replace every original briefing item, in order, after «השתמשתי». */
-export const SCAN_QUEUE: SpareItem[] = CURRENT_BRIEFING.spares.slice(0, 6);
-
 export type TickerLine = { source: string; text: string; url: string };
 
 export const TICKER: TickerLine[] = [
@@ -199,14 +198,18 @@ export const TICKER: TickerLine[] = [
   { source: "דווח ב-FT", text: "ריאד מקדמת ביטוח אוניות עד 186 מיליון דולר", url: "https://katzr.net/863429" },
 ];
 
-export const BRIEFING_HEADER = "עדכון | 3 בספטמבר, 21:00";
-export const SWAP_EVERY_MS = 12_000;
+export function briefingHeaderNow() {
+  return `עדכון | ${todayDateLabel()}, ${hourLabelFromKey(hourKey())}`;
+}
 
-const USED_KEY = "idkun-used-at-v6";
-const PAYLOAD_KEY = "idkun-payload-v6";
-const ORIG_KEY = "idkun-orig-ids-v6";
-const QUEUE_KEY = "idkun-queue-at-v6";
-const SCAN_MS = 40 * 60 * 1000;
+export const BRIEFING_HEADER = briefingHeaderNow();
+export const SWAP_EVERY_MS = 12_000;
+export const SCAN_MS = 40 * 60 * 1000;
+
+const USED_KEY = "idkun-used-at-v7";
+const PAYLOAD_KEY = "idkun-payload-v7";
+const ORIG_KEY = "idkun-orig-ids-v7";
+const QUEUE_KEY = "idkun-queue-at-v7";
 
 function lsGet(key: string): string | null {
   try {
@@ -252,7 +255,7 @@ export function saveQueueAt(n: number) {
   lsSet(QUEUE_KEY, String(n));
 }
 
-export function markUsed(payload: BriefingPayload) {
+export function markUsedLocal(payload: BriefingPayload) {
   lsSet(USED_KEY, String(Date.now()));
   lsSet(ORIG_KEY, JSON.stringify(listItemIds(payload)));
   lsSet(QUEUE_KEY, "0");
@@ -279,7 +282,7 @@ export function activePayload(): BriefingPayload {
   return structuredClone(CURRENT_BRIEFING);
 }
 
-export function persistPayload(payload: BriefingPayload) {
+export function persistPayloadLocal(payload: BriefingPayload) {
   lsSet(PAYLOAD_KEY, JSON.stringify(payload));
 }
 
@@ -296,3 +299,5 @@ export function remainingOriginal(payload: BriefingPayload, originalIds: string[
   const live = new Set(listItemIds(payload));
   return originalIds.filter((id) => live.has(id));
 }
+
+export { formatHeDateTime, hourKey, hourLabelFromKey, todayDateLabel };

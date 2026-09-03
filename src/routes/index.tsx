@@ -4,32 +4,119 @@ import { createFileRoute } from "@tanstack/react-router";
 import { BriefingDoc } from "@/components/briefing-doc";
 import {
   BRIEFING_HEADER,
-  SCAN_QUEUE,
+  CURRENT_BRIEFING,
   SWAP_EVERY_MS,
   TICKER,
-  activePayload,
   formatDue,
   isScanning,
   loadOriginalIds,
   loadQueueAt,
   loadUsedAt,
-  markUsed,
-  persistPayload,
+  markUsedLocal,
+  persistPayloadLocal,
   remainingOriginal,
   saveQueueAt,
   scanDueAt,
 } from "@/lib/news/desk";
-import { replaceNextOriginal, type BriefingPayload } from "@/lib/news/types";
+import {
+  addSpare,
+  ensureBriefing,
+  getDashboard,
+  markUsed,
+  persistPayload,
+  refreshTicker,
+  swapSpare,
+} from "@/lib/news/server";
+import { displayShort } from "@/lib/news/display-short";
+import {
+  briefingHasContent,
+  replaceNextOriginal,
+  type BriefingPayload,
+  type DashboardData,
+  type SpareItem,
+} from "@/lib/news/types";
 
-export const Route = createFileRoute("/")({ component: Home });
+export const Route = createFileRoute("/")({
+  loader: async () => {
+    try {
+      return await ensureBriefing({ data: {} });
+    } catch (err) {
+      console.error("[loader]", err);
+      return null;
+    }
+  },
+  component: Home,
+});
+
+function seedDash(): DashboardData {
+  return {
+    briefing: {
+      id: "seed",
+      hourLabel: "21:00",
+      dateLabel: "3 בספטמבר",
+      generatedAt: new Date().toISOString(),
+      status: "ready",
+      payload: structuredClone(CURRENT_BRIEFING),
+    },
+    latestBriefing: null,
+    hours: [],
+    ticker: TICKER.map((row, i) => ({
+      id: `t${i}`,
+      title: row.text,
+      titleHe: `${row.source}: ${row.text}`,
+      source: row.source,
+      url: row.url,
+      publishedAt: null,
+      arena: null,
+    })),
+    scanQueue: CURRENT_BRIEFING.spares.slice(0, 6),
+    currentHourKey: "seed",
+    currentClock: "21:00",
+    currentDateLabel: "3 בספטמבר",
+    generatingHour: null,
+    scanningNext: false,
+    scanDueAt: null,
+    scanDueLabel: null,
+  };
+}
+
+function pickPayload(dash: DashboardData | null): { hourKey: string; header: string; payload: BriefingPayload } {
+  const fallback = structuredClone(CURRENT_BRIEFING);
+  if (!dash) {
+    return { hourKey: "seed", header: BRIEFING_HEADER, payload: fallback };
+  }
+  const view =
+    (briefingHasContent(dash.briefing) && dash.briefing) ||
+    (briefingHasContent(dash.latestBriefing) && dash.latestBriefing) ||
+    null;
+  if (!view) {
+    return {
+      hourKey: dash.currentHourKey,
+      header: `עדכון | ${dash.currentDateLabel}, ${dash.currentClock}`,
+      payload: fallback,
+    };
+  }
+  return {
+    hourKey: view.id,
+    header: `עדכון | ${view.dateLabel}, ${view.hourLabel}`,
+    payload: view.payload,
+  };
+}
 
 function Home() {
+  const initial = Route.useLoaderData();
+  const [dash, setDash] = useState<DashboardData>(() => initial ?? seedDash());
+  const picked = pickPayload(dash);
   const [usedAt, setUsedAt] = useState<number | null>(null);
-  const [payload, setPayload] = useState<BriefingPayload | null>(null);
+  const [payload, setPayload] = useState<BriefingPayload>(picked.payload);
+  const [header, setHeader] = useState(picked.header);
+  const [hourKey, setHourKey] = useState(picked.hourKey);
   const [originalIds, setOriginalIds] = useState<string[]>([]);
   const [tickKey, setTickKey] = useState(0);
+  const [scanningTicker, setScanningTicker] = useState(false);
   const queueAt = useRef(0);
   const originalsRef = useRef<string[]>([]);
+  const scanQueueRef = useRef<SpareItem[]>([]);
 
   useEffect(() => {
     const used = loadUsedAt();
@@ -37,24 +124,37 @@ function Home() {
     originalsRef.current = orig;
     setUsedAt(used);
     setOriginalIds(orig);
-    setPayload(activePayload());
     queueAt.current = loadQueueAt();
+    const p = pickPayload(initial ?? seedDash());
+    setPayload(p.payload);
+    setHeader(p.header);
+    setHourKey(p.hourKey);
+    scanQueueRef.current = (initial?.scanQueue ?? CURRENT_BRIEFING.spares).slice(0, 10);
   }, []);
+
+  useEffect(() => {
+    scanQueueRef.current = (dash.scanQueue ?? []).slice(0, 10);
+  }, [dash.scanQueue]);
 
   useEffect(() => {
     if (!usedAt) return;
     const tick = () => {
       setPayload((curr) => {
-        if (!curr) return curr;
         const still = remainingOriginal(curr, originalsRef.current);
         if (still.length === 0) return curr;
-        if (queueAt.current >= SCAN_QUEUE.length) return curr;
-        const nextIn = SCAN_QUEUE[queueAt.current];
+        const queue = scanQueueRef.current;
+        if (queueAt.current >= queue.length) return curr;
+        const nextIn = queue[queueAt.current];
         const result = replaceNextOriginal(curr, still, nextIn);
         if (!result) return curr;
         queueAt.current += 1;
         saveQueueAt(queueAt.current);
-        persistPayload(result.payload);
+        persistPayloadLocal(result.payload);
+        if (hourKey && hourKey !== "seed") {
+          void persistPayload({
+            data: { hourKey, payload: result.payload },
+          }).catch(() => undefined);
+        }
         return result.payload;
       });
     };
@@ -64,31 +164,136 @@ function Home() {
       window.clearTimeout(first);
       window.clearInterval(loop);
     };
+  }, [usedAt, hourKey]);
+
+  useEffect(() => {
+    const poll = window.setInterval(() => {
+      void getDashboard({ data: {} })
+        .then((next) => {
+          setDash(next);
+          // While user is scanning/editing, don't yank locked view until window ends
+          if (!isScanning(usedAt)) {
+            const p = pickPayload(next);
+            if (briefingHasContent(next.briefing) || briefingHasContent(next.latestBriefing)) {
+              setPayload(p.payload);
+              setHeader(p.header);
+              setHourKey(p.hourKey);
+            }
+          }
+        })
+        .catch(() => undefined);
+    }, 20_000);
+    const tick = window.setInterval(() => {
+      void onRefreshTicker();
+    }, 60_000);
+    return () => {
+      window.clearInterval(poll);
+      window.clearInterval(tick);
+    };
   }, [usedAt]);
 
   const scanning =
     Boolean(usedAt) &&
-    (isScanning(usedAt) || (payload ? remainingOriginal(payload, originalIds).length > 0 : false));
-  const due = usedAt ? formatDue(scanDueAt(usedAt)) : null;
-  const left = payload ? remainingOriginal(payload, originalIds).length : 0;
+    (isScanning(usedAt) ||
+      dash.scanningNext ||
+      remainingOriginal(payload, originalIds).length > 0);
+  const due =
+    (dash.scanDueLabel && dash.scanningNext ? dash.scanDueLabel : null) ||
+    (usedAt ? formatDue(scanDueAt(usedAt)) : null);
+  const left = remainingOriginal(payload, originalIds).length;
   const total = Math.max(originalIds.length, 1);
   const replaced = Math.max(0, originalIds.length - left);
-  const ticker = useMemo(() => [...TICKER, ...TICKER], []);
 
-  function onUsed() {
-    if (!payload) return;
-    markUsed(payload);
+  const tickerRows = useMemo(() => {
+    const live = dash.ticker
+      .map((row) => {
+        const text = (row.titleHe || row.title || "").replace(/\*\*/g, "");
+        const source = row.source || "מבזק";
+        const url = displayShort(undefined, row.url) || row.url;
+        return { source, text, url };
+      })
+      .filter((row) => row.text.length > 8);
+    const base = live.length ? live : TICKER;
+    return [...base, ...base];
+  }, [dash.ticker]);
+
+  async function onRefreshTicker() {
+    setScanningTicker(true);
+    setTickKey((k) => k + 1);
+    try {
+      const next = await refreshTicker();
+      setDash(next);
+    } catch {
+      /* keep */
+    } finally {
+      setScanningTicker(false);
+    }
+  }
+
+  async function onUsed() {
+    markUsedLocal(payload);
     const ids = payload.arenas.flatMap((a) => a.items.map((i) => i.id));
     originalsRef.current = ids;
     queueAt.current = 0;
     saveQueueAt(0);
     setOriginalIds(ids);
     setUsedAt(Date.now());
+    try {
+      const next = await markUsed({ data: { hourKey: hourKey === "seed" ? dash.currentHourKey : hourKey } });
+      setDash(next);
+      scanQueueRef.current = (next.scanQueue ?? []).slice(0, 10);
+    } catch {
+      scanQueueRef.current = (dash.scanQueue ?? CURRENT_BRIEFING.spares).slice(0, 10);
+    }
   }
 
-  function onChange(next: BriefingPayload) {
+  async function onChange(next: BriefingPayload) {
     setPayload(next);
-    persistPayload(next);
+    persistPayloadLocal(next);
+    if (hourKey && hourKey !== "seed") {
+      try {
+        const dashNext = await persistPayload({ data: { hourKey, payload: next } });
+        setDash(dashNext);
+      } catch {
+        /* local only */
+      }
+    }
+  }
+
+  async function onSwap(spareId: string, itemId: string) {
+    if (hourKey && hourKey !== "seed") {
+      try {
+        const next = await swapSpare({ data: { hourKey, spareId, itemId } });
+        setDash(next);
+        const p = pickPayload(next);
+        setPayload(p.payload);
+        persistPayloadLocal(p.payload);
+        return;
+      } catch {
+        /* fall through */
+      }
+    }
+    const { applySwap } = await import("@/lib/news/types");
+    const next = applySwap(payload, spareId, itemId);
+    if (next) void onChange(next);
+  }
+
+  async function onAdd(spareId: string) {
+    if (hourKey && hourKey !== "seed") {
+      try {
+        const next = await addSpare({ data: { hourKey, spareId } });
+        setDash(next);
+        const p = pickPayload(next);
+        setPayload(p.payload);
+        persistPayloadLocal(p.payload);
+        return;
+      } catch {
+        /* fall through */
+      }
+    }
+    const { applyAdd } = await import("@/lib/news/types");
+    const next = applyAdd(payload, spareId);
+    if (next) void onChange(next);
   }
 
   return (
@@ -97,10 +302,10 @@ function Home() {
         <div className="flex h-12 items-center">
           <button
             type="button"
-            onClick={() => setTickKey((k) => k + 1)}
+            onClick={() => void onRefreshTicker()}
             className="inline-flex h-full shrink-0 items-center gap-2 border-e border-gold/30 bg-navy px-3 text-xs font-semibold text-fg-on-dark hover:bg-navy-2 sm:px-4"
           >
-            <RefreshCw className="size-3.5" />
+            <RefreshCw className={`size-3.5 ${scanningTicker ? "animate-spin" : ""}`} />
             רענון מבזקים
           </button>
           <div className="flex h-full min-w-0 flex-1 items-center overflow-hidden">
@@ -108,7 +313,7 @@ function Home() {
               key={tickKey}
               className="ticker-track flex h-full w-max items-center gap-10 whitespace-nowrap px-4 text-sm text-fg-on-dark"
             >
-              {ticker.map((row, i) => (
+              {tickerRows.map((row, i) => (
                 <a
                   key={row.url + i}
                   href={row.url}
@@ -126,20 +331,18 @@ function Home() {
       </header>
 
       <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
-        {payload ? (
-          <BriefingDoc
-            header={BRIEFING_HEADER}
-            payload={payload}
-            onChange={onChange}
-            onUsed={onUsed}
-            used={scanning}
-            scanDueLabel={due}
-            replaced={replaced}
-            total={total}
-          />
-        ) : (
-          <p className="text-center text-fg-on-dark">טוען עדכון…</p>
-        )}
+        <BriefingDoc
+          header={header}
+          payload={payload}
+          onChange={onChange}
+          onUsed={() => void onUsed()}
+          onSwap={(spareId, itemId) => void onSwap(spareId, itemId)}
+          onAdd={(spareId) => void onAdd(spareId)}
+          used={scanning}
+          scanDueLabel={due}
+          replaced={replaced}
+          total={total}
+        />
       </main>
     </div>
   );

@@ -26,3 +26,6 @@ export const SOURCE_POOL = {
   iran: ["farsnews.ir", "tasnimnews.com", "irna.ir", "isna.ir", "presstv.ir", "defapress.ir"],
   intl: ["reuters.com", "axios.com", "ft.com", "wsj.com", "apnews.com"],
 } as const;
+
+export { RSS_SOURCES, TELEGRAM_SOURCES, X_HANDLES } from "./rss-sources";
+export type { RssSource, TelegramSource } from "./rss-sources";

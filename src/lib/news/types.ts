@@ -32,7 +32,60 @@ export type BriefingArena = {
 export type BriefingPayload = {
   arenas: BriefingArena[];
   spares: SpareItem[];
+  desk?: number;
 };
+
+export type BriefingRecord = {
+  id: string;
+  hourLabel: string;
+  dateLabel: string;
+  generatedAt: string;
+  status: "generating" | "ready" | "error";
+  error?: string | null;
+  payload: BriefingPayload;
+};
+
+export type HourChip = {
+  id: string;
+  hourLabel: string;
+  status: "generating" | "ready" | "error";
+};
+
+export type TickerItem = {
+  id: string;
+  title: string;
+  titleHe: string | null;
+  source: string;
+  url: string;
+  publishedAt: string | null;
+  arena: string | null;
+};
+
+export type DashboardData = {
+  briefing: BriefingRecord | null;
+  latestBriefing: BriefingRecord | null;
+  hours: HourChip[];
+  ticker: TickerItem[];
+  scanQueue: SpareItem[];
+  currentHourKey: string;
+  currentClock: string;
+  currentDateLabel: string;
+  generatingHour: string | null;
+  scanningNext: boolean;
+  scanDueAt: string | null;
+  scanDueLabel: string | null;
+};
+
+export type RawStory = {
+  title: string;
+  url: string;
+  source: string;
+  publishedAt: string | null;
+  arena: ArenaId | null;
+  via: "rss" | "telegram";
+};
+
+export const DESK_STYLE = 1;
 
 export const ARENA_META: Record<ArenaId, { title: string; flags: string[] }> = {
   iran: { title: "איראן", flags: ["ir"] },
@@ -60,7 +113,8 @@ export const FLAG_EMOJI: Record<string, string> = {
   tr: "🇹🇷",
   eg: "🇪🇬",
   jo: "🇯🇴",
-  globe: "🌍",
+  us: "🇺🇸",
+  globe: "🌐",
 };
 
 const FLAG_MARKS: { code: string; re: RegExp }[] = [
@@ -76,6 +130,7 @@ const FLAG_MARKS: { code: string; re: RegExp }[] = [
   { code: "bh", re: /בחריין/ },
   { code: "jo", re: /ירדן/ },
   { code: "tr", re: /תורכיה|אנקרה|ארדואן/ },
+  { code: "eg", re: /מצרים|קהיר|סיסי/ },
 ];
 
 export function flagsForItems(items: BriefingItem[]): string[] {
@@ -117,6 +172,7 @@ export function arenaPresentation(id: ArenaId, items: BriefingItem[]) {
 
 function clonePayload(payload: BriefingPayload): BriefingPayload {
   return {
+    desk: payload.desk,
     arenas: payload.arenas.map((arena) => ({
       ...arena,
       items: arena.items.map((item) => ({ ...item })),
@@ -129,13 +185,18 @@ export function briefingItemCount(payload: BriefingPayload) {
   return payload.arenas.reduce((sum, arena) => sum + arena.items.length, 0);
 }
 
+export function briefingHasContent(rec: BriefingRecord | null | undefined) {
+  if (!rec) return false;
+  return briefingItemCount(rec.payload) > 0;
+}
+
 function findSpareIndex(spares: SpareItem[], id: string) {
-  return spares.findIndex((row) => row.id === id);
+  return spares.findIndex((row) => row.id === id || row.url === id);
 }
 
 function findItemLoc(arenas: BriefingArena[], id: string) {
   for (let ai = 0; ai < arenas.length; ai += 1) {
-    const ii = arenas[ai].items.findIndex((row) => row.id === id);
+    const ii = arenas[ai].items.findIndex((row) => row.id === id || row.url === id);
     if (ii >= 0) return { ai, ii };
   }
   return null;
@@ -250,4 +311,23 @@ export function replaceNextOriginal(
   );
   next.arenas = sortArenas(next.arenas);
   return { payload: next, replacedId };
+}
+
+export function ensureItemIds(payload: BriefingPayload): BriefingPayload {
+  let n = 0;
+  const stamp = Date.now().toString(36);
+  return {
+    desk: payload.desk,
+    arenas: payload.arenas.map((arena) => ({
+      ...arena,
+      items: arena.items.map((item) => ({
+        ...item,
+        id: item.id || `i-${stamp}-${(n += 1)}`,
+      })),
+    })),
+    spares: payload.spares.map((row) => ({
+      ...row,
+      id: row.id || `s-${stamp}-${(n += 1)}`,
+    })),
+  };
 }
