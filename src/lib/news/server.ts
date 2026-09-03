@@ -175,7 +175,9 @@ function storiesToTicker(stories: RawStory[]): TickerItem[] {
   return stories.slice(0, 40).map((story) => ({
     id: story.url.slice(-24) || story.url,
     title: story.title,
-    titleHe: hasHebrew(story.title) ? story.title : localizeHeadline(story.title, story.source),
+    titleHe: hasHebrew(story.title)
+      ? story.title
+      : localizeHeadline(story.title, story.source) || story.title,
     source: story.source,
     url: story.url,
     publishedAt: story.publishedAt,
@@ -184,12 +186,21 @@ function storiesToTicker(stories: RawStory[]): TickerItem[] {
 }
 
 export const scanMinute = createServerFn({ method: "POST" }).validator((input?: unknown) => input ?? {}).handler(async () => {
-  const stories = await Promise.race([
-    ingestStories(true, "hot"),
-    new Promise<RawStory[]>((resolve) => setTimeout(() => resolve([]), 22_000)),
-  ]);
-  await setMeta("last_ingest_at", new Date().toISOString());
-  await localizeTicker();
+  let stories: RawStory[] = [];
+  try {
+    stories = await Promise.race([
+      ingestStories(true, "hot"),
+      new Promise<RawStory[]>((resolve) => setTimeout(() => resolve([]), 18_000)),
+    ]);
+  } catch (err) {
+    console.error("[scanMinute]", err instanceof Error ? err.message : err);
+  }
+  try {
+    await setMeta("last_ingest_at", new Date().toISOString());
+    await localizeTicker();
+  } catch {
+    /* ignore store */
+  }
   return { items: storiesToTicker(stories) };
 });
 

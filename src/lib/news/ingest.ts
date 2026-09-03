@@ -73,7 +73,7 @@ function parseRss(xml: string, source: string): RawStory[] {
       tag(block, "updated") ||
       null;
     const text = `${title} ${tag(block, "description")}`;
-    if (!isDeskStory(text) && !isRegional(text)) continue;
+    if (title.length < 12) continue;
     items.push({
       title: firstLine(title, 220),
       url: url.trim(),
@@ -83,7 +83,7 @@ function parseRss(xml: string, source: string): RawStory[] {
       via: "rss",
     });
   }
-  return items;
+  return items.slice(0, 6);
 }
 
 function parseTelegram(
@@ -104,7 +104,6 @@ function parseTelegram(
     if (body.length < 24) continue;
     const url = post ? `https://t.me/${post}` : `https://t.me/s/${channel}`;
     const title = firstLine(body, 220);
-    if (!isDeskStory(`${title} ${body}`)) continue;
     items.push({
       title,
       url,
@@ -114,7 +113,7 @@ function parseTelegram(
       via: "telegram",
     });
   }
-  return items;
+  return items.slice(0, 5);
 }
 
 function isTodayIsrael(iso: string | null) {
@@ -155,16 +154,19 @@ export async function ingestStories(
   force = false,
   mode: IngestMode = "full",
 ): Promise<RawStory[]> {
-  const last = await getMeta("ticker_at");
-  if (!force && mode !== "hot" && last) {
-    const then = Number(last);
-    if (Number.isFinite(then) && Date.now() - then < 75_000) {
-      return [];
+  try {
+    const last = await getMeta("ticker_at");
+    if (!force && mode !== "hot" && last) {
+      const then = Number(last);
+      if (Number.isFinite(then) && Date.now() - then < 75_000) {
+        return [];
+      }
     }
-  }
-  // Hot path skips ticker_at so a background full ingest can still run.
-  if (mode === "full") {
-    await setMeta("ticker_at", String(Date.now()));
+    if (mode === "full") {
+      await setMeta("ticker_at", String(Date.now()));
+    }
+  } catch {
+    /* store optional on cold start */
   }
 
   type RssJob = { kind: "rss"; src: (typeof RSS_SOURCES)[number] };
@@ -173,11 +175,23 @@ export async function ingestStories(
   let concurrency = 10;
 
   if (mode === "hot") {
-    // Compact desk list — scan all of it every minute.
-    concurrency = 8;
+    concurrency = 6;
+    const rssCursor = Number((await getMeta("ingest_rss_cursor")) || "0") || 0;
+    const tgCursor = Number((await getMeta("ingest_tg_cursor")) || "0") || 0;
+    const rssBatch = rotate(RSS_SOURCES, rssCursor, 6);
+    const tgPool = TELEGRAM_SOURCES.filter((src) => !src.indicator);
+    const tgBatch = rotate(tgPool, tgCursor, 8);
+    try {
+      await Promise.all([
+        setMeta("ingest_rss_cursor", String(RSS_SOURCES.length ? (rssCursor + rssBatch.length) % RSS_SOURCES.length : 0)),
+        setMeta("ingest_tg_cursor", String(tgPool.length ? (tgCursor + tgBatch.length) % tgPool.length : 0)),
+      ]);
+    } catch {
+      /* meta optional */
+    }
     jobs = [
-      ...RSS_SOURCES.map((src) => ({ kind: "rss" as const, src })),
-      ...TELEGRAM_SOURCES.filter((src) => !src.indicator).map((src) => ({ kind: "tg" as const, src })),
+      ...rssBatch.map((src) => ({ kind: "rss" as const, src })),
+      ...tgBatch.map((src) => ({ kind: "tg" as const, src })),
     ];
   } else {
     jobs = [
@@ -225,17 +239,21 @@ export async function ingestStories(
     return Date.now() - d.getTime() < 36 * 60 * 60 * 1000;
   });
 
-  await insertTicker(
-    recent.slice(0, 140).map((story) => ({
-      id: storyId(story.url),
-      title: story.title,
-      titleHe: hasHebrew(story.title) ? story.title : null,
-      source: story.source,
-      url: story.url,
-      publishedAt: story.publishedAt,
-      arena: story.arena,
-    })),
-  );
+  try {
+    await insertTicker(
+      recent.slice(0, 140).map((story) => ({
+        id: storyId(story.url),
+        title: story.title,
+        titleHe: hasHebrew(story.title) ? story.title : null,
+        source: story.source,
+        url: story.url,
+        publishedAt: story.publishedAt,
+        arena: story.arena,
+      })),
+    );
+  } catch (err) {
+    console.error("[insertTicker]", err instanceof Error ? err.message : err);
+  }
 
   // Hot scan feeds compose immediately — keep the 36h window, do not require today-IL.
   if (mode === "hot") return recent;
