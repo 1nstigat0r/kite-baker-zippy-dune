@@ -3,6 +3,7 @@ import {
   resolveArena,
   deskHeadline,
   fingerprint,
+  attributionLead,
   formatOutlet,
   hasHebrew,
   isJunkItem,
@@ -118,9 +119,7 @@ function storyToItem(story: RawStory): BriefingItem | null {
   const heTitle = toDeskHebrew(story.title);
   const bodyBase = hasHebrew(heTitle) ? heTitle : deskHeadline(story.title);
   if (!bodyBase || bodyBase.length < 12) return null;
-  const speaker = hasHebrew(bodyBase)
-    ? `דווח ב-${outlet || story.source}`
-    : `דווח ב-${outlet || story.source}`;
+  const speaker = attributionLead(story.source);
   // Prefer outlet lead for English; still keep line even if partially English after substitutions
   const cleaned = shapeCopy(
     shortenSpeaker(speaker),
@@ -132,11 +131,11 @@ function storyToItem(story: RawStory): BriefingItem | null {
   if (!hasHebrew(cleaned.body) && cleaned.body.length < 40) return null;
   if (!hasHebrew(cleaned.body)) {
     // Wrap English remainder as desk attribution line
-    cleaned.speaker = cleaned.speaker || `דווח ב-${outlet || story.source}`;
+    cleaned.speaker = cleaned.speaker || attributionLead(story.source);
   }
   if (/אבו עלי|כאן 11|דסק ערבים|ynet|עמית סגל|יחזקאלי/i.test(story.source)) return null;
   return mkItem(
-    cleaned.speaker || `דווח ב-${outlet || story.source}`,
+    cleaned.speaker || attributionLead(story.source),
     cleaned.body,
     story.url,
     story.publishedAt,
@@ -559,9 +558,6 @@ export function absorbFindsIntoPayload(
 }
 
 export function localizeHeadline(title: string, source: string) {
-  const he = toDeskHebrew(title);
-  if (hasHebrew(he)) return deskHeadline(he);
-  const outlet = formatOutlet(source);
-  const body = deskHeadline(title);
-  return `דווח ב-${outlet}: ${body}`.slice(0, 140);
+  const he = deskHeadline(title);
+  return he.slice(0, 160);
 }

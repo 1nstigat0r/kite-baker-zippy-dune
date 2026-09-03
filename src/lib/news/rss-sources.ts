@@ -12,13 +12,13 @@ export type TelegramSource = {
 export const RSS_SOURCES: RssSource[] = [
   { name: "רויטרס", url: "https://feeds.reuters.com/reuters/worldNews" },
   { name: "ה-WSJ", url: "https://feeds.a.dj.com/rss/RSSWorldNews.xml" },
-  { name: "הוושינגטון פוסט", url: "https://feeds.washingtonpost.com/rss/world" },
+  { name: "ה-Washington Post", url: "https://feeds.washingtonpost.com/rss/world" },
   { name: "ה-NYT", url: "https://rss.nytimes.com/services/xml/rss/nyt/MiddleEast.xml" },
-  { name: "הטלגרף", url: "https://www.telegraph.co.uk/rss.xml" },
-  { name: "בלומברג", url: "https://feeds.bloomberg.com/politics/news.rss" },
+  { name: "ה-Telegraph", url: "https://www.telegraph.co.uk/rss.xml" },
+  { name: "ה-Bloomberg", url: "https://feeds.bloomberg.com/politics/news.rss" },
   { name: "CNN", url: "http://rss.cnn.com/rss/edition_world.rss" },
   { name: "ABC", url: "https://abcnews.go.com/abcnews/internationalheadlines" },
-  { name: "פוליטיקו", url: "https://rss.politico.com/politics-news.xml" },
+  { name: "Politico", url: "https://rss.politico.com/politics-news.xml" },
   { name: "אלשרק אלאוסט", url: "https://aawsat.com/feed" },
   { name: "אלערבי אלג'דיד", url: "https://www.alaraby.co.uk/rss.xml" },
   { name: "ארם", url: "https://www.eremnews.com/feed" },
@@ -49,7 +49,7 @@ export const TELEGRAM_SOURCES: TelegramSource[] = [
   { name: "אלג'זירה", channel: "AjaNews" },
   { name: "אלג'זירה ישיר", channel: "ajMubasher" },
   { name: "חמזה", channel: "hamza20300" },
-  { name: "קודס", channel: "QudsN" },
+  { name: "קדס", channel: "QudsN" },
 ];
 
 export const X_HANDLES = [

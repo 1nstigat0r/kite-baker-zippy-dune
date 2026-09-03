@@ -77,7 +77,23 @@ const OUTLET_ALIASES: Record<string, string> = {
   reuters: "רויטרס",
   "the new york times": "ה-NYT",
   nyt: "ה-NYT",
+  "ה-nyt": "ה-NYT",
   "new york times": "ה-NYT",
+  "wall street journal": "ה-WSJ",
+  wsj: "ה-WSJ",
+  "ה-wsj": "ה-WSJ",
+  "washington post": "ה-Washington Post",
+  "the washington post": "ה-Washington Post",
+  "הוושינגטון פוסט": "ה-Washington Post",
+  "washington journal": "ה-Washington Journal",
+  "the washington journal": "ה-Washington Journal",
+  cnn: "CNN",
+  abc: "ABC",
+  politico: "Politico",
+  bloomberg: "ה-Bloomberg",
+  "the telegraph": "ה-Telegraph",
+  telegraph: "ה-Telegraph",
+  "הטלגרף": "ה-Telegraph",
   guardian: "ה-Guardian",
   "the guardian": "ה-Guardian",
   axios: "ה-Axios",
@@ -87,6 +103,17 @@ const OUTLET_ALIASES: Record<string, string> = {
   "the economist": "אקונומיסט",
   "al jazeera": "אלג'זירה",
   aljazeera: "אלג'זירה",
+  "aja news": "אלג'זירה",
+  ajanews: "אלג'זירה",
+  "aj mubasher": "אלג'זירה",
+  quds: "קדס",
+  qudsn: "קדס",
+  "קודס": "קדס",
+  aawsat: "אלשרק אלאוסט",
+  "alsharq alawsat": "אלשרק אלאוסט",
+  "אלשרק אלאוסט": "אלשרק אלאוסט",
+  alaraby: "אלערבי אלג'דיד",
+  "alaraby aljadeed": "אלערבי אלג'דיד",
   "france 24": "פראנס 24",
   france24: "פראנס 24",
   "sky news": "סקיי ניוז",
@@ -349,7 +376,31 @@ export function formatOutlet(source: string) {
   const key = name.toLowerCase().replace(/^the\s+/, "");
   if (OUTLET_ALIASES[key]) return OUTLET_ALIASES[key];
   if (OUTLET_ALIASES[name.toLowerCase()]) return OUTLET_ALIASES[name.toLowerCase()];
+  if (OUTLET_ALIASES[name]) return OUTLET_ALIASES[name];
+  // Arabic outlets: never "אל-ג'זירה" / "קודס"
+  name = name.replace(/^אל-/u, "אל").replace(/קודס/g, "קדס");
   return name;
+}
+
+/** Latin brands keep a hyphen: דווח ב-CNN. Hebrew/Arabic names do not: דווח בקדס. */
+export function attributionLead(source: string) {
+  const o = formatOutlet(source);
+  if (/^ה-/.test(o) || /[A-Za-z]/.test(o)) return `דווח ב-${o}`;
+  return `דווח ב${o}`;
+}
+
+export function isUsDomesticOffDesk(text: string) {
+  const x = text ?? "";
+  if (REGION_RE.test(x) || DESK_RE.test(x)) return false;
+  return /\bvance\b|jd vance|גיי די|uber\b|nigeria|congress|senate|white house|campaign|ohio|governor|midterm/i.test(x);
+}
+
+export function skipArabForUsPolitics(text: string, source: string) {
+  if (!/אלג'זירה|אלערביה|אלחדת|aljazeera|ajanews|ajmubasher|aja news/i.test(source)) return false;
+  const x = text ?? "";
+  const usPol = /\bvance\b|jd vance|גיי די|uber\b|nigeria|congress|senate|white house|campaign|midterm/i.test(x);
+  const me = /\biran\b|israel|gaza|hormuz|hezbollah|lebanon|syria|yemen|iraq|איראן|עזה|חיזבאללה|הורמוז|לבנון|סוריה/i.test(x);
+  return usPol && !me;
 }
 
 export function shortenSpeaker(name: string) {

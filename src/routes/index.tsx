@@ -36,6 +36,7 @@ import {
 } from "@/lib/news/server";
 import { mergeTicker, nextPackLabel, shouldPackHour } from "@/lib/news/ticker-loop";
 import { displayShort } from "@/lib/news/display-short";
+import { formatOutlet } from "@/lib/news/text";
 import {
   briefingHasContent,
   type BriefingPayload,
@@ -267,13 +268,13 @@ function Home() {
     const live = tickerItems
       .map((row) => {
         const text = (row.titleHe || row.title || "").replace(/\*\*/g, "");
-        const source = row.source || "מבזק";
+        const source = formatOutlet(row.source || "מבזק");
         const url = displayShort(undefined, row.url) || row.url;
         return { source, text, url };
       })
       .filter((row) => row.text.length > 8);
     if (!live.length) {
-      return [{ source: "עדכון", text: "סורק מבזקים… אם זה נשאר דקה — הסריקה נכשלת בשרת", url: "#" }];
+      return [{ source: "עדכון", text: "סורק מבזקים כל דקה…", url: "#" }];
     }
     return [...live, ...live];
   }, [tickerItems]);

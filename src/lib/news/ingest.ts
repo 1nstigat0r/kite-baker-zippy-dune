@@ -7,6 +7,8 @@ import {
   hasHebrew,
   isDeskStory,
   isRegional,
+  isUsDomesticOffDesk,
+  skipArabForUsPolitics,
   stripHtml,
 } from "./text";
 import { israelParts, parsePossiblyUtc } from "./time";
@@ -74,6 +76,8 @@ function parseRss(xml: string, source: string): RawStory[] {
       null;
     const text = `${title} ${tag(block, "description")}`;
     if (title.length < 12) continue;
+    if (!isDeskStory(text) && !isRegional(text)) continue;
+    if (isUsDomesticOffDesk(text) || skipArabForUsPolitics(text, source)) continue;
     items.push({
       title: firstLine(title, 220),
       url: url.trim(),
@@ -104,6 +108,9 @@ function parseTelegram(
     if (body.length < 24) continue;
     const url = post ? `https://t.me/${post}` : `https://t.me/s/${channel}`;
     const title = firstLine(body, 220);
+    const blob = `${title} ${body}`;
+    if (!isDeskStory(blob) && !isRegional(blob)) continue;
+    if (isUsDomesticOffDesk(blob) || skipArabForUsPolitics(blob, source)) continue;
     items.push({
       title,
       url,

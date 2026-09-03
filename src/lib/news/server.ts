@@ -31,7 +31,7 @@ import {
   setMeta,
   swapSpareItem,
 } from "./store";
-import { fingerprint, hasHebrew } from "./text";
+import { fingerprint, formatOutlet, hasHebrew } from "./text";
 import { hourKey, hourLabelFromKey, israelParts } from "./time";
 import { briefingHasContent, briefingItemCount, type ArenaId, type BriefingPayload, type RawStory, type TickerItem } from "./types";
 
@@ -175,10 +175,8 @@ function storiesToTicker(stories: RawStory[]): TickerItem[] {
   return stories.slice(0, 40).map((story) => ({
     id: story.url.slice(-24) || story.url,
     title: story.title,
-    titleHe: hasHebrew(story.title)
-      ? story.title
-      : localizeHeadline(story.title, story.source) || story.title,
-    source: story.source,
+    titleHe: localizeHeadline(story.title, story.source),
+    source: formatOutlet(story.source),
     url: story.url,
     publishedAt: story.publishedAt,
     arena: story.arena,
