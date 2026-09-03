@@ -10,6 +10,7 @@ import {
   isIsraeliVoice,
   isJunkItem,
   isOffPrimarySource,
+  failsTickerQuality,
   isOffTheater,
   isPropagandaCopy,
   isUsDomesticOffDesk,
@@ -143,6 +144,7 @@ function storyToItem(story: RawStory): BriefingItem | null {
   if (isIsraeliVoice(cleaned.speaker, cleaned.body, story.url) && !isIsraeliStrike(cleaned.body)) return null;
   if (isUsDomesticOffDesk(blob)) return null;
   if (isPropagandaCopy(cleaned.body) || isOffTheater(`${cleaned.body} ${story.title}`, story.source)) return null;
+  if (failsTickerQuality(cleaned.body)) return null;
   return mkItem(
     cleaned.speaker || attributionLead(story.source),
     cleaned.body,
@@ -582,7 +584,8 @@ export async function composeTickerItem(story: RawStory): Promise<TickerItem | n
   const item = storyToItem({ ...story, title: he });
   if (!item) return null;
   const body = item.body.replace(/\*\*/g, "").replace(/^דחוף\s*[|｜]\s*/, "");
-  if (!hasHebrew(body) || tooMuchLatin(body) || body.length < 12) return null;
+  if (!hasHebrew(body) || tooMuchLatin(body) || body.length < 20) return null;
+  if (failsTickerQuality(body)) return null;
   return {
     id: story.url.slice(-24) || story.url,
     title: story.title,

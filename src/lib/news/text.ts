@@ -476,11 +476,40 @@ export function formatOutlet(source: string) {
   return name;
 }
 
-/** Latin brands keep a hyphen: דווח ב-CNN. Hebrew/Arabic names do not: דווח בקדס. */
+/** Latin brands: דווח ב-NYT (never דווח ב-ה-NYT). Hebrew: דווח בקדס. */
 export function attributionLead(source: string) {
-  const o = formatOutlet(source);
-  if (/^ה-/.test(o) || /[A-Za-z]/.test(o)) return `דווח ב-${o}`;
+  let o = formatOutlet(source);
+  o = o.replace(/^ה-/, "");
+  if (/[A-Za-z]/.test(o)) return `דווח ב-${o}`;
   return `דווח ב${o}`;
+}
+
+/** Truncated, garbled, hashtaggy, or calqued copy that is not a desk report. */
+export function isWeakDeskCopy(text: string) {
+  const s = (text ?? "").replace(/\s+/g, " ").trim();
+  if (s.length < 20) return true;
+  if (/…\s*$|\.\.\.\s*$/.test(s)) return true;
+  if (/#|📷|🎥|📹/.test(s)) return true;
+  if (/The New York Times|Washington Post|^Al Jazeera|reported in/i.test(s)) return true;
+  if (/אומרים תושבים|residents say/i.test(s)) return true;
+  if (/([\u0590-\u05FF])\1{2,}/.test(s)) return true;
+  if (/^(?:החלה|מתחילים|מתחילה)\s+(?:תקיפה|פינוי)/.test(s) && s.length < 48) return true;
+  return false;
+}
+
+/** Domestic filler that is not a Mid-East desk exclusive. */
+export function isOffDeskFiller(text: string) {
+  const s = text ?? "";
+  if (/סבסוד|חשמל|כרי[יה]|מיינר|מפרים|תחנה מרכזית|תחבורה|ביצועים של שנתיים|#דו["״]ח/i.test(s)) {
+    if (!/סנקצ|הורמוז|טיל|תקיפ|חיזבאללה|חסד["״]ם|גרעין/.test(s)) return true;
+  }
+  if (/צדק להרג|תקופת אסד|עינויים מתקופת/.test(s) && !/כתב אישום|בית דין|האשמ/.test(s)) return true;
+  if (/צבא ישראלי הורג|צה["״]ל הרג|פשיטה בכפר/.test(s) && !/לבנון|עזה|סוריה|תימן|איראן/.test(s)) return true;
+  return false;
+}
+
+export function failsTickerQuality(text: string) {
+  return isWeakDeskCopy(text) || isOffDeskFiller(text) || isPropagandaCopy(text) || tooMuchLatin(text);
 }
 
 export function isUsDomesticOffDesk(text: string) {

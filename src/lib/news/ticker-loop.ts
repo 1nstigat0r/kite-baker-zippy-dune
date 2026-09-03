@@ -1,5 +1,5 @@
 import type { TickerItem } from "./types";
-import { hasHebrew, tooMuchLatin } from "./text";
+import { failsTickerQuality, hasHebrew, sameEvent, tooMuchLatin } from "./text";
 
 export const MAX_TICKER = 12;
 
@@ -37,9 +37,15 @@ export function mergeTicker(
     if (!prev || tickerInterest(row) > tickerInterest(prev)) byUrl.set(key, row);
   }
   const ranked = [...byUrl.values()]
-    .filter((row) => hasHebrew(row.titleHe || "") && !tooMuchLatin(row.titleHe || ""))
+    .filter((row) => hasHebrew(row.titleHe || "") && !tooMuchLatin(row.titleHe || "") && !failsTickerQuality(row.titleHe || ""))
     .sort((a, b) => tickerInterest(b) - tickerInterest(a));
-  return ranked.slice(0, max);
+  const kept: TickerItem[] = [];
+  for (const row of ranked) {
+    const text = row.titleHe || "";
+    if (kept.some((k) => sameEvent(k.titleHe || "", text))) continue;
+    kept.push(row);
+  }
+  return kept.slice(0, max);
 }
 
 export function nextPackLabel(now = new Date()) {
