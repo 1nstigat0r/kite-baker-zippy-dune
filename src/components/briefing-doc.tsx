@@ -178,11 +178,7 @@ export function BriefingDoc({
 
   return (
     <div>
-      <div className="mb-5 flex items-start justify-between gap-4">
-        <h1 className="min-w-0 flex-1 text-right text-2xl font-semibold tracking-tight text-fg-on-dark sm:text-3xl">
-          <span className="block">{header}</span>
-          <span className="mt-2 inline-block h-[3px] w-16 bg-gold" />
-        </h1>
+      <div className="mb-5 flex items-center justify-end gap-4">
         <button
           type="button"
           onClick={onUsed}
@@ -208,13 +204,17 @@ export function BriefingDoc({
         <button
           type="button"
           onClick={() => void copyBriefing()}
-          className="absolute start-3 top-3 inline-flex min-h-9 items-center gap-1.5 rounded-full border border-line bg-surface-2 px-3 text-xs font-semibold text-navy shadow-[0_4px_0_0_rgba(12,28,55,0.18)] hover:bg-gold/20"
+          className="absolute left-3 top-3 z-10 inline-flex min-h-9 items-center gap-1.5 rounded-full border border-line bg-surface-2 px-3 text-xs font-semibold text-navy shadow-[0_4px_0_0_rgba(12,28,55,0.18)] hover:bg-gold/20"
           aria-label={copied ? "הועתק" : "העתק את העדכון"}
           title={copied ? "הועתק" : "העתק לוואטסאפ"}
         >
           <Copy className="size-3.5" />
           {copied ? "הועתק" : "העתק"}
         </button>
+        <h1 className="mb-6 ps-24 text-right text-2xl font-semibold tracking-tight text-navy sm:text-3xl">
+          <span className="block">{header}</span>
+          <span className="mt-2 inline-block h-[3px] w-16 bg-gold" />
+        </h1>
         {numbered.map(({ arena, items }) => (
           <div key={arena.id} className="mb-2">
             <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-navy">
