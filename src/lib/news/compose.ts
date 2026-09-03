@@ -97,10 +97,6 @@ function prunePayload(payload: BriefingPayload, previous: string[]): BriefingPay
   return ensureItemIds({ ...payload, arenas, spares, desk: DESK_STYLE });
 }
 
-function seedPayload(): BriefingPayload {
-  return ensureItemIds(structuredClone(CURRENT_BRIEFING));
-}
-
 function interestScore(text: string, publishedAt?: string | null) {
   let s = 0;
   if (/גורמים ל-|בלעדי|מסר(?:ו)? ל|דווח ב-/.test(text)) s += 6;
@@ -279,17 +275,7 @@ function padSpares(payload: BriefingPayload, stories: RawStory[], previous: stri
     covered.push(itemText(row));
     seenUrls.add(row.url);
   }
-  // pad from seed if still short
-  if (spares.length < 10) {
-    for (const spare of seedPayload().spares) {
-      if (spares.length >= 10) break;
-      if (seenUrls.has(spare.url)) continue;
-      if (covered.some((p) => sameEvent(p, itemText(spare)))) continue;
-      spares.push(spare);
-      covered.push(itemText(spare));
-      seenUrls.add(spare.url);
-    }
-  }
+  // Do not pad from CURRENT_BRIEFING seed — that resurrects burned exclusives.
   return ensureItemIds({ ...payload, spares: spares.slice(0, 10) });
 }
 
