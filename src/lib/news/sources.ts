@@ -27,5 +27,5 @@ export const SOURCE_POOL = {
   intl: ["reuters.com", "axios.com", "ft.com", "wsj.com", "apnews.com"],
 } as const;
 
-export { RSS_SOURCES, TELEGRAM_SOURCES, X_HANDLES } from "./rss-sources";
+export { RSS_SOURCES, TELEGRAM_SOURCES, X_HANDLES, X_LISTS, PRIMARY_HOST_HINTS } from "./rss-sources";
 export type { RssSource, TelegramSource } from "./rss-sources";
