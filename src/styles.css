@@ -49,17 +49,26 @@
   align-items: center;
 }
 
-.ticker-track:hover {
+.ticker-track:has(.ticker-item:hover) {
   animation-play-state: paused;
 }
 
+.ticker-item {
+  position: relative;
+}
+
 .ticker-plus {
-  opacity: 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  display: none;
+  transform: translate(-50%, -50%);
   pointer-events: none;
 }
 
 .ticker-item:hover .ticker-plus {
-  opacity: 1;
+  display: inline-flex;
   pointer-events: auto;
 }
 

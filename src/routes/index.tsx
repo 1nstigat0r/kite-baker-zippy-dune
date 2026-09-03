@@ -415,7 +415,16 @@ function Home() {
               className="ticker-track flex h-full w-max items-center gap-12 whitespace-nowrap px-5 text-base text-fg-on-dark sm:text-lg"
             >
               {tickerRows.map((row, i) => (
-                <span key={row.url + i} className="ticker-item inline-flex items-center gap-1.5 leading-none">
+                <span key={row.url + i} className="ticker-item inline-flex items-center leading-none">
+                  <a
+                    href={row.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 hover:text-gold"
+                  >
+                    <span className="font-semibold text-gold">{row.source}</span>
+                    <span className="text-fg-on-dark/90">{row.text}</span>
+                  </a>
                   {row.url !== "#" ? (
                     <button
                       type="button"
@@ -426,20 +435,11 @@ function Home() {
                         e.stopPropagation();
                         onAddTickerToSpare(row.url);
                       }}
-                      className="ticker-plus inline-flex size-5 shrink-0 items-center justify-center rounded-full border border-gold/55 text-[11px] font-bold text-gold hover:bg-gold hover:text-bg"
+                      className="ticker-plus size-6 items-center justify-center rounded-full border border-gold bg-bg text-sm font-bold text-gold shadow hover:bg-gold hover:text-bg"
                     >
                       +
                     </button>
                   ) : null}
-                  <a
-                    href={row.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 hover:text-gold"
-                  >
-                    <span className="font-semibold text-gold">{row.source}</span>
-                    <span className="text-fg-on-dark/90">{row.text}</span>
-                  </a>
                 </span>
               ))}
             </div>
