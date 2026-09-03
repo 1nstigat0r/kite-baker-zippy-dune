@@ -13,6 +13,9 @@ import {
   loadUsedAt,
   markUsedLocal,
   persistPayloadLocal,
+  burnUrls,
+  filterBurned,
+  clearLocalDeskCache,
   saveQueueAt,
   scanDueAt,
 } from "@/lib/news/desk";
@@ -53,7 +56,7 @@ function seedDash(): DashboardData {
       dateLabel: "3 בספטמבר",
       generatedAt: new Date().toISOString(),
       status: "ready",
-      payload: structuredClone(CURRENT_BRIEFING),
+      payload: filterBurned(structuredClone(CURRENT_BRIEFING)),
     },
     latestBriefing: null,
     hours: [],
@@ -96,7 +99,7 @@ function pickPayload(dash: DashboardData | null): { hourKey: string; header: str
   return {
     hourKey: view.id,
     header: `עדכון | ${view.dateLabel}, ${view.hourLabel}`,
-    payload: view.payload,
+    payload: filterBurned(view.payload),
   };
 }
 
@@ -198,6 +201,11 @@ function Home() {
   }
 
   async function onUsed() {
+    burnUrls([
+      ...payload.arenas.flatMap((a) => a.items.map((i) => i.url)),
+      ...payload.spares.map((i) => i.url),
+    ].filter(Boolean));
+    clearLocalDeskCache();
     markUsedLocal(payload);
     const ids = payload.arenas.flatMap((a) => a.items.map((i) => i.id));
     originalsRef.current = ids;
@@ -214,11 +222,12 @@ function Home() {
       });
       setDash(next);
       const p = pickPayload(next);
-      setPayload(p.payload);
+      const clean = filterBurned(p.payload);
+      setPayload(clean);
       setHeader(p.header);
       setHourKey(p.hourKey);
-      persistPayloadLocal(p.payload);
-      scanQueueRef.current = (next.scanQueue ?? []).slice(0, 10);
+      persistPayloadLocal(clean);
+      scanQueueRef.current = (clean.spares ?? []).slice(0, 10);
     } catch {
       const { briefingFromSpares } = await import("@/lib/news/compose");
       const local = briefingFromSpares(payload, 6);

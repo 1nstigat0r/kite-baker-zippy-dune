@@ -301,20 +301,9 @@ export async function composeBriefing(input: {
   seen: Set<string> | string[];
 }) {
   const seen = input.seen instanceof Set ? input.seen : new Set(input.seen);
-  const seed = prunePayload(seedPayload(), input.previous);
+  // NEVER recycle CURRENT_BRIEFING seed — resurrects used exclusives after cold starts.
   const live = fromStories(input.stories, seen, input.previous);
-  const liveCount = live.arenas.reduce((s, a) => s + a.items.length, 0);
-  // Prefer live stories; seed only fills gaps when fetch is thin
-  const merged =
-    liveCount >= 4
-      ? mergeUnique(live, seed, input.previous)
-      : mergeUnique(seed, live, input.previous);
-  let capped = capBriefing(merged, 6);
-  // Ensure 4–8: if under 4 after prune, keep seed items
-  const count = capped.arenas.reduce((s, a) => s + a.items.length, 0);
-  if (count < 4) {
-    capped = capBriefing(mergeUnique(seedPayload(), capped, []), 6);
-  }
+  let capped = capBriefing(prunePayload(live, input.previous), 6);
   capped = padSpares(capped, input.stories, input.previous);
   const payload = decorateArenas(capped);
 
