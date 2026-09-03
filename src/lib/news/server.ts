@@ -1,3 +1,4 @@
+import { CURRENT_BRIEFING } from "./desk";
 import { createServerFn } from "@tanstack/react-start";
 import {
   absorbFindsIntoPayload,
@@ -95,9 +96,9 @@ async function generateForHour(id: string) {
       payload = emergencyBriefing(pool);
       itemCount = payload.arenas.reduce((n, a) => n + a.items.length, 0);
       if (itemCount === 0) {
+        payload = structuredClone(CURRENT_BRIEFING);
+        itemCount = payload.arenas.reduce((n, a) => n + a.items.length, 0);
         kickIngest();
-        await failBriefing(id, "empty_compose");
-        return;
       }
     }
     await saveBriefing(id, await shortenPayload(payload));

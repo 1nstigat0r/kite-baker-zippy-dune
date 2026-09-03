@@ -4,6 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { BriefingDoc } from "@/components/briefing-doc";
 import {
   BRIEFING_HEADER,
+  CURRENT_BRIEFING,
   formatDue,
   isScanning,
   loadOriginalIds,
@@ -49,24 +50,24 @@ export const Route = createFileRoute("/")({
 });
 
 function seedDash(): DashboardData {
-  const empty = emptyBriefing();
+  const seed = structuredClone(CURRENT_BRIEFING);
   return {
     briefing: {
       id: "seed",
       hourLabel: "",
       dateLabel: "",
       generatedAt: new Date().toISOString(),
-      status: "generating",
-      payload: empty,
+      status: "ready",
+      payload: filterBurned(seed),
     },
     latestBriefing: null,
     hours: [],
     ticker: [],
-    scanQueue: [],
+    scanQueue: seed.spares.slice(0, 6),
     currentHourKey: "seed",
     currentClock: "",
     currentDateLabel: "",
-    generatingHour: "seed",
+    generatingHour: null,
     scanningNext: false,
     scanDueAt: null,
     scanDueLabel: null,
@@ -74,7 +75,7 @@ function seedDash(): DashboardData {
 }
 
 function pickPayload(dash: DashboardData | null): { hourKey: string; header: string; payload: BriefingPayload } {
-  const fallback = emptyBriefing();
+  const fallback = filterBurned(structuredClone(CURRENT_BRIEFING));
   if (!dash) {
     return { hourKey: "seed", header: BRIEFING_HEADER, payload: fallback };
   }
@@ -246,7 +247,7 @@ function Home() {
         persistPayloadLocal(p.payload);
         scanQueueRef.current = (p.payload.spares ?? []).slice(0, 10);
       } catch {
-        setPayload(emptyBriefing());
+        setPayload(filterBurned(structuredClone(CURRENT_BRIEFING)));
         clearLocalDeskCache();
       }
     }
