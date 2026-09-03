@@ -395,7 +395,7 @@ export async function setMeta(key: string, value: string) {
 export const SCAN_LEAD_MS = 40 * 60 * 1000;
 
 
-const DESK_GEN = "v14-rss-only";
+const DESK_GEN = "v15-live-rss-tg";
 
 /** Wipe briefings/ticker/seen when code gen changes — kills stuck static exclusives. */
 export async function ensureDeskGeneration() {

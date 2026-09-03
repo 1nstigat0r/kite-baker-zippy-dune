@@ -117,6 +117,7 @@ function Home() {
 
   useEffect(() => {
     purgeLegacyDeskCache();
+    clearLocalDeskCache();
     const used = loadUsedAt();
     const orig = loadOriginalIds();
     originalsRef.current = orig;
@@ -128,6 +129,18 @@ function Home() {
     setHeader(p.header);
     setHourKey(p.hourKey);
     scanQueueRef.current = (initial?.scanQueue ?? []).slice(0, 10);
+    void ensureBriefing({ data: { force: true } })
+      .then((next) => {
+        setDash(next);
+        const q = pickPayload(next);
+        if (briefingHasContent(next.briefing) || briefingHasContent(next.latestBriefing)) {
+          setPayload(q.payload);
+          setHeader(q.header);
+          setHourKey(q.hourKey);
+          persistPayloadLocal(q.payload);
+        }
+      })
+      .catch(() => undefined);
   }, []);
 
   useEffect(() => {

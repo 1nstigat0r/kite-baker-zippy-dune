@@ -114,9 +114,8 @@ async function generateForHour(id: string) {
       const pool = stories.length ? stories : fromTicker;
       payload = emergencyBriefing(pool);
       itemCount = payload.arenas.reduce((n, a) => n + a.items.length, 0);
-      if (itemCount === 0) {
+      if (itemCount === 0 && pool.length === 0) {
         payload = structuredClone(CURRENT_BRIEFING);
-        itemCount = payload.arenas.reduce((n, a) => n + a.items.length, 0);
         kickIngest();
       }
     }
@@ -216,8 +215,9 @@ async function tickScan() {
     return;
   }
 
-  if (!latest || latest.id !== hourKey()) {
-    const id = hourKey();
+  const id = hourKey();
+  const staleSeed = latest && latest.id === id && isSeedPayload(latest.payload);
+  if (!latest || latest.id !== id || staleSeed) {
     if (inflight.has(id)) return;
     await claimBriefing(id, true);
     const task = generateForHour(id).finally(() => inflight.delete(id));

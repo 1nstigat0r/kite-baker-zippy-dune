@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { RSS_SOURCES } from "./sources";
+import { RSS_SOURCES, TELEGRAM_SOURCES } from "./sources";
 import { insertTicker, getMeta, setMeta } from "./store";
 import {
   resolveArena,
@@ -142,7 +142,6 @@ async function poolMap<T, R>(items: T[], size: number, fn: (item: T) => Promise<
 
 export type IngestMode = "fast" | "full";
 
-/** 6 RSS only on the request path — Telegram pool times out Vercel. */
 const FAST_RSS: { name: string; url: string }[] = [
   { name: "BBC", url: "https://feeds.bbci.co.uk/news/world/middle_east/rss.xml" },
   { name: "אלג'זירה", url: "https://www.aljazeera.com/xml/rss/all.xml" },
@@ -151,6 +150,34 @@ const FAST_RSS: { name: string; url: string }[] = [
   { name: "איראן אינטרנשיונל", url: "https://www.iranintl.com/feed" },
   { name: "פראנס 24", url: "https://www.france24.com/en/middle-east/rss" },
 ];
+
+/** Primary TG only — never the owner's full dump. */
+const FAST_TG = [
+  "farsna",
+  "tasnimnews",
+  "IRNAofficial",
+  "mehrnews",
+  "almanarnews",
+  "almayadeen",
+  "almasirah",
+  "NourNews_IR",
+].map((channel) => {
+  const row = TELEGRAM_SOURCES.find((s) => s.channel.toLowerCase() === channel.toLowerCase());
+  return row ?? { name: channel, channel };
+});
+
+/** A few agency X handles via public RSS mirrors (no official API, fail-soft). */
+const FAST_X = [
+  "FarsNews_Agency",
+  "tasnimnews",
+  "IRNA_English",
+  "AlMayadeenNews",
+  "almanarnews",
+  "AlMasirahTV",
+].map((handle) => ({
+  name: handle,
+  url: `https://nitter.privacydev.net/${handle}/rss`,
+}));
 
 export async function ingestStories(
   force = false,
@@ -163,22 +190,36 @@ export async function ingestStories(
       return [];
     }
   }
-  await setMeta("ticker_at", String(Date.now()));
+  try {
+    await setMeta("ticker_at", String(Date.now()));
+  } catch {
+    /* ingest must still return stories if meta is down */
+  }
 
-  // Fast: 6 proven RSS. Full: entire RSS catalog (no Telegram, no X).
-  const jobs = (mode === "fast" ? FAST_RSS : RSS_SOURCES).map(
-    (src) => ({ kind: "rss" as const, src }),
-  );
+  const tgBatch =
+    mode === "fast"
+      ? FAST_TG
+      : TELEGRAM_SOURCES.filter((s) => !s.indicator).slice(0, 12);
+  const jobs = [
+    ...(mode === "fast" ? FAST_RSS : RSS_SOURCES.slice(0, 20)).map((src) => ({
+      kind: "rss" as const,
+      src,
+    })),
+    ...tgBatch.map((src) => ({ kind: "tg" as const, src })),
+    ...FAST_X.map((src) => ({ kind: "x" as const, src })),
+  ];
 
-  const batches = await poolMap(jobs, mode === "fast" ? 8 : 10, async (job) => {
-    if (job.kind === "rss") {
-      const xml = await fetchText(job.src.url, mode === "fast" ? 4500 : 5000);
+  const batches = await poolMap(jobs, 8, async (job) => {
+    if (job.kind === "rss" || job.kind === "x") {
+      const xml = await fetchText(job.src.url, 3500);
       if (!xml || !/[<](rss|feed|item|entry)/i.test(xml)) return [] as RawStory[];
-      return parseRss(xml, job.src.name);
+      return parseRss(xml, job.src.name).map((row) =>
+        job.kind === "x" ? { ...row, via: "x-list" as const } : row,
+      );
     }
-    const html = await fetchText(`https://t.me/s/${job.src.channel}`, 5000);
+    const html = await fetchText(`https://t.me/s/${job.src.channel}`, 3500);
     if (!html) return [] as RawStory[];
-    return parseTelegram(html, job.src.channel, job.src.name, !!job.src.indicator);
+    return parseTelegram(html, job.src.channel, job.src.name, false);
   });
 
   const merged: RawStory[] = [];
@@ -209,17 +250,21 @@ export async function ingestStories(
   const publishable = recent.filter((story) => !story.indicator);
   const tips = recent.filter((story) => story.indicator);
 
-  await insertTicker(
-    publishable.slice(0, 140).map((story) => ({
-      id: storyId(story.url),
-      title: story.title,
-      titleHe: hasHebrew(story.title) ? story.title : null,
-      source: story.source,
-      url: story.url,
-      publishedAt: story.publishedAt,
-      arena: story.arena,
-    })),
-  );
+  try {
+    await insertTicker(
+      publishable.slice(0, 140).map((story) => ({
+        id: storyId(story.url),
+        title: story.title,
+        titleHe: hasHebrew(story.title) ? story.title : null,
+        source: story.source,
+        url: story.url,
+        publishedAt: story.publishedAt,
+        arena: story.arena,
+      })),
+    );
+  } catch {
+    /* still return stories */
+  }
 
   // Prefer today's items first, but keep the full 36h pool for compose.
   const preferred = [...tips, ...publishable].sort((a, b) => {
