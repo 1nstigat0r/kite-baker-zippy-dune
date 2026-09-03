@@ -206,10 +206,10 @@ export const BRIEFING_HEADER = briefingHeaderNow();
 export const SWAP_EVERY_MS = 12_000;
 export const SCAN_MS = 40 * 60 * 1000;
 
-const USED_KEY = "idkun-used-at-v8";
-const PAYLOAD_KEY = "idkun-payload-v8";
-const ORIG_KEY = "idkun-orig-ids-v8";
-const QUEUE_KEY = "idkun-queue-at-v8";
+const USED_KEY = "idkun-used-at-v9";
+const PAYLOAD_KEY = "idkun-payload-v9";
+const ORIG_KEY = "idkun-orig-ids-v9";
+const QUEUE_KEY = "idkun-queue-at-v9";
 const BURN_URLS_KEY = "idkun-burned-urls-v9";
 
 function lsGet(key: string): string | null {
@@ -315,6 +315,21 @@ export function scanDueAt(usedAt: number) {
 export function isScanning(usedAt: number | null) {
   if (!usedAt) return false;
   return Date.now() < scanDueAt(usedAt);
+}
+
+export function payloadItemCount(payload: BriefingPayload) {
+  return payload.arenas.reduce((sum, arena) => sum + arena.items.length, 0);
+}
+
+/** True when payload still looks like the static seed exclusives. */
+export function looksLikeSeed(payload: BriefingPayload) {
+  const seedUrls = new Set(
+    CURRENT_BRIEFING.arenas.flatMap((a) => a.items.map((i) => i.url)),
+  );
+  const urls = payload.arenas.flatMap((a) => a.items.map((i) => i.url));
+  if (!urls.length) return false;
+  const hit = urls.filter((u) => seedUrls.has(u)).length;
+  return hit >= Math.min(3, urls.length) && hit / urls.length >= 0.5;
 }
 
 export function activePayload(): BriefingPayload {

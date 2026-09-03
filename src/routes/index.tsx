@@ -6,12 +6,15 @@ import {
   BRIEFING_HEADER,
   CURRENT_BRIEFING,
   TICKER,
+  activePayload,
   formatDue,
   isScanning,
   loadOriginalIds,
   loadQueueAt,
   loadUsedAt,
+  looksLikeSeed,
   markUsedLocal,
+  payloadItemCount,
   persistPayloadLocal,
   saveQueueAt,
   scanDueAt,
@@ -79,9 +82,15 @@ function seedDash(): DashboardData {
 }
 
 function pickPayload(dash: DashboardData | null): { hourKey: string; header: string; payload: BriefingPayload } {
-  const fallback = structuredClone(CURRENT_BRIEFING);
+  const local = activePayload();
+  const fallback = stripBurned(structuredClone(CURRENT_BRIEFING));
+  const preferLocal = payloadItemCount(local) > 0;
   if (!dash) {
-    return { hourKey: "seed", header: BRIEFING_HEADER, payload: fallback };
+    return {
+      hourKey: "seed",
+      header: BRIEFING_HEADER,
+      payload: preferLocal ? local : fallback,
+    };
   }
   const view =
     (briefingHasContent(dash.briefing) && dash.briefing) ||
@@ -91,13 +100,26 @@ function pickPayload(dash: DashboardData | null): { hourKey: string; header: str
     return {
       hourKey: dash.currentHourKey,
       header: `עדכון | ${dash.currentDateLabel}, ${dash.currentClock}`,
-      payload: fallback,
+      payload: preferLocal ? local : fallback,
     };
+  }
+  let payload = stripBurned(view.payload);
+  // After «השתמשתי», server/PGLite often respawns the static seed — keep local draft.
+  if (
+    preferLocal &&
+    (payloadItemCount(payload) === 0 || looksLikeSeed(payload)) &&
+    !looksLikeSeed(local)
+  ) {
+    payload = local;
+  } else if (payloadItemCount(payload) === 0 && preferLocal) {
+    payload = local;
+  } else if (payloadItemCount(payload) === 0) {
+    payload = fallback;
   }
   return {
     hourKey: view.id,
     header: `עדכון | ${view.dateLabel}, ${view.hourLabel}`,
-    payload: view.payload,
+    payload,
   };
 }
 
@@ -124,10 +146,18 @@ function Home() {
     setOriginalIds(orig);
     queueAt.current = loadQueueAt();
     const p = pickPayload(initial ?? seedDash());
-    setPayload(p.payload);
+    // Prefer persisted post-השתמשתי draft over server seed on hard refresh.
+    const local = activePayload();
+    const chosen =
+      payloadItemCount(local) > 0 &&
+      (looksLikeSeed(p.payload) || payloadItemCount(stripBurned(p.payload)) === 0)
+        ? local
+        : p.payload;
+    setPayload(chosen);
     setHeader(p.header);
     setHourKey(p.hourKey);
-    scanQueueRef.current = (initial?.scanQueue ?? CURRENT_BRIEFING.spares).slice(0, 10);
+    persistPayloadLocal(chosen);
+    scanQueueRef.current = (chosen.spares ?? initial?.scanQueue ?? []).slice(0, 10);
   }, []);
 
   useEffect(() => {
@@ -139,11 +169,14 @@ function Home() {
     const applyDash = (next: DashboardData) => {
       setDash(next);
       const p = pickPayload(next);
-      if (briefingHasContent(next.briefing) || briefingHasContent(next.latestBriefing)) {
+      if (briefingHasContent(next.briefing) || briefingHasContent(next.latestBriefing) || payloadItemCount(p.payload) > 0) {
         setPayload(p.payload);
         setHeader(p.header);
         setHourKey(p.hourKey);
-        persistPayloadLocal(p.payload);
+        // Don't clobber a live local draft with a respawned seed.
+        if (!looksLikeSeed(p.payload) || !loadUsedAt()) {
+          persistPayloadLocal(p.payload);
+        }
       }
     };
     const poll = window.setInterval(() => {
