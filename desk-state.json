@@ -1,31 +1,13 @@
 {
-  "updatedAt": "2026-09-04T11:39:21.562Z",
+  "updatedAt": "2026-09-04T11:45:03.304Z",
   "ticker": [
-    {
-      "id": "y-direct-hit-us-munition",
-      "title": "US probes Iran wedding strike that analysis shows was likely direct hit by US munition",
-      "titleHe": "ארה״ב איראן תקיפות ארה״ב",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/us-probes-iran-wedding-strike-analysis-shows-was-likely-direct-hit-us-munition",
-      "publishedAt": "2026-09-04T11:39:18.883Z",
-      "arena": "iran"
-    },
-    {
-      "id": "-under-key-lebanon-ridge",
-      "title": "Israel says it has cleared Hezbollah fighters from tunnels under key Lebanon ridge",
-      "titleHe": "ישראל מסר ש טיהר חיזבאללה מנהרות לבנון",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/israel-says-it-has-cleared-hezbollah-fighters-tunnels-under-key-lebanon-ridge",
-      "publishedAt": "2026-09-04T11:39:18.882Z",
-      "arena": "lebanon"
-    },
     {
       "id": "dium=RSS&at_campaign=rss",
       "title": "US and Iran trade strikes for first time in weeks",
       "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T11:39:18.829Z",
+      "publishedAt": "2026-09-04T11:45:00.372Z",
       "arena": "iran"
     },
     {
@@ -34,8 +16,26 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T11:39:18.828Z",
+      "publishedAt": "2026-09-04T11:45:00.371Z",
       "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
+      "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-04T11:45:00.371Z",
+      "arena": "iran"
+    },
+    {
+      "id": "-under-key-lebanon-ridge",
+      "title": "Israel says it has cleared Hezbollah fighters from tunnels under key Lebanon ridge",
+      "titleHe": "ישראל מסר ש טיהר חיזבאללה מנהרות לבנון",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/israel-says-it-has-cleared-hezbollah-fighters-tunnels-under-key-lebanon-ridge",
+      "publishedAt": "2026-09-04T11:45:00.206Z",
+      "arena": "lebanon"
     },
     {
       "id": "strong-bond-with-the-us/",
@@ -43,7 +43,7 @@
       "titleHe": "תקיפה איראן ירדן ארה״ב",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/repeatedly-attacked-by-iran-jordan-pays-a-price-for-its-strong-bond-with-the-us/",
-      "publishedAt": "2026-09-04T11:39:18.507Z",
+      "publishedAt": "2026-09-04T11:44:59.972Z",
       "arena": "iran"
     },
     {
@@ -61,7 +61,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T11:39:18.829Z",
+      "publishedAt": "2026-09-04T11:45:00.372Z",
       "arena": "iran"
     },
     {
@@ -97,7 +97,7 @@
       "titleHe": "איראן’ גרעין אינו ברור לפי הסוכנות הבינלאומית לאנרגיה אטומית",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/02/world/middleeast/iran-nuclear-program-iaea.html",
-      "publishedAt": "2026-09-04T11:39:18.673Z",
+      "publishedAt": "2026-09-04T11:44:59.966Z",
       "arena": "iran"
     },
     {
