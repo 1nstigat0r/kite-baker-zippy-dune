@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-04T22:52:37.393Z",
+  "updatedAt": "2026-09-04T23:01:09.447Z",
   "ticker": [
     {
       "id": "ns-pickaxe-mountain-soon",
@@ -7,7 +7,7 @@
       "titleHe": "טראמפ מסר ש ארה״ב איראן'",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/trump-says-us-may-hit-irans-pickaxe-mountain-soon",
-      "publishedAt": "2026-09-04T22:52:36.247Z",
+      "publishedAt": "2026-09-04T23:01:08.307Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T22:52:35.660Z",
+      "publishedAt": "2026-09-04T23:01:08.207Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T22:52:35.660Z",
+      "publishedAt": "2026-09-04T23:01:08.207Z",
       "arena": "iran"
     },
     {
@@ -34,16 +34,16 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T22:52:35.660Z",
+      "publishedAt": "2026-09-04T23:01:08.206Z",
       "arena": "iran"
     },
     {
       "id": "-push-toward-key-strait/",
-      "title": "Over 120 killed in deadly Yemen clashes as Houthis push toward key strait",
+      "title": "Over 120 killed in Yemen clashes as Houthis push toward key strait",
       "titleHe": "120 הרג תימן החות'ים",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/over-120-killed-in-deadly-yemen-clashes-as-houthis-push-toward-key-strait/",
-      "publishedAt": "2026-09-04T22:52:35.386Z",
+      "publishedAt": "2026-09-04T23:01:07.867Z",
       "arena": "axis"
     },
     {
@@ -52,7 +52,16 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T22:52:35.660Z",
+      "publishedAt": "2026-09-04T23:01:08.207Z",
+      "arena": "iran"
+    },
+    {
+      "id": "ased-bank-over-iran-ties",
+      "title": "US sanctions Turkey-based bank over Iran ties",
+      "titleHe": "ארה״ב סנקציות תורכיה- איראן",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/us-sanctions-turkey-based-bank-over-iran-ties",
+      "publishedAt": "2026-09-04T23:01:08.307Z",
       "arena": "iran"
     },
     {
@@ -62,15 +71,6 @@
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/repeatedly-attacked-by-iran-jordan-pays-a-price-for-its-strong-bond-with-the-us/",
       "publishedAt": "2026-09-04T18:56:46.653Z",
-      "arena": "iran"
-    },
-    {
-      "id": "ased-bank-over-iran-ties",
-      "title": "US sanctions Turkey-based bank over Iran ties",
-      "titleHe": "ארה״ב סנקציות תורכיה- איראן",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/us-sanctions-turkey-based-bank-over-iran-ties",
-      "publishedAt": "2026-09-04T22:52:36.247Z",
       "arena": "iran"
     },
     {
