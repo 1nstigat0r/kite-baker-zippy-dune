@@ -223,6 +223,13 @@ async function main() {
       "error=",
       tick?.error ?? null,
     );
+    // Live may return 200 with empty ticker (scan starved / translate down).
+    // Prefer a real local scan when production produced nothing useful.
+    if (!(tick?.ticker?.length) && !tick?.packed && !tick?.briefing) {
+      console.warn("[desk-auto-tick] live tick empty; running local scan");
+      const local = await localFallback();
+      if (local?.ticker?.length || local?.briefing || local?.packed) tick = local;
+    }
   } catch (err) {
     console.warn(
       "[desk-auto-tick] live tick failed:",
