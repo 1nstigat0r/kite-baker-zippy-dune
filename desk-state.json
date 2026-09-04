@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-04T10:04:56.629Z",
+  "updatedAt": "2026-09-04T10:08:19.449Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,7 +7,7 @@
       "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T09:31:32.293Z",
+      "publishedAt": "2026-09-04T10:08:16.609Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T09:31:32.293Z",
+      "publishedAt": "2026-09-04T10:08:16.609Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T09:31:32.292Z",
+      "publishedAt": "2026-09-04T10:08:16.608Z",
       "arena": "iran"
     },
     {
@@ -34,7 +34,7 @@
       "titleHe": "החות'ים תימן הרגה 13 אנשי כוחות ממשל",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/houthi-escalation-western-yemen-kills-13-government-forces-what-know",
-      "publishedAt": "2026-09-04T09:31:32.216Z",
+      "publishedAt": "2026-09-04T10:08:16.442Z",
       "arena": "axis"
     },
     {
@@ -70,7 +70,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T09:31:32.293Z",
+      "publishedAt": "2026-09-04T10:08:16.609Z",
       "arena": "iran"
     },
     {
@@ -88,7 +88,7 @@
       "titleHe": "איראן’ גרעין אינו ברור לפי הסוכנות הבינלאומית לאנרגיה אטומית",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/02/world/middleeast/iran-nuclear-program-iaea.html",
-      "publishedAt": "2026-09-04T09:31:32.214Z",
+      "publishedAt": "2026-09-04T10:08:16.364Z",
       "arena": "iran"
     },
     {
@@ -104,6 +104,5 @@
   "lastPackId": null,
   "briefing": null,
   "hourKey": null,
-  "header": null,
-  "_preserved": true
+  "header": null
 }
