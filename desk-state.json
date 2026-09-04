@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-04T11:45:03.304Z",
+  "updatedAt": "2026-09-04T11:55:19.252Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,16 +7,7 @@
       "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T11:45:00.372Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "US investigating if missile hit Iran wedding, Vance says",
-      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T11:45:00.371Z",
+      "publishedAt": "2026-09-04T11:55:16.601Z",
       "arena": "iran"
     },
     {
@@ -25,7 +16,16 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T11:45:00.371Z",
+      "publishedAt": "2026-09-04T11:55:16.601Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US investigating if missile hit Iran wedding, Vance says",
+      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-04T11:55:16.600Z",
       "arena": "iran"
     },
     {
@@ -34,7 +34,7 @@
       "titleHe": "ישראל מסר ש טיהר חיזבאללה מנהרות לבנון",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/israel-says-it-has-cleared-hezbollah-fighters-tunnels-under-key-lebanon-ridge",
-      "publishedAt": "2026-09-04T11:45:00.206Z",
+      "publishedAt": "2026-09-04T11:55:16.512Z",
       "arena": "lebanon"
     },
     {
@@ -43,7 +43,7 @@
       "titleHe": "תקיפה איראן ירדן ארה״ב",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/repeatedly-attacked-by-iran-jordan-pays-a-price-for-its-strong-bond-with-the-us/",
-      "publishedAt": "2026-09-04T11:44:59.972Z",
+      "publishedAt": "2026-09-04T11:55:16.302Z",
       "arena": "iran"
     },
     {
@@ -61,7 +61,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T11:45:00.372Z",
+      "publishedAt": "2026-09-04T11:55:16.601Z",
       "arena": "iran"
     },
     {
@@ -97,7 +97,7 @@
       "titleHe": "איראן’ גרעין אינו ברור לפי הסוכנות הבינלאומית לאנרגיה אטומית",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/02/world/middleeast/iran-nuclear-program-iaea.html",
-      "publishedAt": "2026-09-04T11:44:59.966Z",
+      "publishedAt": "2026-09-04T11:55:16.462Z",
       "arena": "iran"
     },
     {
