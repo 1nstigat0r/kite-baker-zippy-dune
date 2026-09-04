@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-04T11:00:10.267Z",
+  "updatedAt": "2026-09-04T11:17:33.119Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,7 +7,7 @@
       "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T10:32:16.385Z",
+      "publishedAt": "2026-09-04T11:17:30.331Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T10:32:16.385Z",
+      "publishedAt": "2026-09-04T11:17:30.330Z",
       "arena": "iran"
     },
     {
@@ -25,8 +25,17 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T10:32:16.384Z",
+      "publishedAt": "2026-09-04T11:17:30.330Z",
       "arena": "iran"
+    },
+    {
+      "id": "-under-key-lebanon-ridge",
+      "title": "Israel says it has cleared Hezbollah fighters from tunnels under key Lebanon ridge",
+      "titleHe": "ישראל מסר ש טיהר חיזבאללה מנהרות לבנון",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/israel-says-it-has-cleared-hezbollah-fighters-tunnels-under-key-lebanon-ridge",
+      "publishedAt": "2026-09-04T11:17:30.218Z",
+      "arena": "lebanon"
     },
     {
       "id": "ernment-forces-what-know",
@@ -44,6 +53,15 @@
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/national-security/2026/09/01/us-carries-out-new-military-strikes-iran/",
       "publishedAt": "2026-09-04T09:31:32.168Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
+      "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-04T11:17:30.331Z",
       "arena": "iran"
     },
     {
@@ -65,15 +83,6 @@
       "arena": "iran"
     },
     {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
-      "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T10:32:16.385Z",
-      "arena": "iran"
-    },
-    {
       "id": "ssion-goal-within-reach/",
       "title": "Netanyahu: Toppling Iranian regime is Israel’s ‘central mission,’ goal ‘within reach’",
       "titleHe": "מסר: נתניהו משה\"מ ישראל’ ‘משימה מרכזית ’ ‘ ’",
@@ -88,7 +97,7 @@
       "titleHe": "איראן’ גרעין אינו ברור לפי הסוכנות הבינלאומית לאנרגיה אטומית",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/02/world/middleeast/iran-nuclear-program-iaea.html",
-      "publishedAt": "2026-09-04T10:32:16.077Z",
+      "publishedAt": "2026-09-04T11:17:30.177Z",
       "arena": "iran"
     },
     {
@@ -104,6 +113,5 @@
   "lastPackId": null,
   "briefing": null,
   "hourKey": null,
-  "header": null,
-  "_preserved": true
+  "header": null
 }
