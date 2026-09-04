@@ -1,8 +1,118 @@
 {
-  "updatedAt": "2026-09-04T23:59:04.031Z",
-  "ticker": [],
+  "updatedAt": "2026-09-04T23:59:24.529Z",
+  "ticker": [
+    {
+      "id": "ns-pickaxe-mountain-soon",
+      "title": "Trump says US may hit Iran's Pickaxe Mountain soon",
+      "titleHe": "טראמפ מסר ש ארה״ב איראן'",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/trump-says-us-may-hit-irans-pickaxe-mountain-soon",
+      "publishedAt": "2026-09-04T23:54:59.299Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US and Iran trade strikes for first time in weeks",
+      "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-04T23:54:58.608Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
+      "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-04T23:54:58.608Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US investigating if missile hit Iran wedding, Vance says",
+      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-04T23:54:58.608Z",
+      "arena": "iran"
+    },
+    {
+      "id": "-push-toward-key-strait/",
+      "title": "Over 120 killed in Yemen clashes as Houthis push toward key strait",
+      "titleHe": "120 הרג תימן החות'ים",
+      "source": "Times of Israel",
+      "url": "https://www.timesofisrael.com/over-120-killed-in-deadly-yemen-clashes-as-houthis-push-toward-key-strait/",
+      "publishedAt": "2026-09-04T23:54:58.315Z",
+      "arena": "axis"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
+      "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-04T23:54:58.608Z",
+      "arena": "iran"
+    },
+    {
+      "id": "ased-bank-over-iran-ties",
+      "title": "US sanctions Turkey-based bank over Iran ties",
+      "titleHe": "ארה״ב סנקציות תורכיה- איראן",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/us-sanctions-turkey-based-bank-over-iran-ties",
+      "publishedAt": "2026-09-04T23:54:59.299Z",
+      "arena": "iran"
+    },
+    {
+      "id": "strong-bond-with-the-us/",
+      "title": "Repeatedly attacked by Iran, Jordan pays a price for its strong bond with the US",
+      "titleHe": "תקיפה איראן ירדן ארה״ב",
+      "source": "Times of Israel",
+      "url": "https://www.timesofisrael.com/repeatedly-attacked-by-iran-jordan-pays-a-price-for-its-strong-bond-with-the-us/",
+      "publishedAt": "2026-09-04T18:56:46.653Z",
+      "arena": "iran"
+    },
+    {
+      "id": "-under-key-lebanon-ridge",
+      "title": "Israel says it has cleared Hezbollah fighters from tunnels under key Lebanon ridge",
+      "titleHe": "ישראל מסר ש טיהר חיזבאללה מנהרות לבנון",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/israel-says-it-has-cleared-hezbollah-fighters-tunnels-under-key-lebanon-ridge",
+      "publishedAt": "2026-09-04T15:40:49.016Z",
+      "arena": "lebanon"
+    },
+    {
+      "id": "ernment-forces-what-know",
+      "title": "Houthi escalation in western Yemen kills 13 government forces: What to know",
+      "titleHe": "החות'ים תימן הרגה 13 אנשי כוחות ממשל",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/houthi-escalation-western-yemen-kills-13-government-forces-what-know",
+      "publishedAt": "2026-09-04T10:24:08.246Z",
+      "arena": "axis"
+    },
+    {
+      "id": "w-military-strikes-iran/",
+      "title": "Iran retaliates with missiles and drones, defying Trump’s warning",
+      "titleHe": "איראן הגיבה בטילים ובכטב״מים טראמפ’",
+      "source": "ה-Washington Post",
+      "url": "https://www.washingtonpost.com/national-security/2026/09/01/us-carries-out-new-military-strikes-iran/",
+      "publishedAt": "2026-09-04T09:31:32.168Z",
+      "arena": "iran"
+    },
+    {
+      "id": "s-options-bypass-hormuz/",
+      "title": "Syria, eyeing role as Middle East hub, offers options to bypass Hormuz",
+      "titleHe": "סוריה מבקשת להיות צומת במזרח התיכון הורמוז",
+      "source": "ה-Washington Post",
+      "url": "https://www.washingtonpost.com/world/2026/09/02/syria-eyeing-role-middle-east-hub-offers-options-bypass-hormuz/",
+      "publishedAt": "2026-09-04T08:38:05.903Z",
+      "arena": "iran"
+    }
+  ],
   "lastPackId": null,
   "briefing": null,
   "hourKey": null,
-  "header": null
+  "header": null,
+  "_preserved": true
 }
