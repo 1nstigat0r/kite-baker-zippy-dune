@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-04T09:21:48.377Z",
+  "updatedAt": "2026-09-04T09:31:36.729Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,7 +7,7 @@
       "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T08:38:05.988Z",
+      "publishedAt": "2026-09-04T09:31:32.293Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T08:38:05.988Z",
+      "publishedAt": "2026-09-04T09:31:32.293Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,25 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T08:38:05.987Z",
+      "publishedAt": "2026-09-04T09:31:32.292Z",
+      "arena": "iran"
+    },
+    {
+      "id": "ernment-forces-what-know",
+      "title": "Houthi escalation in western Yemen kills 13 government forces: What to know",
+      "titleHe": "החות'ים תימן הרגה 13 אנשי כוחות ממשל",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/houthi-escalation-western-yemen-kills-13-government-forces-what-know",
+      "publishedAt": "2026-09-04T09:31:32.216Z",
+      "arena": "axis"
+    },
+    {
+      "id": "w-military-strikes-iran/",
+      "title": "Iran retaliates with missiles and drones, defying Trump’s warning",
+      "titleHe": "איראן הגיבה בטילים ובכטב״מים טראמפ’",
+      "source": "ה-Washington Post",
+      "url": "https://www.washingtonpost.com/national-security/2026/09/01/us-carries-out-new-military-strikes-iran/",
+      "publishedAt": "2026-09-04T09:31:32.168Z",
       "arena": "iran"
     },
     {
@@ -34,15 +52,6 @@
       "titleHe": "סוריה מבקשת להיות צומת במזרח התיכון הורמוז",
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/world/2026/09/02/syria-eyeing-role-middle-east-hub-offers-options-bypass-hormuz/",
-      "publishedAt": "2026-09-04T08:38:05.903Z",
-      "arena": "iran"
-    },
-    {
-      "id": "w-military-strikes-iran/",
-      "title": "Iran retaliates with missiles and drones, defying Trump’s warning",
-      "titleHe": "איראן הגיבה בטילים ובכטב״מים טראמפ’",
-      "source": "ה-Washington Post",
-      "url": "https://www.washingtonpost.com/national-security/2026/09/01/us-carries-out-new-military-strikes-iran/",
       "publishedAt": "2026-09-04T08:38:05.903Z",
       "arena": "iran"
     },
@@ -56,21 +65,12 @@
       "arena": "iran"
     },
     {
-      "id": "ernment-forces-what-know",
-      "title": "Houthi escalation in western Yemen kills 13 government forces: What to know",
-      "titleHe": "החות'ים תימן הרגה 13 אנשי כוחות ממשל",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/houthi-escalation-western-yemen-kills-13-government-forces-what-know",
-      "publishedAt": "2026-09-04T08:38:05.849Z",
-      "arena": "axis"
-    },
-    {
       "id": "dium=RSS&at_campaign=rss",
       "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T08:38:05.988Z",
+      "publishedAt": "2026-09-04T09:31:32.293Z",
       "arena": "iran"
     },
     {
@@ -79,7 +79,7 @@
       "titleHe": "מסר: נתניהו משה\"מ ישראל’ ‘משימה מרכזית ’ ‘ ’",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/netanyahu-toppling-iranian-regime-is-israels-central-mission-goal-within-reach/",
-      "publishedAt": "2026-09-04T08:38:05.708Z",
+      "publishedAt": "2026-09-04T09:31:31.908Z",
       "arena": "iran"
     },
     {
@@ -88,7 +88,7 @@
       "titleHe": "איראן’ גרעין אינו ברור לפי הסוכנות הבינלאומית לאנרגיה אטומית",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/02/world/middleeast/iran-nuclear-program-iaea.html",
-      "publishedAt": "2026-09-04T08:38:05.820Z",
+      "publishedAt": "2026-09-04T09:31:32.214Z",
       "arena": "iran"
     },
     {
@@ -104,11 +104,5 @@
   "lastPackId": null,
   "briefing": null,
   "hourKey": null,
-  "header": null,
-  "_preserved": true,
-  "_heartbeat": {
-    "at": "2026-09-04T09:21:48.377Z",
-    "source": "keep-alive",
-    "note": "auto-tick blocked; curl tick empty"
-  }
+  "header": null
 }
