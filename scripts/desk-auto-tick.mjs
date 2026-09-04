@@ -7,7 +7,15 @@
  * Env: LIVE_URL (optional), CRON_SECRET (optional), GH_TOKEN via `gh` auth
  */
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdtempSync,
+  readFileSync,
+  rmdirSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -31,7 +39,6 @@ function ensureGh() {
   try {
     const out = gh("auth", "status");
     if (!/Logged in/i.test(out) && !/✓/.test(out)) {
-      // gh auth status writes to stderr often; try api
       gh("api", "user", "--jq", ".login");
     }
     return true;
@@ -45,7 +52,8 @@ function ensureGh() {
 }
 
 async function callTick() {
-  const headers = { accept: "application/json" };
+  // Prefer JSON; include text/html so some Start/CDN paths still negotiate.
+  const headers = { accept: "text/html, application/json" };
   if (process.env.CRON_SECRET) {
     headers.authorization = `Bearer ${process.env.CRON_SECRET}`;
   }
@@ -65,6 +73,11 @@ async function callTick() {
   if (!res.ok) {
     const body = await res.text().catch(() => "");
     throw new Error(`tick HTTP ${res.status}: ${body.slice(0, 400)}`);
+  }
+  const ct = res.headers.get("content-type") || "";
+  if (!ct.includes("application/json")) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`tick non-JSON (${ct}): ${body.slice(0, 200)}`);
   }
   return res.json();
 }
@@ -101,10 +114,140 @@ function readLocalState() {
   }
 }
 
+function parseLastJson(stdout) {
+  const lines = String(stdout)
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean);
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const line = lines[i];
+    if (!line.startsWith("{") && !line.startsWith("[")) continue;
+    try {
+      return JSON.parse(line);
+    } catch {
+      /* try earlier */
+    }
+  }
+  return JSON.parse(String(stdout).trim());
+}
+
+function runTsxFile(code) {
+  const tmpDir = mkdtempSync(join(tmpdir(), "desk-tick-"));
+  const tmpFile = join(tmpDir, "scan.ts");
+  writeFileSync(tmpFile, `${code}\n`);
+  const localBin = join(ROOT, "node_modules", ".bin", "tsx");
+  const useLocal = existsSync(localBin);
+  try {
+    return execFileSync(
+      useLocal ? localBin : "npx",
+      useLocal ? [tmpFile] : ["--yes", "tsx", tmpFile],
+      {
+        encoding: "utf8",
+        cwd: ROOT,
+        timeout: 90_000,
+        maxBuffer: 8 * 1024 * 1024,
+        env: { ...process.env },
+      },
+    );
+  } finally {
+    try {
+      unlinkSync(tmpFile);
+    } catch {
+      /* ignore */
+    }
+    try {
+      rmdirSync(tmpDir);
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+/** Full desk tick via tsx importing runDeskTick. */
+function localRunDeskTick() {
+  const code = `
+import { runDeskTick } from ${JSON.stringify(join(ROOT, "src/lib/news/server.ts"))};
+const result = await runDeskTick();
+process.stdout.write(JSON.stringify(result) + "\\n");
+`.trim();
+  return parseLastJson(runTsxFile(code));
+}
+
+/** Scan-only fallback: pureHotScan + composeTickerItem + merge into prior. */
+function localPureScan(prior) {
+  const code = `
+import { pureHotScan } from ${JSON.stringify(join(ROOT, "src/lib/news/ingest.ts"))};
+import { composeTickerItem } from ${JSON.stringify(join(ROOT, "src/lib/news/compose.ts"))};
+import { mergeTicker } from ${JSON.stringify(join(ROOT, "src/lib/news/ticker-loop.ts"))};
+
+const prior = ${JSON.stringify(prior?.ticker ?? [])} as any[];
+const stories = await Promise.race([
+  pureHotScan(),
+  new Promise<any[]>((resolve) => setTimeout(() => resolve([]), 16_000)),
+]);
+const finds: any[] = [];
+for (let i = 0; i < stories.length; i += 4) {
+  const chunk = stories.slice(i, i + 4);
+  const rows = await Promise.all(chunk.map((s) => composeTickerItem(s)));
+  for (const row of rows) if (row) finds.push(row);
+}
+const ticker = mergeTicker(prior, finds, new Set());
+process.stdout.write(JSON.stringify({
+  ticker,
+  packed: false,
+  packId: null,
+  updatedAt: new Date().toISOString(),
+  briefing: null,
+  hourKey: null,
+  header: null,
+  lastPackId: null,
+  error: null,
+  count: stories.length,
+  _localScan: true,
+}) + "\\n");
+`.trim();
+  return parseLastJson(runTsxFile(code));
+}
+
 async function localFallback() {
-  // API not ready yet — keep prior GitHub/local ticker, bump updatedAt heartbeat.
-  console.warn("[desk-auto-tick] API not ready; writing heartbeat from local file");
+  console.warn("[desk-auto-tick] live tick failed; attempting local scan");
   const prior = readLocalState();
+
+  try {
+    const tick = localRunDeskTick();
+    console.log(
+      "[desk-auto-tick] local runDeskTick ok",
+      "count=",
+      tick?.count,
+      "ticker=",
+      tick?.ticker?.length ?? 0,
+    );
+    return tick;
+  } catch (err) {
+    console.warn(
+      "[desk-auto-tick] runDeskTick import failed:",
+      err instanceof Error ? err.message.slice(0, 300) : String(err).slice(0, 300),
+    );
+  }
+
+  try {
+    const tick = localPureScan(prior);
+    console.log(
+      "[desk-auto-tick] pureHotScan ok",
+      "count=",
+      tick?.count,
+      "ticker=",
+      tick?.ticker?.length ?? 0,
+    );
+    return tick;
+  } catch (err) {
+    console.warn(
+      "[desk-auto-tick] pureHotScan failed:",
+      err instanceof Error ? err.message.slice(0, 300) : String(err).slice(0, 300),
+    );
+  }
+
+  console.warn("[desk-auto-tick] writing heartbeat from local file");
   return {
     ...prior,
     updatedAt: new Date().toISOString(),
@@ -117,26 +260,10 @@ function putGithubFile(contentObj) {
   const b64 = Buffer.from(content, "utf8").toString("base64");
   let sha;
   try {
-    sha = gh(
-      "api",
-      `repos/${REPO}/contents/${PATH}`,
-      "--jq",
-      ".sha",
-    ).trim();
+    sha = gh("api", `repos/${REPO}/contents/${PATH}`, "--jq", ".sha").trim();
   } catch {
     sha = "";
   }
-  const args = [
-    "api",
-    `repos/${REPO}/contents/${PATH}`,
-    "-X",
-    "PUT",
-    "-f",
-    `message=desk: auto tick`,
-    "-f",
-    `content=${b64}`,
-  ];
-  // Prefer JSON body for large content / binary-safe
   const body = {
     message: "desk: auto tick",
     content: b64,
@@ -179,7 +306,10 @@ async function main() {
       tick?.error ?? null,
     );
   } catch (err) {
-    console.warn("[desk-auto-tick] live tick failed:", err instanceof Error ? err.message : err);
+    console.warn(
+      "[desk-auto-tick] live tick failed:",
+      err instanceof Error ? err.message : err,
+    );
     tick = await localFallback();
   }
 
