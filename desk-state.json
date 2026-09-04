@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-04T08:38:08.174Z",
+  "updatedAt": "2026-09-04T08:45:25.585813Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -104,5 +104,6 @@
   "lastPackId": null,
   "briefing": null,
   "hourKey": null,
-  "header": null
+  "header": null,
+  "_preserved": true
 }
