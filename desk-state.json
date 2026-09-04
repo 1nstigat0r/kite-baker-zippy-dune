@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-04T08:17:42.913Z",
+  "updatedAt": "2026-09-04T08:21:44.030Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,16 +7,7 @@
       "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T08:17:41.322Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "US investigating if missile hit Iran wedding, Vance says",
-      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T08:17:41.322Z",
+      "publishedAt": "2026-09-04T08:21:41.601Z",
       "arena": "iran"
     },
     {
@@ -25,17 +16,17 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T08:17:41.322Z",
+      "publishedAt": "2026-09-04T08:21:41.601Z",
       "arena": "iran"
     },
     {
-      "id": "ernment-forces-what-know",
-      "title": "Houthi escalation in western Yemen kills 13 government forces: What to know",
-      "titleHe": "החות'ים תימן הרגה 13 אנשי כוחות ממשל",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/houthi-escalation-western-yemen-kills-13-government-forces-what-know",
-      "publishedAt": "2026-09-04T08:17:41.137Z",
-      "arena": "axis"
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US investigating if missile hit Iran wedding, Vance says",
+      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-04T08:21:41.600Z",
+      "arena": "iran"
     },
     {
       "id": "s-options-bypass-hormuz/",
@@ -43,7 +34,7 @@
       "titleHe": "סוריה מבקשת להיות צומת במזרח התיכון הורמוז",
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/world/2026/09/02/syria-eyeing-role-middle-east-hub-offers-options-bypass-hormuz/",
-      "publishedAt": "2026-09-04T08:17:40.983Z",
+      "publishedAt": "2026-09-04T08:21:37.354Z",
       "arena": "iran"
     },
     {
@@ -52,7 +43,7 @@
       "titleHe": "איראן ירתה טילים על כווית התקיפות מתחדשות המלחמה עם ארה״ב",
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/world/2026/09/03/iran-fires-missiles-drones-kuwait-strikes-resume-us-war/",
-      "publishedAt": "2026-09-04T08:17:40.982Z",
+      "publishedAt": "2026-09-04T08:21:37.354Z",
       "arena": "iran"
     },
     {
@@ -61,8 +52,17 @@
       "titleHe": "איראן הגיבה בטילים ובכטב״מים טראמפ’",
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/national-security/2026/09/01/us-carries-out-new-military-strikes-iran/",
-      "publishedAt": "2026-09-04T08:17:40.982Z",
+      "publishedAt": "2026-09-04T08:21:37.354Z",
       "arena": "iran"
+    },
+    {
+      "id": "ernment-forces-what-know",
+      "title": "Houthi escalation in western Yemen kills 13 government forces: What to know",
+      "titleHe": "החות'ים תימן הרגה 13 אנשי כוחות ממשל",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/houthi-escalation-western-yemen-kills-13-government-forces-what-know",
+      "publishedAt": "2026-09-04T08:21:37.256Z",
+      "arena": "axis"
     },
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -70,7 +70,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T08:17:41.322Z",
+      "publishedAt": "2026-09-04T08:21:41.601Z",
       "arena": "iran"
     },
     {
@@ -79,8 +79,17 @@
       "titleHe": "מסר: נתניהו משה\"מ ישראל’ ‘משימה מרכזית ’ ‘ ’",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/netanyahu-toppling-iranian-regime-is-israels-central-mission-goal-within-reach/",
-      "publishedAt": "2026-09-04T08:17:40.912Z",
+      "publishedAt": "2026-09-04T08:21:37.097Z",
       "arena": "iran"
+    },
+    {
+      "id": "eblog-september-04-2026/",
+      "title": "Katz: Ali Taher takeover cements Israeli control over south Lebanon ‘security zone’",
+      "titleHe": "מסר: ישראל לבנון ‘ ’",
+      "source": "Times of Israel",
+      "url": "https://www.timesofisrael.com/liveblog-september-04-2026/",
+      "publishedAt": "2026-09-04T08:21:37.097Z",
+      "arena": "lebanon"
     },
     {
       "id": "uclear-program-iaea.html",
