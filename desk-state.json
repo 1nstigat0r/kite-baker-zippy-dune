@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-04T17:40:10.839Z",
+  "updatedAt": "2026-09-04T17:56:51.943Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,7 +7,7 @@
       "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T17:40:08.710Z",
+      "publishedAt": "2026-09-04T17:56:50.843Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T17:40:08.710Z",
+      "publishedAt": "2026-09-04T17:56:50.843Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T17:40:08.709Z",
+      "publishedAt": "2026-09-04T17:56:50.843Z",
       "arena": "iran"
     },
     {
@@ -34,7 +34,7 @@
       "titleHe": "תקיפה איראן ירדן ארה״ב",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/repeatedly-attacked-by-iran-jordan-pays-a-price-for-its-strong-bond-with-the-us/",
-      "publishedAt": "2026-09-04T17:40:08.457Z",
+      "publishedAt": "2026-09-04T17:56:50.488Z",
       "arena": "iran"
     },
     {
@@ -43,8 +43,17 @@
       "titleHe": "120 הרג תימן החות'ים",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/over-120-killed-in-deadly-yemen-clashes-as-houthis-push-toward-key-strait/",
-      "publishedAt": "2026-09-04T17:40:08.456Z",
+      "publishedAt": "2026-09-04T17:56:50.487Z",
       "arena": "axis"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
+      "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-04T17:56:50.843Z",
+      "arena": "iran"
     },
     {
       "id": "-under-key-lebanon-ridge",
@@ -56,21 +65,12 @@
       "arena": "lebanon"
     },
     {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
-      "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T17:40:08.710Z",
-      "arena": "iran"
-    },
-    {
       "id": "ased-bank-over-iran-ties",
       "title": "US sanctions Turkey-based bank over Iran ties",
       "titleHe": "ארה״ב סנקציות תורכיה- איראן",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/us-sanctions-turkey-based-bank-over-iran-ties",
-      "publishedAt": "2026-09-04T17:40:08.706Z",
+      "publishedAt": "2026-09-04T17:56:50.694Z",
       "arena": "iran"
     },
     {
@@ -79,7 +79,7 @@
       "titleHe": "מסר: איראן המלחמה עם ארה״ב",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
-      "publishedAt": "2026-09-04T17:40:08.452Z",
+      "publishedAt": "2026-09-04T17:56:50.507Z",
       "arena": "iran"
     },
     {
