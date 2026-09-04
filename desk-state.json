@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-04T21:38:52.903Z",
+  "updatedAt": "2026-09-04T21:40:51.402Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,7 +7,7 @@
       "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T21:31:44.500Z",
+      "publishedAt": "2026-09-04T21:40:50.075Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T21:31:44.500Z",
+      "publishedAt": "2026-09-04T21:40:50.075Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T21:31:44.499Z",
+      "publishedAt": "2026-09-04T21:40:50.075Z",
       "arena": "iran"
     },
     {
@@ -34,7 +34,7 @@
       "titleHe": "טראמפ מסר ש ארה״ב איראן'",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/trump-says-us-may-hit-irans-pickaxe-mountain-soon",
-      "publishedAt": "2026-09-04T21:31:44.427Z",
+      "publishedAt": "2026-09-04T21:40:49.871Z",
       "arena": "iran"
     },
     {
@@ -43,7 +43,7 @@
       "titleHe": "120 הרג תימן החות'ים",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/over-120-killed-in-deadly-yemen-clashes-as-houthis-push-toward-key-strait/",
-      "publishedAt": "2026-09-04T21:31:44.150Z",
+      "publishedAt": "2026-09-04T21:40:49.696Z",
       "arena": "axis"
     },
     {
@@ -52,7 +52,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T21:31:44.500Z",
+      "publishedAt": "2026-09-04T21:40:50.075Z",
       "arena": "iran"
     },
     {
@@ -70,7 +70,7 @@
       "titleHe": "ארה״ב סנקציות תורכיה- איראן",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/us-sanctions-turkey-based-bank-over-iran-ties",
-      "publishedAt": "2026-09-04T21:31:44.428Z",
+      "publishedAt": "2026-09-04T21:40:49.872Z",
       "arena": "iran"
     },
     {
@@ -113,6 +113,5 @@
   "lastPackId": null,
   "briefing": null,
   "hourKey": null,
-  "header": null,
-  "lastTickAt": "2026-09-04T21:38:51.751Z"
+  "header": null
 }
