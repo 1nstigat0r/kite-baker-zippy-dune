@@ -1,6 +1,106 @@
 {
-  "updatedAt": "2026-09-04T08:07:20.491Z",
-  "ticker": [],
+  "updatedAt": "2026-09-04T08:07:48.752Z",
+  "ticker": [
+    {
+      "id": "n-says-hit-wedding-party",
+      "title": "Vance: US probing airstrike that Iran says hit a wedding party",
+      "titleHe": "ואנס ארה״ב תקיפות אוויריות איראן מסר ש",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/vance-us-probing-airstrike-iran-says-hit-wedding-party",
+      "publishedAt": "2026-09-04T08:07:45.953Z",
+      "arena": "iran"
+    },
+    {
+      "id": "ernment-forces-what-know",
+      "title": "Houthi escalation in western Yemen kills 13 government forces: What to know",
+      "titleHe": "החות'ים תימן הרגה 13 אנשי כוחות ממשל",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/houthi-escalation-western-yemen-kills-13-government-forces-what-know",
+      "publishedAt": "2026-09-04T08:07:45.953Z",
+      "arena": "axis"
+    },
+    {
+      "id": "y-direct-hit-us-munition",
+      "title": "US probes Iran wedding strike that analysis shows was likely direct hit by US munition",
+      "titleHe": "ארה״ב איראן תקיפות ארה״ב",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/us-probes-iran-wedding-strike-analysis-shows-was-likely-direct-hit-us-munition",
+      "publishedAt": "2026-09-04T08:07:45.952Z",
+      "arena": "iran"
+    },
+    {
+      "id": "t-strikes-resume-us-war/",
+      "title": "Iran fires missiles and drones at Kuwait as strikes resume in war with U.S.",
+      "titleHe": "איראן ירתה טילים על כווית התקיפות מתחדשות המלחמה עם ארה״ב",
+      "source": "ה-Washington Post",
+      "url": "https://www.washingtonpost.com/world/2026/09/03/iran-fires-missiles-drones-kuwait-strikes-resume-us-war/",
+      "publishedAt": "2026-09-04T08:07:45.889Z",
+      "arena": "iran"
+    },
+    {
+      "id": "w-military-strikes-iran/",
+      "title": "Iran retaliates with missiles and drones, defying Trump’s warning",
+      "titleHe": "איראן הגיבה בטילים ובכטב״מים טראמפ’",
+      "source": "ה-Washington Post",
+      "url": "https://www.washingtonpost.com/national-security/2026/09/01/us-carries-out-new-military-strikes-iran/",
+      "publishedAt": "2026-09-04T08:07:45.889Z",
+      "arena": "iran"
+    },
+    {
+      "id": "s-options-bypass-hormuz/",
+      "title": "Syria, eyeing role as Middle East hub, offers options to bypass Hormuz",
+      "titleHe": "סוריה מבקשת להיות צומת במזרח התיכון הורמוז",
+      "source": "ה-Washington Post",
+      "url": "https://www.washingtonpost.com/world/2026/09/02/syria-eyeing-role-middle-east-hub-offers-options-bypass-hormuz/",
+      "publishedAt": "2026-09-04T08:07:45.889Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US and Iran trade strikes for first time in weeks",
+      "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-04T08:07:45.884Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US investigating if missile hit Iran wedding, Vance says",
+      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-04T08:07:45.883Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
+      "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-04T08:07:45.883Z",
+      "arena": "iran"
+    },
+    {
+      "id": "ssion-goal-within-reach/",
+      "title": "Netanyahu: Toppling Iranian regime is Israel’s ‘central mission,’ goal ‘within reach’",
+      "titleHe": "מסר: נתניהו משה\"מ ישראל’ ‘משימה מרכזית ’ ‘ ’",
+      "source": "Times of Israel",
+      "url": "https://www.timesofisrael.com/netanyahu-toppling-iranian-regime-is-israels-central-mission-goal-within-reach/",
+      "publishedAt": "2026-09-04T08:07:45.648Z",
+      "arena": "iran"
+    },
+    {
+      "id": "uclear-program-iaea.html",
+      "title": "Status of Iran’s Nuclear Program Is Unclear, U.N. Watchdog Says",
+      "titleHe": "איראן’ גרעין אינו ברור לפי הסוכנות הבינלאומית לאנרגיה אטומית",
+      "source": "ה-NYT",
+      "url": "https://www.nytimes.com/2026/09/02/world/middleeast/iran-nuclear-program-iaea.html",
+      "publishedAt": "2026-09-04T08:07:45.798Z",
+      "arena": "iran"
+    }
+  ],
   "lastPackId": null,
   "briefing": null,
   "hourKey": null,
