@@ -238,7 +238,24 @@ async function main() {
     tick = await localFallback();
   }
 
-  const state = toDeskState(tick);
+  const prior = readLocalState();
+  let state = toDeskState(tick);
+  // Never wipe a good shared ticker/briefing with an empty heartbeat.
+  const newEmpty =
+    !(state.ticker && state.ticker.length) && !state.briefing && !state.lastPackId;
+  const priorUseful =
+    (prior.ticker && prior.ticker.length) || prior.briefing || prior.lastPackId;
+  if (newEmpty && priorUseful) {
+    console.warn(
+      "[desk-auto-tick] refusing to publish empty over prior ticker=",
+      prior.ticker?.length ?? 0,
+    );
+    state = {
+      ...prior,
+      updatedAt: new Date().toISOString(),
+      _preserved: true,
+    };
+  }
   const put = putGithubFile(state);
   console.log(
     "[desk-auto-tick] published",
@@ -247,6 +264,8 @@ async function main() {
     put?.commit?.sha?.slice(0, 7) || put?.content?.sha?.slice(0, 7) || "?",
     "updatedAt=",
     state.updatedAt,
+    "ticker=",
+    state.ticker?.length ?? 0,
   );
 }
 
