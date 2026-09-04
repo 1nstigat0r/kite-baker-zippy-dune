@@ -1,31 +1,13 @@
 {
-  "updatedAt": "2026-09-04T12:31:13.000Z",
+  "updatedAt": "2026-09-04T13:25:29.129Z",
   "ticker": [
     {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "US and Iran trade strikes for first time in weeks",
-      "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T11:55:16.601Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
-      "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T11:55:16.601Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "US investigating if missile hit Iran wedding, Vance says",
-      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T11:55:16.600Z",
+      "id": "y-direct-hit-us-munition",
+      "title": "US probes Iran wedding strike that analysis shows was likely direct hit by US munition",
+      "titleHe": "ארה״ב איראן תקיפות ארה״ב",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/us-probes-iran-wedding-strike-analysis-shows-was-likely-direct-hit-us-munition",
+      "publishedAt": "2026-09-04T13:25:25.962Z",
       "arena": "iran"
     },
     {
@@ -34,8 +16,26 @@
       "titleHe": "ישראל מסר ש טיהר חיזבאללה מנהרות לבנון",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/israel-says-it-has-cleared-hezbollah-fighters-tunnels-under-key-lebanon-ridge",
-      "publishedAt": "2026-09-04T11:55:16.512Z",
+      "publishedAt": "2026-09-04T13:25:25.961Z",
       "arena": "lebanon"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US and Iran trade strikes for first time in weeks",
+      "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-04T13:25:25.949Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US investigating if missile hit Iran wedding, Vance says",
+      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-04T13:25:25.948Z",
+      "arena": "iran"
     },
     {
       "id": "strong-bond-with-the-us/",
@@ -43,7 +43,16 @@
       "titleHe": "תקיפה איראן ירדן ארה״ב",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/repeatedly-attacked-by-iran-jordan-pays-a-price-for-its-strong-bond-with-the-us/",
-      "publishedAt": "2026-09-04T11:55:16.302Z",
+      "publishedAt": "2026-09-04T13:25:25.753Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
+      "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-04T13:25:25.949Z",
       "arena": "iran"
     },
     {
@@ -56,21 +65,21 @@
       "arena": "axis"
     },
     {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
-      "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T11:55:16.601Z",
-      "arena": "iran"
-    },
-    {
       "id": "w-military-strikes-iran/",
       "title": "Iran retaliates with missiles and drones, defying Trump’s warning",
       "titleHe": "איראן הגיבה בטילים ובכטב״מים טראמפ’",
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/national-security/2026/09/01/us-carries-out-new-military-strikes-iran/",
       "publishedAt": "2026-09-04T09:31:32.168Z",
+      "arena": "iran"
+    },
+    {
+      "id": "uclear-program-iaea.html",
+      "title": "Status of Iran’s Nuclear Program Is Unclear, U.N. Watchdog Says",
+      "titleHe": "איראן’ גרעין אינו ברור לפי הסוכנות הבינלאומית לאנרגיה אטומית",
+      "source": "ה-NYT",
+      "url": "https://www.nytimes.com/2026/09/02/world/middleeast/iran-nuclear-program-iaea.html",
+      "publishedAt": "2026-09-04T13:25:25.898Z",
       "arena": "iran"
     },
     {
@@ -92,15 +101,6 @@
       "arena": "iran"
     },
     {
-      "id": "uclear-program-iaea.html",
-      "title": "Status of Iran’s Nuclear Program Is Unclear, U.N. Watchdog Says",
-      "titleHe": "איראן’ גרעין אינו ברור לפי הסוכנות הבינלאומית לאנרגיה אטומית",
-      "source": "ה-NYT",
-      "url": "https://www.nytimes.com/2026/09/02/world/middleeast/iran-nuclear-program-iaea.html",
-      "publishedAt": "2026-09-04T11:55:16.462Z",
-      "arena": "iran"
-    },
-    {
       "id": "ssion-goal-within-reach/",
       "title": "Netanyahu: Toppling Iranian regime is Israel’s ‘central mission,’ goal ‘within reach’",
       "titleHe": "מסר: נתניהו משה\"מ ישראל’ ‘משימה מרכזית ’ ‘ ’",
@@ -113,6 +113,5 @@
   "lastPackId": null,
   "briefing": null,
   "hourKey": null,
-  "header": null,
-  "_preserved": true
+  "header": null
 }
