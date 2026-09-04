@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-04T19:36:58.296Z",
+  "updatedAt": "2026-09-04T20:02:56.850Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,7 +7,7 @@
       "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T19:36:55.518Z",
+      "publishedAt": "2026-09-04T20:02:53.003Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T19:36:55.517Z",
+      "publishedAt": "2026-09-04T20:02:53.003Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T19:36:55.517Z",
+      "publishedAt": "2026-09-04T20:02:53.003Z",
       "arena": "iran"
     },
     {
@@ -34,7 +34,7 @@
       "titleHe": "120 הרג תימן החות'ים",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/over-120-killed-in-deadly-yemen-clashes-as-houthis-push-toward-key-strait/",
-      "publishedAt": "2026-09-04T19:36:55.219Z",
+      "publishedAt": "2026-09-04T20:02:52.745Z",
       "arena": "axis"
     },
     {
@@ -52,7 +52,25 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-04T19:36:55.518Z",
+      "publishedAt": "2026-09-04T20:02:53.003Z",
+      "arena": "iran"
+    },
+    {
+      "id": "ased-bank-over-iran-ties",
+      "title": "US sanctions Turkey-based bank over Iran ties",
+      "titleHe": "ארה״ב סנקציות תורכיה- איראן",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/us-sanctions-turkey-based-bank-over-iran-ties",
+      "publishedAt": "2026-09-04T20:02:55.192Z",
+      "arena": "iran"
+    },
+    {
+      "id": "ntelligence-reports.html",
+      "title": "A More Confident Iran Emerges After Six Months of War With the U.S.",
+      "titleHe": "מסר: איראן המלחמה עם ארה״ב",
+      "source": "ה-NYT",
+      "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
+      "publishedAt": "2026-09-04T20:02:52.982Z",
       "arena": "iran"
     },
     {
@@ -63,24 +81,6 @@
       "url": "https://www.al-monitor.com/originals/2026/09/israel-says-it-has-cleared-hezbollah-fighters-tunnels-under-key-lebanon-ridge",
       "publishedAt": "2026-09-04T15:40:49.016Z",
       "arena": "lebanon"
-    },
-    {
-      "id": "ased-bank-over-iran-ties",
-      "title": "US sanctions Turkey-based bank over Iran ties",
-      "titleHe": "ארה״ב סנקציות תורכיה- איראן",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/us-sanctions-turkey-based-bank-over-iran-ties",
-      "publishedAt": "2026-09-04T19:36:55.436Z",
-      "arena": "iran"
-    },
-    {
-      "id": "ntelligence-reports.html",
-      "title": "A More Confident Iran Emerges After Six Months of War With the U.S.",
-      "titleHe": "מסר: איראן המלחמה עם ארה״ב",
-      "source": "ה-NYT",
-      "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
-      "publishedAt": "2026-09-04T19:36:55.250Z",
-      "arena": "iran"
     },
     {
       "id": "ernment-forces-what-know",
