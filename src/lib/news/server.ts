@@ -8,7 +8,7 @@ import {
   localizeHeadlineAsync,
   composeTickerItem,
 } from "./compose";
-import { CURRENT_BRIEFING } from "./desk";
+import { briefingHeaderNow, CURRENT_BRIEFING } from "./desk";
 import { ingestStories, pureHotScan } from "./ingest";
 import { shortenPayload } from "./shorten";
 import {
@@ -34,6 +34,7 @@ import {
   swapSpareItem,
 } from "./store";
 import { fingerprint, formatOutlet, hasHebrew } from "./text";
+import { mergeTicker, shouldPackHour } from "./ticker-loop";
 import { hourKey, hourLabelFromKey, israelParts } from "./time";
 import { briefingHasContent, briefingItemCount, type ArenaId, type BriefingPayload, type RawStory, type TickerItem } from "./types";
 
@@ -183,6 +184,143 @@ async function storiesToTicker(stories: RawStory[]): Promise<TickerItem[]> {
   }
   return out;
 }
+
+export type DeskTickResult = {
+  ticker: TickerItem[];
+  packed: boolean;
+  packId: string | null;
+  dashboard?: Awaited<ReturnType<typeof buildDashboard>>;
+  updatedAt: string;
+  briefing: BriefingPayload | null;
+  hourKey: string | null;
+  header: string | null;
+  lastPackId: string | null;
+  error: string | null;
+  count: number;
+};
+
+async function loadDeskTickerMeta(): Promise<TickerItem[]> {
+  try {
+    const raw = await getMeta("desk_ticker_json");
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as TickerItem[];
+    return Array.isArray(parsed) ? parsed.filter((row) => row && row.url) : [];
+  } catch {
+    return [];
+  }
+}
+
+async function saveDeskTickerMeta(items: TickerItem[]) {
+  try {
+    await setMeta("desk_ticker_json", JSON.stringify(items.slice(0, 16)));
+  } catch (err) {
+    console.warn("[deskTick] setMeta desk_ticker_json failed", err instanceof Error ? err.message : err);
+  }
+}
+
+/** Autonomous desk loop: hot scan → merge ticker meta → pack at :45 Israel. */
+export async function runDeskTick(): Promise<DeskTickResult> {
+  const updatedAt = new Date().toISOString();
+  let stories: RawStory[] = [];
+  let error: string | null = null;
+  try {
+    stories = await Promise.race([
+      pureHotScan(),
+      new Promise<RawStory[]>((resolve) => setTimeout(() => resolve([]), 16_000)),
+    ]);
+  } catch (err) {
+    error = err instanceof Error ? err.message : String(err);
+    console.error("[deskTick]", error);
+  }
+
+  const finds = await storiesToTicker(stories);
+  const prior = await loadDeskTickerMeta();
+  let ticker = mergeTicker(prior, finds, new Set());
+  await saveDeskTickerMeta(ticker);
+
+  let packed = false;
+  let packId: string | null = null;
+  let dashboard: Awaited<ReturnType<typeof buildDashboard>> | undefined;
+  let briefing: BriefingPayload | null = null;
+  let hour: string | null = null;
+  let header: string | null = null;
+
+  const wantPack = shouldPackHour();
+  let lastPackMeta: string | null = null;
+  try {
+    lastPackMeta = await getMeta("last_pack_id");
+  } catch {
+    lastPackMeta = null;
+  }
+
+  if (wantPack && lastPackMeta !== wantPack && ticker.length > 0) {
+    const packStories: RawStory[] = ticker.map((item) => ({
+      title: item.titleHe || item.title,
+      url: item.url,
+      source: item.source,
+      publishedAt: item.publishedAt,
+      arena: (item.arena as ArenaId | null) ?? null,
+      via: "rss" as const,
+    }));
+    const id = hourKey();
+    const live = composeLiveOnly({ stories: packStories, previous: [], seen: [] });
+    if (briefingItemCount(live) > 0) {
+      await claimBriefing(id, true);
+      const shortened = await shortenPayload(live);
+      await saveBriefing(id, shortened);
+      try {
+        await setMeta("active_draft_id", id);
+        await setMeta("last_pack_id", wantPack);
+        await setMeta("desk_ticker_json", "[]");
+      } catch (err) {
+        console.warn("[deskTick] pack meta failed", err instanceof Error ? err.message : err);
+      }
+      ticker = [];
+      packed = true;
+      packId = wantPack;
+      lastPackMeta = wantPack;
+      hour = id;
+      briefing = shortened;
+      header = briefingHeaderNow();
+      dashboard = await buildDashboard(id);
+    }
+  }
+
+  if (!briefing) {
+    try {
+      dashboard = dashboard ?? (await buildDashboard());
+      const view =
+        (briefingHasContent(dashboard.briefing) && dashboard.briefing) ||
+        (briefingHasContent(dashboard.latestBriefing) && dashboard.latestBriefing) ||
+        null;
+      if (view) {
+        briefing = view.payload;
+        hour = view.id;
+        header = `עדכון | ${view.dateLabel}, ${view.hourLabel}`;
+      }
+    } catch (err) {
+      console.warn("[deskTick] buildDashboard failed", err instanceof Error ? err.message : err);
+    }
+  }
+
+  return {
+    ticker,
+    packed,
+    packId,
+    dashboard,
+    updatedAt,
+    briefing,
+    hourKey: hour,
+    header,
+    lastPackId: lastPackMeta ?? packId,
+    error,
+    count: stories.length,
+  };
+}
+
+export const deskTick = createServerFn({ method: "POST" })
+  .validator((input?: unknown) => input ?? {})
+  .handler(async () => runDeskTick());
 
 export const scanMinute = createServerFn({ method: "POST" }).validator((input?: unknown) => input ?? {}).handler(async () => {
   let stories: RawStory[] = [];

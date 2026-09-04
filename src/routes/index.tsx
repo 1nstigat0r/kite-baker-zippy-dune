@@ -134,6 +134,45 @@ function pickPayload(dash: DashboardData | null): { hourKey: string; header: str
   };
 }
 
+
+type DeskSharedState = {
+  updatedAt?: string;
+  ticker?: TickerItem[];
+  lastPackId?: string | null;
+  briefing?: BriefingPayload | null;
+  hourKey?: string | null;
+  header?: string | null;
+};
+
+const DESK_STATE_URLS = [
+  "/desk-state.json",
+  "https://raw.githubusercontent.com/1nstigat0r/kite-baker-zippy-dune/main/desk-state.json",
+] as const;
+
+async function fetchDeskShared(): Promise<DeskSharedState | null> {
+  let best: DeskSharedState | null = null;
+  await Promise.all(
+    DESK_STATE_URLS.map(async (url) => {
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) return;
+        const data = (await res.json()) as DeskSharedState;
+        if (!data || typeof data !== "object") return;
+        if (
+          !best ||
+          (data.updatedAt && best.updatedAt && data.updatedAt > best.updatedAt) ||
+          (data.updatedAt && !best.updatedAt)
+        ) {
+          best = data;
+        }
+      } catch {
+        /* offline / 404 */
+      }
+    }),
+  );
+  return best;
+}
+
 function Home() {
   const initial = Route.useLoaderData();
   const [dash, setDash] = useState<DashboardData>(() => initial ?? seedDash());
@@ -249,12 +288,58 @@ function Home() {
         setTickKey((k) => k + 1);
       }
     };
+    const hydrateShared = async () => {
+      const remote = await fetchDeskShared();
+      if (!remote) return;
+      if (Array.isArray(remote.ticker) && remote.ticker.length) {
+        setTickerItems((prev) => {
+          const next = mergeTicker(prev, remote.ticker!, new Set());
+          saveLocalTicker(next);
+          return next;
+        });
+      }
+      const remoteBriefing = remote.briefing;
+      const remoteHour = remote.hourKey;
+      if (
+        remoteBriefing &&
+        remoteHour &&
+        payloadItemCount(remoteBriefing) > 0 &&
+        !looksLikeSeed(remoteBriefing)
+      ) {
+        const local = activePayload();
+        const localPack = loadLastPack();
+        const remotePack = remote.lastPackId || remoteHour;
+        const remoteNewer =
+          looksLikeSeed(local) ||
+          payloadItemCount(local) === 0 ||
+          !localPack ||
+          remotePack > localPack ||
+          remoteHour > localPack;
+        if (remoteNewer) {
+          const cleaned = stripBurned(remoteBriefing);
+          if (payloadItemCount(cleaned) > 0) {
+            setPayload(cleaned);
+            setHourKey(remoteHour);
+            if (remote.header) setHeader(remote.header);
+            persistPayloadLocal(cleaned);
+            if (remotePack) saveLastPack(remotePack);
+          }
+        }
+      } else if (remote.lastPackId) {
+        const localPack = loadLastPack();
+        if (localPack !== remote.lastPackId) saveLastPack(remote.lastPackId);
+      }
+    };
+
     void runScan();
+    void hydrateShared();
     const poll = window.setInterval(() => {
       void getDashboard({ data: {} }).then(applyDash).catch(() => undefined);
+      void hydrateShared();
     }, 20_000);
     const tick = window.setInterval(() => {
       void runScan();
+      void hydrateShared();
     }, 60_000);
     return () => {
       window.clearInterval(poll);
