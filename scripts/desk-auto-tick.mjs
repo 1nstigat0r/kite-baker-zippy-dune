@@ -49,6 +49,17 @@ async function callTick() {
   if (process.env.CRON_SECRET) {
     headers.authorization = `Bearer ${process.env.CRON_SECRET}`;
   }
+  // Vercel Deployment Protection / SSO blocks anonymous cron from the box.
+  // Set VERCEL_AUTOMATION_BYPASS_SECRET (Project → Settings → Deployment Protection)
+  // or disable Vercel Authentication for Production so /api/desk/tick is reachable.
+  const bypass =
+    process.env.VERCEL_AUTOMATION_BYPASS_SECRET ||
+    process.env.VERCEL_PROTECTION_BYPASS ||
+    "";
+  if (bypass) {
+    headers["x-vercel-protection-bypass"] = bypass;
+    headers["x-vercel-set-bypass-cookie"] = "true";
+  }
   const url = `${LIVE.replace(/\/$/, "")}/api/desk/tick`;
   const res = await fetch(url, { method: "GET", headers, cache: "no-store" });
   if (!res.ok) {
