@@ -3,9 +3,9 @@
  * Nitro route server/routes/api/desk/tick.get.ts alone loses to Start on
  * Vercel (Accept: application/json → 500 "Only HTML requests are supported").
  * Middleware runs first (serverDir: "./server") and returns JSON.
+ *
+ * Same export shape as grok-pwa.ts (async (event, next) => ...).
  */
-import { defineMiddleware } from "nitro";
-
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
     status,
@@ -16,7 +16,15 @@ function json(data: unknown, status = 200): Response {
   });
 }
 
-export default defineMiddleware(async (event, next) => {
+interface DeskTickEvent {
+  url: URL;
+  req: { method: string; headers: Headers };
+}
+
+export default async function deskTickMiddleware(
+  event: DeskTickEvent,
+  next: () => unknown | Promise<unknown>,
+): Promise<unknown> {
   const method = (event.req.method ?? "GET").toUpperCase();
   if (method !== "GET") return next();
   if (event.url.pathname !== "/api/desk/tick") return next();
@@ -38,4 +46,4 @@ export default defineMiddleware(async (event, next) => {
     console.error("[middleware/desk-tick]", message);
     return json({ error: message }, 500);
   }
-});
+}
