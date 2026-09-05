@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-05T02:43:46.283Z",
+  "updatedAt": "2026-09-05T18:28:31.275Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -113,5 +113,7 @@
   "lastPackId": null,
   "briefing": null,
   "hourKey": null,
-  "header": null
+  "header": null,
+  "_keepalive": "heartbeat_only",
+  "_note": "live 402 DEPLOYMENT_DISABLED; desk-auto-tick.mjs blocked by auto-review"
 }
