@@ -1,6 +1,42 @@
 {
-  "updatedAt": "2026-09-05T00:52:05.449Z",
+  "updatedAt": "2026-09-05T00:59:20.687Z",
   "ticker": [
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US and Iran trade strikes for first time in weeks",
+      "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-05T00:59:13.889Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
+      "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-05T00:59:13.889Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US investigating if missile hit Iran wedding, Vance says",
+      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-05T00:59:13.888Z",
+      "arena": "iran"
+    },
+    {
+      "id": "-push-toward-key-strait/",
+      "title": "Over 120 killed in Yemen clashes as Houthis push toward key strait",
+      "titleHe": "120 הרג תימן החות'ים",
+      "source": "Times of Israel",
+      "url": "https://www.timesofisrael.com/over-120-killed-in-deadly-yemen-clashes-as-houthis-push-toward-key-strait/",
+      "publishedAt": "2026-09-05T00:59:13.515Z",
+      "arena": "axis"
+    },
     {
       "id": "ns-pickaxe-mountain-soon",
       "title": "Trump says US may hit Iran's Pickaxe Mountain soon",
@@ -12,56 +48,20 @@
     },
     {
       "id": "dium=RSS&at_campaign=rss",
-      "title": "US and Iran trade strikes for first time in weeks",
-      "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-05T00:52:01.022Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
-      "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-05T00:52:01.022Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "US investigating if missile hit Iran wedding, Vance says",
-      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-05T00:52:01.021Z",
-      "arena": "iran"
-    },
-    {
-      "id": "-push-toward-key-strait/",
-      "title": "Over 120 killed in Yemen clashes as Houthis push toward key strait",
-      "titleHe": "120 הרג תימן החות'ים",
-      "source": "Times of Israel",
-      "url": "https://www.timesofisrael.com/over-120-killed-in-deadly-yemen-clashes-as-houthis-push-toward-key-strait/",
-      "publishedAt": "2026-09-05T00:52:00.648Z",
-      "arena": "axis"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
       "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-05T00:52:01.022Z",
+      "publishedAt": "2026-09-05T00:59:13.889Z",
       "arena": "iran"
     },
     {
-      "id": "ased-bank-over-iran-ties",
-      "title": "US sanctions Turkey-based bank over Iran ties",
-      "titleHe": "ארה״ב סנקציות תורכיה- איראן",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/us-sanctions-turkey-based-bank-over-iran-ties",
-      "publishedAt": "2026-09-05T00:52:04.028Z",
+      "id": "ncial-lifeline-for-iran/",
+      "title": "US slaps sanctions on Turkish bank, calling it ‘critical financial lifeline’ for Iran",
+      "titleHe": "ארה״ב סנקציות ‘ ’ איראן",
+      "source": "Times of Israel",
+      "url": "https://www.timesofisrael.com/us-slaps-sanctions-on-turkish-bank-calling-it-critical-financial-lifeline-for-iran/",
+      "publishedAt": "2026-09-05T00:59:13.515Z",
       "arena": "iran"
     },
     {
