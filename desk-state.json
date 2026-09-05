@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-05T19:16:56.629Z",
+  "updatedAt": "2026-09-05T19:22:15.502Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,7 +7,7 @@
       "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-05T19:16:53.998Z",
+      "publishedAt": "2026-09-05T19:22:12.720Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-05T19:16:53.998Z",
+      "publishedAt": "2026-09-05T19:22:12.720Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-05T19:16:53.997Z",
+      "publishedAt": "2026-09-05T19:22:12.720Z",
       "arena": "iran"
     },
     {
@@ -34,8 +34,17 @@
       "titleHe": "טראמפ מסר ש ארה״ב איראן'",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/trump-says-us-may-hit-irans-pickaxe-mountain-soon",
-      "publishedAt": "2026-09-05T19:16:53.787Z",
+      "publishedAt": "2026-09-05T19:22:12.545Z",
       "arena": "iran"
+    },
+    {
+      "id": "-drone-attack-on-troops/",
+      "title": "3 said killed in IDF strikes in Lebanon after Hezbollah drone attack on troops",
+      "titleHe": "3 הרג צה\"ל תקיפות לבנון חיזבאללה כטב״מים תקיפה",
+      "source": "Times of Israel",
+      "url": "https://www.timesofisrael.com/3-said-killed-in-idf-strikes-in-lebanon-after-hezbollah-drone-attack-on-troops/",
+      "publishedAt": "2026-09-05T19:22:12.313Z",
+      "arena": "lebanon"
     },
     {
       "id": "rs-after-missile-attacks",
@@ -47,21 +56,12 @@
       "arena": "iran"
     },
     {
-      "id": "-drone-attack-on-troops/",
-      "title": "3 said killed in IDF strikes in Lebanon after Hezbollah drone attack on troops",
-      "titleHe": "3 הרג צה\"ל תקיפות לבנון חיזבאללה כטב״מים תקיפה",
-      "source": "Times of Israel",
-      "url": "https://www.timesofisrael.com/3-said-killed-in-idf-strikes-in-lebanon-after-hezbollah-drone-attack-on-troops/",
-      "publishedAt": "2026-09-05T19:16:53.572Z",
-      "arena": "lebanon"
-    },
-    {
       "id": "dium=RSS&at_campaign=rss",
       "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-05T19:16:53.998Z",
+      "publishedAt": "2026-09-05T19:22:12.720Z",
       "arena": "iran"
     },
     {
