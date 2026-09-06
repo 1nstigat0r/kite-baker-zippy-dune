@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-06T18:54:46.192Z",
+  "updatedAt": "2026-09-06T19:10:03.459Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,7 +7,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T18:54:43.729Z",
+      "publishedAt": "2026-09-06T19:10:01.036Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T18:54:43.728Z",
+      "publishedAt": "2026-09-06T19:10:01.036Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "ישראל תקיפות הרג לבנון",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/israeli-strikes-kill-seven-southern-lebanon",
-      "publishedAt": "2026-09-06T18:54:43.555Z",
+      "publishedAt": "2026-09-06T19:10:00.900Z",
       "arena": "lebanon"
     },
     {
@@ -34,7 +34,7 @@
       "titleHe": "איראן איים ארה״ב תקיפה",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-threatens-greater-force-if-us-launches-more-attacks",
-      "publishedAt": "2026-09-06T18:54:43.555Z",
+      "publishedAt": "2026-09-06T19:10:00.900Z",
       "arena": "iran"
     },
     {
@@ -43,7 +43,7 @@
       "titleHe": "איראן מסר ש תקיפה ' '",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-tackle-economic-issues-says-further-attacks-will-be-more-painful",
-      "publishedAt": "2026-09-06T18:54:43.555Z",
+      "publishedAt": "2026-09-06T19:10:00.900Z",
       "arena": "iran"
     },
     {
@@ -52,7 +52,7 @@
       "titleHe": ". .-איראן התקיפות מתחדשות",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
-      "publishedAt": "2026-09-06T18:54:43.539Z",
+      "publishedAt": "2026-09-06T19:10:00.856Z",
       "arena": "iran"
     },
     {
@@ -61,7 +61,7 @@
       "titleHe": "300 הרג תימן 4 החות'ים",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/more-than-300-fighters-killed-in-yemen-clashes-over-last-4-days-amid-houthi-offensive/",
-      "publishedAt": "2026-09-06T18:54:43.341Z",
+      "publishedAt": "2026-09-06T19:10:00.594Z",
       "arena": "axis"
     },
     {
@@ -70,7 +70,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T18:54:43.729Z",
+      "publishedAt": "2026-09-06T19:10:01.036Z",
       "arena": "iran"
     },
     {
@@ -79,7 +79,7 @@
       "titleHe": "מסר: איראן המלחמה עם ארה״ב",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
-      "publishedAt": "2026-09-06T18:54:43.540Z",
+      "publishedAt": "2026-09-06T19:10:00.856Z",
       "arena": "iran"
     },
     {
@@ -88,7 +88,16 @@
       "titleHe": ". . מסר ש איראן גרעין ‘ ’",
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/world/2026/09/06/us-energy-secretary-chris-wright-says-iran-nuclear-deal-may-not-happen/",
-      "publishedAt": "2026-09-06T18:54:43.440Z",
+      "publishedAt": "2026-09-06T19:10:00.808Z",
+      "arena": "iran"
+    },
+    {
+      "id": "termined-to-see-it-fall/",
+      "title": "Netanyahu: ‘End is near’ for Iran’s regime, Israel is determined to see it fall",
+      "titleHe": "מסר: נתניהו ‘ ’ איראן’ ישראל",
+      "source": "Times of Israel",
+      "url": "https://www.timesofisrael.com/netanyahu-end-is-near-for-irans-regime-israel-is-determined-to-see-it-fall/",
+      "publishedAt": "2026-09-06T19:10:00.594Z",
       "arena": "iran"
     },
     {
@@ -99,15 +108,6 @@
       "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
       "publishedAt": "2026-09-05T22:32:06.929Z",
       "arena": "iran"
-    },
-    {
-      "id": "-drone-attack-on-troops/",
-      "title": "3 said killed in IDF strikes in Lebanon after Hezbollah drone attack on troops",
-      "titleHe": "3 הרג צה\"ל תקיפות לבנון חיזבאללה כטב״מים תקיפה",
-      "source": "Times of Israel",
-      "url": "https://www.timesofisrael.com/3-said-killed-in-idf-strikes-in-lebanon-after-hezbollah-drone-attack-on-troops/",
-      "publishedAt": "2026-09-05T19:30:43.443Z",
-      "arena": "lebanon"
     }
   ],
   "lastPackId": null,
