@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-06T15:32:25.999Z",
+  "updatedAt": "2026-09-06T15:38:44.290Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,7 +7,7 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T15:32:23.810Z",
+      "publishedAt": "2026-09-06T15:38:41.717Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T15:32:23.810Z",
+      "publishedAt": "2026-09-06T15:38:41.717Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "ישראל תקיפות הרג לבנון",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/israeli-strikes-kill-four-southern-lebanon",
-      "publishedAt": "2026-09-06T15:32:23.671Z",
+      "publishedAt": "2026-09-06T15:38:41.605Z",
       "arena": "lebanon"
     },
     {
@@ -34,7 +34,7 @@
       "titleHe": "איראן מסר ש תקיפה ' '",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-tackle-economic-issues-says-further-attacks-will-be-more-painful",
-      "publishedAt": "2026-09-06T15:32:23.671Z",
+      "publishedAt": "2026-09-06T15:38:41.605Z",
       "arena": "iran"
     },
     {
@@ -43,7 +43,16 @@
       "titleHe": "איראן איים ארה״ב תקיפה",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-threatens-greater-force-if-us-launches-more-attacks",
-      "publishedAt": "2026-09-06T15:32:23.671Z",
+      "publishedAt": "2026-09-06T15:38:41.605Z",
+      "arena": "iran"
+    },
+    {
+      "id": "-war-oil-production.html",
+      "title": "OPEC Plus Holds Oil Production Steady as U.S.-Iran Strikes Resume",
+      "titleHe": ". .-איראן התקיפות מתחדשות",
+      "source": "ה-NYT",
+      "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
+      "publishedAt": "2026-09-06T15:38:41.500Z",
       "arena": "iran"
     },
     {
@@ -52,7 +61,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T15:32:23.810Z",
+      "publishedAt": "2026-09-06T15:38:41.718Z",
       "arena": "iran"
     },
     {
@@ -99,15 +108,6 @@
       "url": "https://www.al-monitor.com/originals/2026/09/israel-says-it-has-cleared-hezbollah-fighters-tunnels-under-key-lebanon-ridge",
       "publishedAt": "2026-09-04T15:40:49.016Z",
       "arena": "lebanon"
-    },
-    {
-      "id": "ernment-forces-what-know",
-      "title": "Houthi escalation in western Yemen kills 13 government forces: What to know",
-      "titleHe": "החות'ים תימן הרגה 13 אנשי כוחות ממשל",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/houthi-escalation-western-yemen-kills-13-government-forces-what-know",
-      "publishedAt": "2026-09-04T10:24:08.246Z",
-      "arena": "axis"
     }
   ],
   "lastPackId": null,
