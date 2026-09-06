@@ -1,40 +1,13 @@
 {
-  "updatedAt": "2026-09-06T20:25:45.953Z",
+  "updatedAt": "2026-09-06T20:28:51.038Z",
   "ticker": [
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
-      "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T20:25:43.859Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "US investigating if missile hit Iran wedding, Vance says",
-      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T20:25:43.859Z",
-      "arena": "iran"
-    },
-    {
-      "id": "-war-oil-production.html",
-      "title": "OPEC Plus Holds Oil Production Steady as U.S.-Iran Strikes Resume",
-      "titleHe": ". .-איראן התקיפות מתחדשות",
-      "source": "ה-NYT",
-      "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
-      "publishedAt": "2026-09-06T20:25:43.810Z",
-      "arena": "iran"
-    },
     {
       "id": "l-seven-southern-lebanon",
       "title": "Israeli strikes kill seven in southern Lebanon",
       "titleHe": "ישראל תקיפות הרג לבנון",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/israeli-strikes-kill-seven-southern-lebanon",
-      "publishedAt": "2026-09-06T20:25:43.789Z",
+      "publishedAt": "2026-09-06T20:28:47.806Z",
       "arena": "lebanon"
     },
     {
@@ -43,7 +16,7 @@
       "titleHe": "איראן מסר ש תקיפה ' '",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-tackle-economic-issues-says-further-attacks-will-be-more-painful",
-      "publishedAt": "2026-09-06T20:25:43.789Z",
+      "publishedAt": "2026-09-06T20:28:47.806Z",
       "arena": "iran"
     },
     {
@@ -52,7 +25,34 @@
       "titleHe": "איראן איים ארה״ב תקיפה",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-threatens-greater-force-if-us-launches-more-attacks",
-      "publishedAt": "2026-09-06T20:25:43.789Z",
+      "publishedAt": "2026-09-06T20:28:47.806Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
+      "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-06T20:28:47.804Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US investigating if missile hit Iran wedding, Vance says",
+      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-06T20:28:47.804Z",
+      "arena": "iran"
+    },
+    {
+      "id": "-war-oil-production.html",
+      "title": "OPEC Plus Holds Oil Production Steady as U.S.-Iran Strikes Resume",
+      "titleHe": ". .-איראן התקיפות מתחדשות",
+      "source": "ה-NYT",
+      "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
+      "publishedAt": "2026-09-06T20:28:47.785Z",
       "arena": "iran"
     },
     {
@@ -61,7 +61,7 @@
       "titleHe": "300 הרג תימן 4 החות'ים",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/more-than-300-fighters-killed-in-yemen-clashes-over-last-4-days-amid-houthi-offensive/",
-      "publishedAt": "2026-09-06T20:25:43.579Z",
+      "publishedAt": "2026-09-06T20:28:47.534Z",
       "arena": "axis"
     },
     {
@@ -70,7 +70,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T20:25:43.859Z",
+      "publishedAt": "2026-09-06T20:28:47.804Z",
       "arena": "iran"
     },
     {
@@ -79,7 +79,7 @@
       "titleHe": ". . מסר ש איראן גרעין ‘ ’",
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/world/2026/09/06/us-energy-secretary-chris-wright-says-iran-nuclear-deal-may-not-happen/",
-      "publishedAt": "2026-09-06T20:25:43.835Z",
+      "publishedAt": "2026-09-06T20:28:47.837Z",
       "arena": "iran"
     },
     {
@@ -88,7 +88,7 @@
       "titleHe": "מסר: איראן המלחמה עם ארה״ב",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
-      "publishedAt": "2026-09-06T20:25:43.811Z",
+      "publishedAt": "2026-09-06T20:28:47.785Z",
       "arena": "iran"
     },
     {
@@ -97,7 +97,7 @@
       "titleHe": "מסר: נתניהו ‘ ’ איראן’ ישראל",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/netanyahu-end-is-near-for-irans-regime-israel-is-determined-to-see-it-fall/",
-      "publishedAt": "2026-09-06T20:25:43.577Z",
+      "publishedAt": "2026-09-06T20:28:47.534Z",
       "arena": "iran"
     },
     {
