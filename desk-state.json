@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-06T10:18:13.877Z",
+  "updatedAt": "2026-09-06T10:24:26.007Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,7 +7,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T10:18:10.970Z",
+      "publishedAt": "2026-09-06T10:24:24.182Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T10:18:10.970Z",
+      "publishedAt": "2026-09-06T10:24:24.182Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "טראמפ מסר ש ארה״ב איראן'",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/trump-says-us-may-hit-irans-pickaxe-mountain-soon",
-      "publishedAt": "2026-09-06T10:18:10.755Z",
+      "publishedAt": "2026-09-06T10:24:24.074Z",
       "arena": "iran"
     },
     {
@@ -34,8 +34,17 @@
       "titleHe": "הרג ישראל תקיפות לבנון",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/four-killed-israeli-strikes-southern-lebanon",
-      "publishedAt": "2026-09-06T10:18:10.754Z",
+      "publishedAt": "2026-09-06T10:24:24.073Z",
       "arena": "lebanon"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
+      "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-06T10:24:24.182Z",
+      "arena": "iran"
     },
     {
       "id": "eblog-september-06-2026/",
@@ -45,15 +54,6 @@
       "url": "https://www.timesofisrael.com/liveblog-september-06-2026/",
       "publishedAt": "2026-09-06T08:18:17.251Z",
       "arena": "lebanon"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
-      "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T10:18:10.970Z",
-      "arena": "iran"
     },
     {
       "id": "dium=RSS&at_campaign=rss",
