@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-06T06:09:48.139Z",
+  "updatedAt": "2026-09-06T06:14:10.096Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -104,5 +104,7 @@
   "lastPackId": null,
   "briefing": null,
   "hourKey": null,
-  "header": null
+  "header": null,
+  "_fallback": true,
+  "_note": "keep-alive heartbeat; live tick 402 DEPLOYMENT_DISABLED"
 }
