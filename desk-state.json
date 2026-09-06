@@ -1,13 +1,22 @@
 {
-  "updatedAt": "2026-09-06T18:43:12.926Z",
+  "updatedAt": "2026-09-05T22:32:08.096Z",
   "ticker": [
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US and Iran trade strikes for first time in weeks",
+      "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-05T22:32:06.929Z",
+      "arena": "iran"
+    },
     {
       "id": "dium=RSS&at_campaign=rss",
       "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T18:43:09.994Z",
+      "publishedAt": "2026-09-05T22:32:06.929Z",
       "arena": "iran"
     },
     {
@@ -16,53 +25,17 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T18:43:09.993Z",
+      "publishedAt": "2026-09-05T22:32:06.928Z",
       "arena": "iran"
     },
     {
-      "id": "l-seven-southern-lebanon",
-      "title": "Israeli strikes kill seven in southern Lebanon",
-      "titleHe": "ישראל תקיפות הרג לבנון",
+      "id": "ns-pickaxe-mountain-soon",
+      "title": "Trump says US may hit Iran's Pickaxe Mountain soon",
+      "titleHe": "טראמפ מסר ש ארה״ב איראן'",
       "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/israeli-strikes-kill-seven-southern-lebanon",
-      "publishedAt": "2026-09-06T18:43:09.887Z",
-      "arena": "lebanon"
-    },
-    {
-      "id": "cks-will-be-more-painful",
-      "title": "Iran to tackle economic issues, says further attacks will be 'more painful'",
-      "titleHe": "איראן מסר ש תקיפה ' '",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/iran-tackle-economic-issues-says-further-attacks-will-be-more-painful",
-      "publishedAt": "2026-09-06T18:43:09.886Z",
+      "url": "https://www.al-monitor.com/originals/2026/09/trump-says-us-may-hit-irans-pickaxe-mountain-soon",
+      "publishedAt": "2026-09-05T22:32:06.748Z",
       "arena": "iran"
-    },
-    {
-      "id": "us-launches-more-attacks",
-      "title": "Iran threatens greater force if US launches more attacks",
-      "titleHe": "איראן איים ארה״ב תקיפה",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/iran-threatens-greater-force-if-us-launches-more-attacks",
-      "publishedAt": "2026-09-06T18:43:09.886Z",
-      "arena": "iran"
-    },
-    {
-      "id": "-war-oil-production.html",
-      "title": "OPEC Plus Holds Oil Production Steady as U.S.-Iran Strikes Resume",
-      "titleHe": ". .-איראן התקיפות מתחדשות",
-      "source": "ה-NYT",
-      "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
-      "publishedAt": "2026-09-06T18:43:09.834Z",
-      "arena": "iran"
-    },
-    {
-      "id": "s-amid-houthi-offensive/",
-      "title": "More than 300 fighters killed in Yemen clashes over last 4 days, amid Houthi offensive",
-      "titleHe": "300 הרג תימן 4 החות'ים",
-      "source": "Times of Israel",
-      "url": "https://www.timesofisrael.com/more-than-300-fighters-killed-in-yemen-clashes-over-last-4-days-amid-houthi-offensive/",
-      "publishedAt": "2026-09-06T18:43:09.666Z",
-      "arena": "axis"
     },
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -70,43 +43,61 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T18:43:09.994Z",
+      "publishedAt": "2026-09-05T22:32:06.929Z",
       "arena": "iran"
     },
     {
-      "id": "ear-deal-may-not-happen/",
-      "title": "U.S. energy secretary says Iran nuclear deal ‘may not’ happen anytime soon",
-      "titleHe": ". . מסר ש איראן גרעין ‘ ’",
-      "source": "ה-Washington Post",
-      "url": "https://www.washingtonpost.com/world/2026/09/06/us-energy-secretary-chris-wright-says-iran-nuclear-deal-may-not-happen/",
-      "publishedAt": "2026-09-06T18:43:09.879Z",
-      "arena": "iran"
-    },
-    {
-      "id": "ntelligence-reports.html",
-      "title": "A More Confident Iran Emerges After Six Months of War With the U.S.",
-      "titleHe": "מסר: איראן המלחמה עם ארה״ב",
-      "source": "ה-NYT",
-      "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
-      "publishedAt": "2026-09-06T18:43:09.835Z",
-      "arena": "iran"
-    },
-    {
-      "id": "eblog-september-06-2026/",
-      "title": "IDF strike said to destroy empty Lebanon hospital after drone attack targeting troops",
-      "titleHe": "צה\"ל תקיפות לבנון כטב״מים תקיפה",
+      "id": "-drone-attack-on-troops/",
+      "title": "3 said killed in IDF strikes in Lebanon after Hezbollah drone attack on troops",
+      "titleHe": "3 הרג צה\"ל תקיפות לבנון חיזבאללה כטב״מים תקיפה",
       "source": "Times of Israel",
-      "url": "https://www.timesofisrael.com/liveblog-september-06-2026/",
-      "publishedAt": "2026-09-06T08:18:17.251Z",
+      "url": "https://www.timesofisrael.com/3-said-killed-in-idf-strikes-in-lebanon-after-hezbollah-drone-attack-on-troops/",
+      "publishedAt": "2026-09-05T19:30:43.443Z",
       "arena": "lebanon"
     },
     {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "US and Iran trade strikes for first time in weeks",
-      "titleHe": "ארה״ב איראן מחליפות תקיפות לראשונה מזה שבועות",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T00:59:41.512Z",
+      "id": "-push-toward-key-strait/",
+      "title": "Over 120 killed in Yemen clashes as Houthis push toward key strait",
+      "titleHe": "120 הרג תימן החות'ים",
+      "source": "Times of Israel",
+      "url": "https://www.timesofisrael.com/over-120-killed-in-deadly-yemen-clashes-as-houthis-push-toward-key-strait/",
+      "publishedAt": "2026-09-05T01:21:24.728Z",
+      "arena": "axis"
+    },
+    {
+      "id": "strong-bond-with-the-us/",
+      "title": "Repeatedly attacked by Iran, Jordan pays a price for its strong bond with the US",
+      "titleHe": "תקיפה איראן ירדן ארה״ב",
+      "source": "Times of Israel",
+      "url": "https://www.timesofisrael.com/repeatedly-attacked-by-iran-jordan-pays-a-price-for-its-strong-bond-with-the-us/",
+      "publishedAt": "2026-09-04T18:56:46.653Z",
+      "arena": "iran"
+    },
+    {
+      "id": "-under-key-lebanon-ridge",
+      "title": "Israel says it has cleared Hezbollah fighters from tunnels under key Lebanon ridge",
+      "titleHe": "ישראל מסר ש טיהר חיזבאללה מנהרות לבנון",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/israel-says-it-has-cleared-hezbollah-fighters-tunnels-under-key-lebanon-ridge",
+      "publishedAt": "2026-09-04T15:40:49.016Z",
+      "arena": "lebanon"
+    },
+    {
+      "id": "ernment-forces-what-know",
+      "title": "Houthi escalation in western Yemen kills 13 government forces: What to know",
+      "titleHe": "החות'ים תימן הרגה 13 אנשי כוחות ממשל",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/houthi-escalation-western-yemen-kills-13-government-forces-what-know",
+      "publishedAt": "2026-09-04T10:24:08.246Z",
+      "arena": "axis"
+    },
+    {
+      "id": "w-military-strikes-iran/",
+      "title": "Iran retaliates with missiles and drones, defying Trump’s warning",
+      "titleHe": "איראן הגיבה בטילים ובכטב״מים טראמפ’",
+      "source": "ה-Washington Post",
+      "url": "https://www.washingtonpost.com/national-security/2026/09/01/us-carries-out-new-military-strikes-iran/",
+      "publishedAt": "2026-09-04T09:31:32.168Z",
       "arena": "iran"
     }
   ],
