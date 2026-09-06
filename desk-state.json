@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-06T14:18:54.617Z",
+  "updatedAt": "2026-09-06T14:26:32.664Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,7 +7,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T14:18:51.509Z",
+      "publishedAt": "2026-09-06T14:26:30.343Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T14:18:51.509Z",
+      "publishedAt": "2026-09-06T14:26:30.343Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "ישראל תקיפות הרג לבנון",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/israeli-strikes-kill-four-southern-lebanon",
-      "publishedAt": "2026-09-06T14:18:51.349Z",
+      "publishedAt": "2026-09-06T14:26:30.317Z",
       "arena": "lebanon"
     },
     {
@@ -34,7 +34,7 @@
       "titleHe": "איראן מסר ש תקיפה ' '",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-tackle-economic-issues-says-further-attacks-will-be-more-painful",
-      "publishedAt": "2026-09-06T14:18:51.349Z",
+      "publishedAt": "2026-09-06T14:26:30.317Z",
       "arena": "iran"
     },
     {
@@ -43,7 +43,16 @@
       "titleHe": "איראן איים ארה״ב תקיפה",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-threatens-greater-force-if-us-launches-more-attacks",
-      "publishedAt": "2026-09-06T14:18:51.349Z",
+      "publishedAt": "2026-09-06T14:26:30.317Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
+      "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-06T14:26:30.343Z",
       "arena": "iran"
     },
     {
@@ -53,15 +62,6 @@
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/trump-says-us-may-hit-irans-pickaxe-mountain-soon",
       "publishedAt": "2026-09-06T12:25:33.063Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
-      "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T14:18:51.509Z",
       "arena": "iran"
     },
     {
