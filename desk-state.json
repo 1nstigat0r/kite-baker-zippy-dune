@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-06T18:25:51.974Z",
+  "updatedAt": "2026-09-06T18:31:11.483Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,7 +7,7 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T18:25:48.816Z",
+      "publishedAt": "2026-09-06T18:31:09.347Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T18:25:48.816Z",
+      "publishedAt": "2026-09-06T18:31:09.347Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "ישראל תקיפות הרג לבנון",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/israeli-strikes-kill-seven-southern-lebanon",
-      "publishedAt": "2026-09-06T18:25:48.767Z",
+      "publishedAt": "2026-09-06T18:31:09.090Z",
       "arena": "lebanon"
     },
     {
@@ -34,7 +34,7 @@
       "titleHe": "איראן מסר ש תקיפה ' '",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-tackle-economic-issues-says-further-attacks-will-be-more-painful",
-      "publishedAt": "2026-09-06T18:25:48.767Z",
+      "publishedAt": "2026-09-06T18:31:09.090Z",
       "arena": "iran"
     },
     {
@@ -43,7 +43,16 @@
       "titleHe": "איראן איים ארה״ב תקיפה",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-threatens-greater-force-if-us-launches-more-attacks",
-      "publishedAt": "2026-09-06T18:25:48.767Z",
+      "publishedAt": "2026-09-06T18:31:09.090Z",
+      "arena": "iran"
+    },
+    {
+      "id": "-war-oil-production.html",
+      "title": "OPEC Plus Holds Oil Production Steady as U.S.-Iran Strikes Resume",
+      "titleHe": ". .-איראן התקיפות מתחדשות",
+      "source": "ה-NYT",
+      "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
+      "publishedAt": "2026-09-06T18:31:09.073Z",
       "arena": "iran"
     },
     {
@@ -52,17 +61,8 @@
       "titleHe": "300 הרג תימן 4 החות'ים",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/more-than-300-fighters-killed-in-yemen-clashes-over-last-4-days-amid-houthi-offensive/",
-      "publishedAt": "2026-09-06T18:25:48.503Z",
+      "publishedAt": "2026-09-06T18:31:08.825Z",
       "arena": "axis"
-    },
-    {
-      "id": "-war-oil-production.html",
-      "title": "OPEC Plus Holds Oil Production Steady as U.S.-Iran Strikes Resume",
-      "titleHe": ". .-איראן התקיפות מתחדשות",
-      "source": "ה-NYT",
-      "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
-      "publishedAt": "2026-09-06T18:25:48.498Z",
-      "arena": "iran"
     },
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -70,7 +70,16 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T18:25:48.816Z",
+      "publishedAt": "2026-09-06T18:31:09.347Z",
+      "arena": "iran"
+    },
+    {
+      "id": "ear-deal-may-not-happen/",
+      "title": "U.S. energy secretary says Iran nuclear deal ‘may not’ happen anytime soon",
+      "titleHe": ". . מסר ש איראן גרעין ‘ ’",
+      "source": "ה-Washington Post",
+      "url": "https://www.washingtonpost.com/world/2026/09/06/us-energy-secretary-chris-wright-says-iran-nuclear-deal-may-not-happen/",
+      "publishedAt": "2026-09-06T18:31:09.254Z",
       "arena": "iran"
     },
     {
@@ -79,7 +88,7 @@
       "titleHe": "מסר: איראן המלחמה עם ארה״ב",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
-      "publishedAt": "2026-09-06T18:25:48.499Z",
+      "publishedAt": "2026-09-06T18:31:09.073Z",
       "arena": "iran"
     },
     {
@@ -99,15 +108,6 @@
       "url": "https://www.bbc.co.uk/news/articles/cx2z72x5z1po?at_medium=RSS&at_campaign=rss",
       "publishedAt": "2026-09-06T00:59:41.512Z",
       "arena": "iran"
-    },
-    {
-      "id": "-under-key-lebanon-ridge",
-      "title": "Israel says it has cleared Hezbollah fighters from tunnels under key Lebanon ridge",
-      "titleHe": "ישראל מסר ש טיהר חיזבאללה מנהרות לבנון",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/israel-says-it-has-cleared-hezbollah-fighters-tunnels-under-key-lebanon-ridge",
-      "publishedAt": "2026-09-04T15:40:49.016Z",
-      "arena": "lebanon"
     }
   ],
   "lastPackId": null,
