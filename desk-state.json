@@ -1,22 +1,22 @@
 {
-  "updatedAt": "2026-09-06T13:30:35.920Z",
+  "updatedAt": "2026-09-06T13:37:08.398Z",
   "ticker": [
+    {
+      "id": "g-oil-tanker-attack.html",
+      "title": "U.S. Strikes Three Iranian ‘Shadow Network’ Oil Tankers, Military Says",
+      "titleHe": ". . תקיפות איראן ‘ ’ מסר ש",
+      "source": "ה-NYT",
+      "url": "https://www.nytimes.com/2026/09/05/world/middleeast/iran-us-kharg-oil-tanker-attack.html",
+      "publishedAt": "2026-09-06T13:37:06.345Z",
+      "arena": "iran"
+    },
     {
       "id": "dium=RSS&at_campaign=rss",
       "title": "US investigating if missile hit Iran wedding, Vance says",
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T13:30:33.575Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
-      "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T13:30:33.575Z",
+      "publishedAt": "2026-09-06T13:37:06.309Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "איראן מסר ש תקיפה ' '",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-tackle-economic-issues-says-further-attacks-will-be-more-painful",
-      "publishedAt": "2026-09-06T13:30:33.486Z",
+      "publishedAt": "2026-09-06T13:37:06.228Z",
       "arena": "iran"
     },
     {
@@ -34,7 +34,7 @@
       "titleHe": "איראן איים ארה״ב תקיפה",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-threatens-greater-force-if-us-launches-more-attacks",
-      "publishedAt": "2026-09-06T13:30:33.486Z",
+      "publishedAt": "2026-09-06T13:37:06.228Z",
       "arena": "iran"
     },
     {
@@ -43,7 +43,7 @@
       "titleHe": "ישראל תקיפות הרג לבנון",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/israeli-strikes-kill-four-southern-lebanon",
-      "publishedAt": "2026-09-06T13:30:33.486Z",
+      "publishedAt": "2026-09-06T13:37:06.228Z",
       "arena": "lebanon"
     },
     {
@@ -61,7 +61,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T13:30:33.575Z",
+      "publishedAt": "2026-09-06T13:37:06.309Z",
       "arena": "iran"
     },
     {
