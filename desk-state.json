@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-06T12:25:35.169Z",
+  "updatedAt": "2026-09-06T12:31:57.769Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,7 +7,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T12:25:33.109Z",
+      "publishedAt": "2026-09-06T12:31:55.074Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,34 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T12:25:33.109Z",
+      "publishedAt": "2026-09-06T12:31:55.074Z",
+      "arena": "iran"
+    },
+    {
+      "id": "strikes-southern-lebanon",
+      "title": "Four killed in Israeli strikes on southern Lebanon",
+      "titleHe": "הרג ישראל תקיפות לבנון",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/four-killed-israeli-strikes-southern-lebanon",
+      "publishedAt": "2026-09-06T12:31:54.904Z",
+      "arena": "lebanon"
+    },
+    {
+      "id": "cks-will-be-more-painful",
+      "title": "Iran to tackle economic issues, says further attacks will be 'more painful'",
+      "titleHe": "איראן מסר ש תקיפה ' '",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/iran-tackle-economic-issues-says-further-attacks-will-be-more-painful",
+      "publishedAt": "2026-09-06T12:31:54.903Z",
+      "arena": "iran"
+    },
+    {
+      "id": "us-launches-more-attacks",
+      "title": "Iran threatens greater force if US launches more attacks",
+      "titleHe": "איראן איים ארה״ב תקיפה",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/iran-threatens-greater-force-if-us-launches-more-attacks",
+      "publishedAt": "2026-09-06T12:31:54.903Z",
       "arena": "iran"
     },
     {
@@ -29,30 +56,12 @@
       "arena": "iran"
     },
     {
-      "id": "strikes-southern-lebanon",
-      "title": "Four killed in Israeli strikes on southern Lebanon",
-      "titleHe": "הרג ישראל תקיפות לבנון",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/four-killed-israeli-strikes-southern-lebanon",
-      "publishedAt": "2026-09-06T12:25:33.061Z",
-      "arena": "lebanon"
-    },
-    {
-      "id": "cks-will-be-more-painful",
-      "title": "Iran to tackle economic issues, says further attacks will be 'more painful'",
-      "titleHe": "איראן מסר ש תקיפה ' '",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/iran-tackle-economic-issues-says-further-attacks-will-be-more-painful",
-      "publishedAt": "2026-09-06T12:25:33.061Z",
-      "arena": "iran"
-    },
-    {
       "id": "dium=RSS&at_campaign=rss",
       "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T12:25:33.109Z",
+      "publishedAt": "2026-09-06T12:31:55.074Z",
       "arena": "iran"
     },
     {
@@ -81,15 +90,6 @@
       "url": "https://www.timesofisrael.com/over-120-killed-in-deadly-yemen-clashes-as-houthis-push-toward-key-strait/",
       "publishedAt": "2026-09-05T01:21:24.728Z",
       "arena": "axis"
-    },
-    {
-      "id": "strong-bond-with-the-us/",
-      "title": "Repeatedly attacked by Iran, Jordan pays a price for its strong bond with the US",
-      "titleHe": "תקיפה איראן ירדן ארה״ב",
-      "source": "Times of Israel",
-      "url": "https://www.timesofisrael.com/repeatedly-attacked-by-iran-jordan-pays-a-price-for-its-strong-bond-with-the-us/",
-      "publishedAt": "2026-09-04T18:56:46.653Z",
-      "arena": "iran"
     },
     {
       "id": "-under-key-lebanon-ridge",
