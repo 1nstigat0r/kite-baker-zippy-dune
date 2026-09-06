@@ -1,31 +1,13 @@
 {
-  "updatedAt": "2026-09-06T11:41:14.787Z",
+  "updatedAt": "2026-09-06T11:51:13.006Z",
   "ticker": [
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
-      "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T11:41:12.602Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "US investigating if missile hit Iran wedding, Vance says",
-      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T11:41:12.602Z",
-      "arena": "iran"
-    },
     {
       "id": "ns-pickaxe-mountain-soon",
       "title": "Trump says US may hit Iran's Pickaxe Mountain soon",
       "titleHe": "טראמפ מסר ש ארה״ב איראן'",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/trump-says-us-may-hit-irans-pickaxe-mountain-soon",
-      "publishedAt": "2026-09-06T11:41:12.481Z",
+      "publishedAt": "2026-09-06T11:51:10.573Z",
       "arena": "iran"
     },
     {
@@ -34,8 +16,35 @@
       "titleHe": "הרג ישראל תקיפות לבנון",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/four-killed-israeli-strikes-southern-lebanon",
-      "publishedAt": "2026-09-06T11:41:12.480Z",
+      "publishedAt": "2026-09-06T11:51:10.572Z",
       "arena": "lebanon"
+    },
+    {
+      "id": "cks-will-be-more-painful",
+      "title": "Iran to tackle economic issues, says further attacks will be 'more painful'",
+      "titleHe": "איראן מסר ש תקיפה ' '",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/iran-tackle-economic-issues-says-further-attacks-will-be-more-painful",
+      "publishedAt": "2026-09-06T11:51:10.572Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
+      "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-06T11:51:10.553Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US investigating if missile hit Iran wedding, Vance says",
+      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-06T11:51:10.553Z",
+      "arena": "iran"
     },
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -43,7 +52,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-06T11:41:12.602Z",
+      "publishedAt": "2026-09-06T11:51:10.553Z",
       "arena": "iran"
     },
     {
@@ -99,15 +108,6 @@
       "url": "https://www.al-monitor.com/originals/2026/09/houthi-escalation-western-yemen-kills-13-government-forces-what-know",
       "publishedAt": "2026-09-04T10:24:08.246Z",
       "arena": "axis"
-    },
-    {
-      "id": "w-military-strikes-iran/",
-      "title": "Iran retaliates with missiles and drones, defying Trump’s warning",
-      "titleHe": "איראן הגיבה בטילים ובכטב״מים טראמפ’",
-      "source": "ה-Washington Post",
-      "url": "https://www.washingtonpost.com/national-security/2026/09/01/us-carries-out-new-military-strikes-iran/",
-      "publishedAt": "2026-09-04T09:31:32.168Z",
-      "arena": "iran"
     }
   ],
   "lastPackId": null,
