@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-07T17:22:59.000Z",
+  "updatedAt": "2026-09-07T17:23:18.177Z",
   "ticker": [
     {
       "id": "ucts-wave-deadly-strikes",
@@ -105,5 +105,5 @@
   "briefing": null,
   "hourKey": null,
   "header": null,
-  "_heartbeat": true
+  "_preserved": true
 }
