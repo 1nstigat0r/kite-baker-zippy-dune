@@ -1,22 +1,22 @@
 {
-  "updatedAt": "2026-09-07T11:21:38.678Z",
+  "updatedAt": "2026-09-07T11:36:10.040Z",
   "ticker": [
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "US investigating if missile hit Iran wedding, Vance says",
-      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T11:21:36.669Z",
-      "arena": "iran"
-    },
     {
       "id": "dium=RSS&at_campaign=rss",
       "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T11:21:36.669Z",
+      "publishedAt": "2026-09-07T11:36:07.640Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US investigating if missile hit Iran wedding, Vance says",
+      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-07T11:36:07.639Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "איראן ' ' ארה״ב תקיפה",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cp8d56w7d9po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T11:21:36.669Z",
+      "publishedAt": "2026-09-07T11:36:07.639Z",
       "arena": "iran"
     },
     {
@@ -34,7 +34,7 @@
       "titleHe": ". .-איראן התקיפות מתחדשות",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
-      "publishedAt": "2026-09-07T11:21:36.319Z",
+      "publishedAt": "2026-09-07T11:36:07.557Z",
       "arena": "iran"
     },
     {
@@ -70,7 +70,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T11:21:36.669Z",
+      "publishedAt": "2026-09-07T11:36:07.640Z",
       "arena": "iran"
     },
     {
@@ -79,7 +79,7 @@
       "titleHe": ". . מסר ש איראן גרעין ‘ ’",
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/world/2026/09/06/us-energy-secretary-chris-wright-says-iran-nuclear-deal-may-not-happen/",
-      "publishedAt": "2026-09-07T11:21:36.359Z",
+      "publishedAt": "2026-09-07T11:36:07.602Z",
       "arena": "iran"
     },
     {
@@ -88,7 +88,7 @@
       "titleHe": "מסר: איראן המלחמה עם ארה״ב",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
-      "publishedAt": "2026-09-07T11:21:36.320Z",
+      "publishedAt": "2026-09-07T11:36:07.557Z",
       "arena": "iran"
     },
     {
