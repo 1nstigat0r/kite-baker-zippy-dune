@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-07T09:50:49.615Z",
+  "updatedAt": "2026-09-07T09:56:53.430Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,16 +7,7 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T09:50:48.145Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iran warns of 'faster, heavier, more painful response' to US attacks",
-      "titleHe": "איראן ' ' ארה״ב תקיפה",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cp8d56w7d9po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T09:50:48.145Z",
+      "publishedAt": "2026-09-07T09:56:51.997Z",
       "arena": "iran"
     },
     {
@@ -25,16 +16,16 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T09:50:48.145Z",
+      "publishedAt": "2026-09-07T09:56:51.997Z",
       "arena": "iran"
     },
     {
-      "id": "-war-oil-production.html",
-      "title": "OPEC Plus Holds Oil Production Steady as U.S.-Iran Strikes Resume",
-      "titleHe": ". .-איראן התקיפות מתחדשות",
-      "source": "ה-NYT",
-      "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
-      "publishedAt": "2026-09-07T09:50:48.063Z",
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iran warns of 'faster, heavier, more painful response' to US attacks",
+      "titleHe": "איראן ' ' ארה״ב תקיפה",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cp8d56w7d9po?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-07T09:56:51.996Z",
       "arena": "iran"
     },
     {
@@ -43,7 +34,7 @@
       "titleHe": "איראן מסר ש תקיפה ' '",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-tackle-economic-issues-says-further-attacks-will-be-more-painful",
-      "publishedAt": "2026-09-07T09:50:47.998Z",
+      "publishedAt": "2026-09-07T09:56:51.828Z",
       "arena": "iran"
     },
     {
@@ -52,7 +43,7 @@
       "titleHe": "תקיפות ישראליות בעיירה בדרום לבנון נהרגו 11, כך מסרה סוכנות הידיעות הממלכתית",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/israeli-strikes-southern-lebanese-town-kill-11-state-news-agency-says",
-      "publishedAt": "2026-09-07T09:50:47.996Z",
+      "publishedAt": "2026-09-07T09:56:51.826Z",
       "arena": "lebanon"
     },
     {
@@ -61,7 +52,16 @@
       "titleHe": "איראן מסר ש ‘ ’ הורמוז",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/iran-says-it-will-declare-prohibited-zone-near-strait-of-hormuz-in-coming-days/",
-      "publishedAt": "2026-09-07T09:50:47.876Z",
+      "publishedAt": "2026-09-07T09:56:51.670Z",
+      "arena": "iran"
+    },
+    {
+      "id": "-war-oil-production.html",
+      "title": "OPEC Plus Holds Oil Production Steady as U.S.-Iran Strikes Resume",
+      "titleHe": ". .-איראן התקיפות מתחדשות",
+      "source": "ה-NYT",
+      "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
+      "publishedAt": "2026-09-07T09:56:51.661Z",
       "arena": "iran"
     },
     {
@@ -70,16 +70,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T09:50:48.145Z",
-      "arena": "iran"
-    },
-    {
-      "id": "ntelligence-reports.html",
-      "title": "A More Confident Iran Emerges After Six Months of War With the U.S.",
-      "titleHe": "מסר: איראן המלחמה עם ארה״ב",
-      "source": "ה-NYT",
-      "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
-      "publishedAt": "2026-09-07T09:50:48.063Z",
+      "publishedAt": "2026-09-07T09:56:51.997Z",
       "arena": "iran"
     },
     {
@@ -88,7 +79,16 @@
       "titleHe": ". . מסר ש איראן גרעין ‘ ’",
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/world/2026/09/06/us-energy-secretary-chris-wright-says-iran-nuclear-deal-may-not-happen/",
-      "publishedAt": "2026-09-07T09:50:48.052Z",
+      "publishedAt": "2026-09-07T09:56:51.700Z",
+      "arena": "iran"
+    },
+    {
+      "id": "ntelligence-reports.html",
+      "title": "A More Confident Iran Emerges After Six Months of War With the U.S.",
+      "titleHe": "מסר: איראן המלחמה עם ארה״ב",
+      "source": "ה-NYT",
+      "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
+      "publishedAt": "2026-09-07T09:56:51.661Z",
       "arena": "iran"
     },
     {
