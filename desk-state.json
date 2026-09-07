@@ -1,40 +1,13 @@
 {
-  "updatedAt": "2026-09-07T07:56:34.611Z",
+  "updatedAt": "2026-09-07T08:14:13.631Z",
   "ticker": [
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
-      "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T07:56:32.174Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "US investigating if missile hit Iran wedding, Vance says",
-      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T07:56:32.173Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iran warns of 'faster, heavier, more painful response' to US attacks",
-      "titleHe": "איראן ' ' ארה״ב תקיפה",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cp8d56w7d9po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T07:56:32.173Z",
-      "arena": "iran"
-    },
     {
       "id": "l-seven-southern-lebanon",
       "title": "Israeli strikes kill seven in southern Lebanon",
       "titleHe": "ישראל תקיפות הרג לבנון",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/israeli-strikes-kill-seven-southern-lebanon",
-      "publishedAt": "2026-09-07T07:56:32.037Z",
+      "publishedAt": "2026-09-07T08:14:10.890Z",
       "arena": "lebanon"
     },
     {
@@ -43,7 +16,16 @@
       "titleHe": "איראן מסר ש תקיפה ' '",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-tackle-economic-issues-says-further-attacks-will-be-more-painful",
-      "publishedAt": "2026-09-07T07:56:32.037Z",
+      "publishedAt": "2026-09-07T08:14:10.890Z",
+      "arena": "iran"
+    },
+    {
+      "id": "us-launches-more-attacks",
+      "title": "Iran threatens greater force if US launches more attacks",
+      "titleHe": "איראן איים ארה״ב תקיפה",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/iran-threatens-greater-force-if-us-launches-more-attacks",
+      "publishedAt": "2026-09-07T08:14:10.890Z",
       "arena": "iran"
     },
     {
@@ -52,16 +34,25 @@
       "titleHe": "תקיפות ישראליות בעיירה בדרום לבנון נהרגו 11, כך מסרה סוכנות הידיעות הממלכתית",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/israeli-strikes-southern-lebanese-town-kill-11-state-news-agency-says",
-      "publishedAt": "2026-09-07T07:56:32.032Z",
+      "publishedAt": "2026-09-07T08:14:10.888Z",
       "arena": "lebanon"
     },
     {
-      "id": "-war-oil-production.html",
-      "title": "OPEC Plus Holds Oil Production Steady as U.S.-Iran Strikes Resume",
-      "titleHe": ". .-איראן התקיפות מתחדשות",
-      "source": "ה-NYT",
-      "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
-      "publishedAt": "2026-09-07T07:56:32.006Z",
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
+      "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-07T08:14:10.847Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US investigating if missile hit Iran wedding, Vance says",
+      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-07T08:14:10.847Z",
       "arena": "iran"
     },
     {
@@ -70,7 +61,16 @@
       "titleHe": "איראן מסר ש ‘ ’ הורמוז",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/iran-says-it-will-declare-prohibited-zone-near-strait-of-hormuz-in-coming-days/",
-      "publishedAt": "2026-09-07T07:56:31.851Z",
+      "publishedAt": "2026-09-07T08:14:10.661Z",
+      "arena": "iran"
+    },
+    {
+      "id": "-war-oil-production.html",
+      "title": "OPEC Plus Holds Oil Production Steady as U.S.-Iran Strikes Resume",
+      "titleHe": ". .-איראן התקיפות מתחדשות",
+      "source": "ה-NYT",
+      "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
+      "publishedAt": "2026-09-07T08:14:10.643Z",
       "arena": "iran"
     },
     {
@@ -79,16 +79,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T07:56:32.174Z",
-      "arena": "iran"
-    },
-    {
-      "id": "ntelligence-reports.html",
-      "title": "A More Confident Iran Emerges After Six Months of War With the U.S.",
-      "titleHe": "מסר: איראן המלחמה עם ארה״ב",
-      "source": "ה-NYT",
-      "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
-      "publishedAt": "2026-09-07T07:56:32.006Z",
+      "publishedAt": "2026-09-07T08:14:10.848Z",
       "arena": "iran"
     },
     {
@@ -97,7 +88,16 @@
       "titleHe": ". . מסר ש איראן גרעין ‘ ’",
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/world/2026/09/06/us-energy-secretary-chris-wright-says-iran-nuclear-deal-may-not-happen/",
-      "publishedAt": "2026-09-07T07:56:31.847Z",
+      "publishedAt": "2026-09-07T08:14:10.702Z",
+      "arena": "iran"
+    },
+    {
+      "id": "ntelligence-reports.html",
+      "title": "A More Confident Iran Emerges After Six Months of War With the U.S.",
+      "titleHe": "מסר: איראן המלחמה עם ארה״ב",
+      "source": "ה-NYT",
+      "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
+      "publishedAt": "2026-09-07T08:14:10.644Z",
       "arena": "iran"
     },
     {
