@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-07T08:17:16.816Z",
+  "updatedAt": "2026-09-07T08:22:04.878Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,7 +7,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T08:17:15.220Z",
+      "publishedAt": "2026-09-07T08:22:03.310Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T08:17:15.220Z",
+      "publishedAt": "2026-09-07T08:22:03.309Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "איראן ' ' ארה״ב תקיפה",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cp8d56w7d9po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T08:17:15.220Z",
+      "publishedAt": "2026-09-07T08:22:03.309Z",
       "arena": "iran"
     },
     {
@@ -34,7 +34,7 @@
       "titleHe": "ישראל תקיפות הרג לבנון",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/israeli-strikes-kill-seven-southern-lebanon",
-      "publishedAt": "2026-09-07T08:17:15.052Z",
+      "publishedAt": "2026-09-07T08:22:03.272Z",
       "arena": "lebanon"
     },
     {
@@ -43,7 +43,7 @@
       "titleHe": "איראן מסר ש תקיפה ' '",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-tackle-economic-issues-says-further-attacks-will-be-more-painful",
-      "publishedAt": "2026-09-07T08:17:15.052Z",
+      "publishedAt": "2026-09-07T08:22:03.272Z",
       "arena": "iran"
     },
     {
@@ -52,17 +52,8 @@
       "titleHe": "תקיפות ישראליות בעיירה בדרום לבנון נהרגו 11, כך מסרה סוכנות הידיעות הממלכתית",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/israeli-strikes-southern-lebanese-town-kill-11-state-news-agency-says",
-      "publishedAt": "2026-09-07T08:17:15.050Z",
+      "publishedAt": "2026-09-07T08:22:03.270Z",
       "arena": "lebanon"
-    },
-    {
-      "id": "f-hormuz-in-coming-days/",
-      "title": "Iran says it will declare ‘prohibited zone’ near Strait of Hormuz in coming days",
-      "titleHe": "איראן מסר ש ‘ ’ הורמוז",
-      "source": "Times of Israel",
-      "url": "https://www.timesofisrael.com/iran-says-it-will-declare-prohibited-zone-near-strait-of-hormuz-in-coming-days/",
-      "publishedAt": "2026-09-07T08:17:14.867Z",
-      "arena": "iran"
     },
     {
       "id": "-war-oil-production.html",
@@ -70,7 +61,16 @@
       "titleHe": ". .-איראן התקיפות מתחדשות",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
-      "publishedAt": "2026-09-07T08:17:14.855Z",
+      "publishedAt": "2026-09-07T08:22:03.182Z",
+      "arena": "iran"
+    },
+    {
+      "id": "f-hormuz-in-coming-days/",
+      "title": "Iran says it will declare ‘prohibited zone’ near Strait of Hormuz in coming days",
+      "titleHe": "איראן מסר ש ‘ ’ הורמוז",
+      "source": "Times of Israel",
+      "url": "https://www.timesofisrael.com/iran-says-it-will-declare-prohibited-zone-near-strait-of-hormuz-in-coming-days/",
+      "publishedAt": "2026-09-07T08:22:03.034Z",
       "arena": "iran"
     },
     {
@@ -79,7 +79,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-07T08:17:15.220Z",
+      "publishedAt": "2026-09-07T08:22:03.310Z",
       "arena": "iran"
     },
     {
@@ -88,7 +88,7 @@
       "titleHe": ". . מסר ש איראן גרעין ‘ ’",
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/world/2026/09/06/us-energy-secretary-chris-wright-says-iran-nuclear-deal-may-not-happen/",
-      "publishedAt": "2026-09-07T08:17:14.893Z",
+      "publishedAt": "2026-09-07T08:22:03.308Z",
       "arena": "iran"
     },
     {
@@ -97,7 +97,7 @@
       "titleHe": "מסר: איראן המלחמה עם ארה״ב",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
-      "publishedAt": "2026-09-07T08:17:14.856Z",
+      "publishedAt": "2026-09-07T08:22:03.190Z",
       "arena": "iran"
     },
     {
