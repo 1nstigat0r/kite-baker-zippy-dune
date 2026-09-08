@@ -1,6 +1,69 @@
 {
-  "updatedAt": "2026-09-08T05:42:39.275Z",
+  "updatedAt": "2026-09-08T05:51:08.951Z",
   "ticker": [
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
+      "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-08T05:51:07.580Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "US investigating if missile hit Iran wedding, Vance says",
+      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-08T05:51:07.579Z",
+      "arena": "iran"
+    },
+    {
+      "id": "dium=RSS&at_campaign=rss",
+      "title": "Iran warns of 'faster, heavier, more painful response' to US attacks",
+      "titleHe": "איראן ' ' ארה״ב תקיפה",
+      "source": "BBC ME",
+      "url": "https://www.bbc.co.uk/news/articles/cp8d56w7d9po?at_medium=RSS&at_campaign=rss",
+      "publishedAt": "2026-09-08T05:51:07.579Z",
+      "arena": "iran"
+    },
+    {
+      "id": "-war-oil-production.html",
+      "title": "OPEC Plus Holds Oil Production Steady as U.S.-Iran Strikes Resume",
+      "titleHe": ". .-איראן התקיפות מתחדשות",
+      "source": "ה-NYT",
+      "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
+      "publishedAt": "2026-09-08T05:51:07.472Z",
+      "arena": "iran"
+    },
+    {
+      "id": "this-attack-saudi-arabia",
+      "title": "Iran threatens US with new 'economic warfare' and missiles as Houthis attack Saudi Arabia",
+      "titleHe": "איראן איים ארה״ב ' ' טילים החות'ים תקיפה סעודיה",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/iran-threatens-us-new-economic-warfare-and-missiles-houthis-attack-saudi-arabia",
+      "publishedAt": "2026-09-08T05:51:07.440Z",
+      "arena": "iran"
+    },
+    {
+      "id": "d-houthi-attacks-kingdom",
+      "title": "Saudi-led coalition in Yemen says 73 injured in Houthi attacks on the kingdom",
+      "titleHe": "תימן מסר ש 73 החות'ים תקיפה",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/saudi-led-coalition-yemen-says-73-injured-houthi-attacks-kingdom",
+      "publishedAt": "2026-09-08T05:51:07.440Z",
+      "arena": "axis"
+    },
+    {
+      "id": "ndab-battle-intensifies/",
+      "title": "Houthis say 7 killed in Saudi strike on Yemen prison as Bab el-Mandeb battle intensifies",
+      "titleHe": "החות'ים 7 הרג תקיפות תימן",
+      "source": "Times of Israel",
+      "url": "https://www.timesofisrael.com/houthis-say-7-killed-in-saudi-strike-on-yemen-prison-as-bab-al-mandab-battle-intensifies/",
+      "publishedAt": "2026-09-08T05:51:07.260Z",
+      "arena": "axis"
+    },
     {
       "id": "ucts-wave-deadly-strikes",
       "title": "Lebanon says Israel conducts wave of deadly strikes",
@@ -11,84 +74,12 @@
       "arena": "lebanon"
     },
     {
-      "id": "this-attack-saudi-arabia",
-      "title": "Iran threatens US with new 'economic warfare' and missiles as Houthis attack Saudi Arabia",
-      "titleHe": "איראן איים ארה״ב ' ' טילים החות'ים תקיפה סעודיה",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/iran-threatens-us-new-economic-warfare-and-missiles-houthis-attack-saudi-arabia",
-      "publishedAt": "2026-09-08T05:42:37.717Z",
-      "arena": "iran"
-    },
-    {
-      "id": "d-houthi-attacks-kingdom",
-      "title": "Saudi-led coalition in Yemen says 73 injured in Houthi attacks on the kingdom",
-      "titleHe": "תימן מסר ש 73 החות'ים תקיפה",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/saudi-led-coalition-yemen-says-73-injured-houthi-attacks-kingdom",
-      "publishedAt": "2026-09-08T05:42:37.717Z",
-      "arena": "axis"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
-      "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-08T05:42:36.813Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "US investigating if missile hit Iran wedding, Vance says",
-      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-08T05:42:36.813Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iran warns of 'faster, heavier, more painful response' to US attacks",
-      "titleHe": "איראן ' ' ארה״ב תקיפה",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cp8d56w7d9po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-08T05:42:36.813Z",
-      "arena": "iran"
-    },
-    {
-      "id": "-war-oil-production.html",
-      "title": "OPEC Plus Holds Oil Production Steady as U.S.-Iran Strikes Resume",
-      "titleHe": ". .-איראן התקיפות מתחדשות",
-      "source": "ה-NYT",
-      "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
-      "publishedAt": "2026-09-08T05:42:36.661Z",
-      "arena": "iran"
-    },
-    {
-      "id": "ndab-battle-intensifies/",
-      "title": "Houthis say 7 killed in Saudi strike on Yemen prison as Bab el-Mandeb battle intensifies",
-      "titleHe": "החות'ים 7 הרג תקיפות תימן",
-      "source": "Times of Israel",
-      "url": "https://www.timesofisrael.com/houthis-say-7-killed-in-saudi-strike-on-yemen-prison-as-bab-al-mandab-battle-intensifies/",
-      "publishedAt": "2026-09-08T05:42:36.511Z",
-      "arena": "axis"
-    },
-    {
       "id": "dium=RSS&at_campaign=rss",
       "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-08T05:42:36.813Z",
-      "arena": "iran"
-    },
-    {
-      "id": "ear-deal-may-not-happen/",
-      "title": "U.S. energy secretary says Iran nuclear deal ‘may not’ happen anytime soon",
-      "titleHe": ". . מסר ש איראן גרעין ‘ ’",
-      "source": "ה-Washington Post",
-      "url": "https://www.washingtonpost.com/world/2026/09/06/us-energy-secretary-chris-wright-says-iran-nuclear-deal-may-not-happen/",
-      "publishedAt": "2026-09-08T05:42:36.751Z",
+      "publishedAt": "2026-09-08T05:51:07.580Z",
       "arena": "iran"
     },
     {
@@ -97,7 +88,16 @@
       "titleHe": "מסר: איראן המלחמה עם ארה״ב",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
-      "publishedAt": "2026-09-08T05:42:36.662Z",
+      "publishedAt": "2026-09-08T05:51:07.472Z",
+      "arena": "iran"
+    },
+    {
+      "id": "ear-deal-may-not-happen/",
+      "title": "U.S. energy secretary says Iran nuclear deal ‘may not’ happen anytime soon",
+      "titleHe": ". . מסר ש איראן גרעין ‘ ’",
+      "source": "ה-Washington Post",
+      "url": "https://www.washingtonpost.com/world/2026/09/06/us-energy-secretary-chris-wright-says-iran-nuclear-deal-may-not-happen/",
+      "publishedAt": "2026-09-08T05:51:07.467Z",
       "arena": "iran"
     },
     {
@@ -106,7 +106,7 @@
       "titleHe": "הסנקציות האמריקניות מאיימות לרסק את חלומותיהם של סטודנטים איראנים",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/us-sanctions-threaten-crush-iranian-students-dreams",
-      "publishedAt": "2026-09-08T05:42:37.717Z",
+      "publishedAt": "2026-09-08T05:51:07.440Z",
       "arena": "iran"
     }
   ],
