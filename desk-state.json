@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-08T01:49:17.016Z",
+  "updatedAt": "2026-09-08T02:21:18.840Z",
   "ticker": [
     {
       "id": "ucts-wave-deadly-strikes",
@@ -7,7 +7,7 @@
       "titleHe": "לבנון מסר ש ישראל תקיפות",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/lebanon-says-israel-conducts-wave-deadly-strikes",
-      "publishedAt": "2026-09-08T01:49:15.563Z",
+      "publishedAt": "2026-09-08T02:21:17.042Z",
       "arena": "lebanon"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-08T01:49:14.655Z",
+      "publishedAt": "2026-09-08T02:21:16.883Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-08T01:49:14.655Z",
+      "publishedAt": "2026-09-08T02:21:16.882Z",
       "arena": "iran"
     },
     {
@@ -34,7 +34,16 @@
       "titleHe": "איראן ' ' ארה״ב תקיפה",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cp8d56w7d9po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-08T01:49:14.655Z",
+      "publishedAt": "2026-09-08T02:21:16.882Z",
+      "arena": "iran"
+    },
+    {
+      "id": "-war-oil-production.html",
+      "title": "OPEC Plus Holds Oil Production Steady as U.S.-Iran Strikes Resume",
+      "titleHe": ". .-איראן התקיפות מתחדשות",
+      "source": "ה-NYT",
+      "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
+      "publishedAt": "2026-09-08T02:21:16.707Z",
       "arena": "iran"
     },
     {
@@ -43,17 +52,8 @@
       "titleHe": "החות'ים 7 הרג תקיפות תימן",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/houthis-say-7-killed-in-saudi-strike-on-yemen-prison-as-bab-al-mandab-battle-intensifies/",
-      "publishedAt": "2026-09-08T01:49:14.306Z",
+      "publishedAt": "2026-09-08T02:21:16.538Z",
       "arena": "axis"
-    },
-    {
-      "id": "-war-oil-production.html",
-      "title": "OPEC Plus Holds Oil Production Steady as U.S.-Iran Strikes Resume",
-      "titleHe": ". .-איראן התקיפות מתחדשות",
-      "source": "ה-NYT",
-      "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
-      "publishedAt": "2026-09-08T01:49:14.294Z",
-      "arena": "iran"
     },
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -61,7 +61,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-08T01:49:14.655Z",
+      "publishedAt": "2026-09-08T02:21:16.883Z",
       "arena": "iran"
     },
     {
@@ -70,16 +70,7 @@
       "titleHe": "איחוד האמירויות מסר ש ' חטופים' איראן",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/uae-says-its-energy-exports-will-not-be-held-hostage-iran-war",
-      "publishedAt": "2026-09-08T01:49:15.564Z",
-      "arena": "iran"
-    },
-    {
-      "id": "ear-deal-may-not-happen/",
-      "title": "U.S. energy secretary says Iran nuclear deal ‘may not’ happen anytime soon",
-      "titleHe": ". . מסר ש איראן גרעין ‘ ’",
-      "source": "ה-Washington Post",
-      "url": "https://www.washingtonpost.com/world/2026/09/06/us-energy-secretary-chris-wright-says-iran-nuclear-deal-may-not-happen/",
-      "publishedAt": "2026-09-08T01:49:14.351Z",
+      "publishedAt": "2026-09-08T02:21:17.043Z",
       "arena": "iran"
     },
     {
@@ -88,7 +79,16 @@
       "titleHe": "מסר: איראן המלחמה עם ארה״ב",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
-      "publishedAt": "2026-09-08T01:49:14.294Z",
+      "publishedAt": "2026-09-08T02:21:16.707Z",
+      "arena": "iran"
+    },
+    {
+      "id": "ear-deal-may-not-happen/",
+      "title": "U.S. energy secretary says Iran nuclear deal ‘may not’ happen anytime soon",
+      "titleHe": ". . מסר ש איראן גרעין ‘ ’",
+      "source": "ה-Washington Post",
+      "url": "https://www.washingtonpost.com/world/2026/09/06/us-energy-secretary-chris-wright-says-iran-nuclear-deal-may-not-happen/",
+      "publishedAt": "2026-09-08T02:21:16.561Z",
       "arena": "iran"
     },
     {
