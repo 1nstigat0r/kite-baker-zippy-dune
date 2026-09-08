@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-08T05:27:50.582Z",
+  "updatedAt": "2026-09-08T05:32:44.188Z",
   "ticker": [
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -7,7 +7,7 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-08T05:27:49.190Z",
+      "publishedAt": "2026-09-08T05:32:42.799Z",
       "arena": "iran"
     },
     {
@@ -16,7 +16,7 @@
       "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-08T05:27:49.190Z",
+      "publishedAt": "2026-09-08T05:32:42.799Z",
       "arena": "iran"
     },
     {
@@ -25,7 +25,7 @@
       "titleHe": "איראן ' ' ארה״ב תקיפה",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cp8d56w7d9po?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-08T05:27:49.190Z",
+      "publishedAt": "2026-09-08T05:32:42.799Z",
       "arena": "iran"
     },
     {
@@ -34,7 +34,7 @@
       "titleHe": "לבנון מסר ש ישראל תקיפות",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/lebanon-says-israel-conducts-wave-deadly-strikes",
-      "publishedAt": "2026-09-08T05:27:49.111Z",
+      "publishedAt": "2026-09-08T05:32:42.733Z",
       "arena": "lebanon"
     },
     {
@@ -43,7 +43,7 @@
       "titleHe": "איראן איים ארה״ב ' ' טילים החות'ים תקיפה סעודיה",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/iran-threatens-us-new-economic-warfare-and-missiles-houthis-attack-saudi-arabia",
-      "publishedAt": "2026-09-08T05:27:49.110Z",
+      "publishedAt": "2026-09-08T05:32:42.733Z",
       "arena": "iran"
     },
     {
@@ -52,7 +52,16 @@
       "titleHe": "תימן מסר ש 73 החות'ים תקיפה",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/saudi-led-coalition-yemen-says-73-injured-houthi-attacks-kingdom",
-      "publishedAt": "2026-09-08T05:27:49.109Z",
+      "publishedAt": "2026-09-08T05:32:42.733Z",
+      "arena": "axis"
+    },
+    {
+      "id": "ndab-battle-intensifies/",
+      "title": "Houthis say 7 killed in Saudi strike on Yemen prison as Bab el-Mandeb battle intensifies",
+      "titleHe": "החות'ים 7 הרג תקיפות תימן",
+      "source": "Times of Israel",
+      "url": "https://www.timesofisrael.com/houthis-say-7-killed-in-saudi-strike-on-yemen-prison-as-bab-al-mandab-battle-intensifies/",
+      "publishedAt": "2026-09-08T05:32:42.548Z",
       "arena": "axis"
     },
     {
@@ -61,17 +70,8 @@
       "titleHe": ". .-איראן התקיפות מתחדשות",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/06/business/opec-iran-war-oil-production.html",
-      "publishedAt": "2026-09-08T05:27:49.051Z",
+      "publishedAt": "2026-09-08T05:32:42.539Z",
       "arena": "iran"
-    },
-    {
-      "id": "ndab-battle-intensifies/",
-      "title": "Houthis say 7 killed in Saudi strike on Yemen prison as Bab el-Mandeb battle intensifies",
-      "titleHe": "החות'ים 7 הרג תקיפות תימן",
-      "source": "Times of Israel",
-      "url": "https://www.timesofisrael.com/houthis-say-7-killed-in-saudi-strike-on-yemen-prison-as-bab-al-mandab-battle-intensifies/",
-      "publishedAt": "2026-09-08T05:27:48.907Z",
-      "arena": "axis"
     },
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -79,7 +79,7 @@
       "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-08T05:27:49.190Z",
+      "publishedAt": "2026-09-08T05:32:42.799Z",
       "arena": "iran"
     },
     {
@@ -88,7 +88,7 @@
       "titleHe": ". . מסר ש איראן גרעין ‘ ’",
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/world/2026/09/06/us-energy-secretary-chris-wright-says-iran-nuclear-deal-may-not-happen/",
-      "publishedAt": "2026-09-08T05:27:49.174Z",
+      "publishedAt": "2026-09-08T05:32:42.585Z",
       "arena": "iran"
     },
     {
@@ -97,7 +97,7 @@
       "titleHe": "מסר: איראן המלחמה עם ארה״ב",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
-      "publishedAt": "2026-09-08T05:27:49.052Z",
+      "publishedAt": "2026-09-08T05:32:42.539Z",
       "arena": "iran"
     },
     {
