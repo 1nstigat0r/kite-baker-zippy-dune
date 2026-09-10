@@ -1,22 +1,31 @@
 {
-  "updatedAt": "2026-09-10T22:02:44.284Z",
+  "updatedAt": "2026-09-10T22:06:57.552Z",
   "ticker": [
-    {
-      "id": "latest-attacks-warships/",
-      "title": "Trump accuses Iran of meddling in midterms as wave of missiles targets U.S. base in Jordan",
-      "titleHe": "טראמפ איראן טילים . . ירדן",
-      "source": "ה-Washington Post",
-      "url": "https://www.washingtonpost.com/national-security/2026/09/08/us-launches-strikes-5-iranian-oil-tankers-after-latest-attacks-warships/",
-      "publishedAt": "2026-09-10T22:02:43.074Z",
-      "arena": "iran"
-    },
     {
       "id": "-destroyed-south-lebanon",
       "title": "Tremor recorded as Israel says Hezbollah tunnels destroyed in south Lebanon",
       "titleHe": "ישראל מסר ש חיזבאללה מנהרות לבנון",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/tremor-recorded-israel-says-hezbollah-tunnels-destroyed-south-lebanon",
-      "publishedAt": "2026-09-10T22:02:43.015Z",
+      "publishedAt": "2026-09-10T22:06:56.068Z",
+      "arena": "lebanon"
+    },
+    {
+      "id": "latest-attacks-warships/",
+      "title": "Trump accuses Iran of meddling in midterms as wave of missiles targets U.S. base in Jordan",
+      "titleHe": "טראמפ איראן טילים . . ירדן",
+      "source": "ה-Washington Post",
+      "url": "https://www.washingtonpost.com/national-security/2026/09/08/us-launches-strikes-5-iranian-oil-tankers-after-latest-attacks-warships/",
+      "publishedAt": "2026-09-10T22:06:55.989Z",
+      "arena": "iran"
+    },
+    {
+      "id": "ebanons-ali-taher-ridge/",
+      "title": "IDF blows up Hezbollah’s ‘strategic’ complex beneath south Lebanon’s Ali Taher Ridge",
+      "titleHe": "צה\"ל חיזבאללה’ ‘ ’ לבנון’",
+      "source": "Times of Israel",
+      "url": "https://www.timesofisrael.com/idf-blows-up-hezbollahs-strategic-complex-beneath-south-lebanons-ali-taher-ridge/",
+      "publishedAt": "2026-09-10T22:06:55.933Z",
       "arena": "lebanon"
     },
     {
@@ -98,15 +107,6 @@
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/09/world/middleeast/iran-war-us-aggression-hormuz.html",
       "publishedAt": "2026-09-10T19:43:16.474Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "Iranian attack on Saudi tanker killed two Filipino sailors, Saudi Arabia says",
-      "titleHe": "תקיפה איראנית על מכלית סעודית הרגה שני מלחים פיליפינים סעודיה מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-08T06:45:38.989Z",
       "arena": "iran"
     }
   ],
