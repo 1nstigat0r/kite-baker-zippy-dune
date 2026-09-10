@@ -1,31 +1,22 @@
 {
-  "updatedAt": "2026-09-10T20:34:51.722Z",
+  "updatedAt": "2026-09-10T20:56:56.203Z",
   "ticker": [
-    {
-      "id": "latest-attacks-warships/",
-      "title": "Trump accuses Iran of meddling in midterms as wave of missiles targets U.S. base in Jordan",
-      "titleHe": "טראמפ איראן טילים . . ירדן",
-      "source": "ה-Washington Post",
-      "url": "https://www.washingtonpost.com/national-security/2026/09/08/us-launches-strikes-5-iranian-oil-tankers-after-latest-attacks-warships/",
-      "publishedAt": "2026-09-10T20:34:50.041Z",
-      "arena": "iran"
-    },
     {
       "id": "-destroyed-south-lebanon",
       "title": "Tremor recorded as Israel says Hezbollah tunnels destroyed in south Lebanon",
       "titleHe": "ישראל מסר ש חיזבאללה מנהרות לבנון",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/tremor-recorded-israel-says-hezbollah-tunnels-destroyed-south-lebanon",
-      "publishedAt": "2026-09-10T20:34:49.927Z",
+      "publishedAt": "2026-09-10T20:56:54.621Z",
       "arena": "lebanon"
     },
     {
-      "id": "s-aggression-hormuz.html",
-      "title": "Iran Signals Readiness to Escalate War With U.S. Amid Rising Economic Pressure",
-      "titleHe": "מסר: איראן המלחמה עם ארה״ב",
-      "source": "ה-NYT",
-      "url": "https://www.nytimes.com/2026/09/09/world/middleeast/iran-war-us-aggression-hormuz.html",
-      "publishedAt": "2026-09-10T19:43:16.474Z",
+      "id": "latest-attacks-warships/",
+      "title": "Trump accuses Iran of meddling in midterms as wave of missiles targets U.S. base in Jordan",
+      "titleHe": "טראמפ איראן טילים . . ירדן",
+      "source": "ה-Washington Post",
+      "url": "https://www.washingtonpost.com/national-security/2026/09/08/us-launches-strikes-5-iranian-oil-tankers-after-latest-attacks-warships/",
+      "publishedAt": "2026-09-10T20:56:54.346Z",
       "arena": "iran"
     },
     {
@@ -99,6 +90,15 @@
       "url": "https://www.al-monitor.com/originals/2026/09/lebanon-says-israel-conducts-wave-deadly-strikes",
       "publishedAt": "2026-09-08T05:42:37.717Z",
       "arena": "lebanon"
+    },
+    {
+      "id": "s-aggression-hormuz.html",
+      "title": "Iran Signals Readiness to Escalate War With U.S. Amid Rising Economic Pressure",
+      "titleHe": "מסר: איראן המלחמה עם ארה״ב",
+      "source": "ה-NYT",
+      "url": "https://www.nytimes.com/2026/09/09/world/middleeast/iran-war-us-aggression-hormuz.html",
+      "publishedAt": "2026-09-10T19:43:16.474Z",
+      "arena": "iran"
     },
     {
       "id": "dium=RSS&at_campaign=rss",
