@@ -1,23 +1,23 @@
 {
-  "updatedAt": "2026-09-10T22:06:57.552Z",
+  "updatedAt": "2026-09-10T22:27:58.141Z",
   "ticker": [
-    {
-      "id": "-destroyed-south-lebanon",
-      "title": "Tremor recorded as Israel says Hezbollah tunnels destroyed in south Lebanon",
-      "titleHe": "ישראל מסר ש חיזבאללה מנהרות לבנון",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/tremor-recorded-israel-says-hezbollah-tunnels-destroyed-south-lebanon",
-      "publishedAt": "2026-09-10T22:06:56.068Z",
-      "arena": "lebanon"
-    },
     {
       "id": "latest-attacks-warships/",
       "title": "Trump accuses Iran of meddling in midterms as wave of missiles targets U.S. base in Jordan",
       "titleHe": "טראמפ איראן טילים . . ירדן",
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/national-security/2026/09/08/us-launches-strikes-5-iranian-oil-tankers-after-latest-attacks-warships/",
-      "publishedAt": "2026-09-10T22:06:55.989Z",
+      "publishedAt": "2026-09-10T22:27:56.941Z",
       "arena": "iran"
+    },
+    {
+      "id": "-destroyed-south-lebanon",
+      "title": "Tremor recorded as Israel says Hezbollah tunnels destroyed in south Lebanon",
+      "titleHe": "ישראל מסר ש חיזבאללה מנהרות לבנון",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/tremor-recorded-israel-says-hezbollah-tunnels-destroyed-south-lebanon",
+      "publishedAt": "2026-09-10T22:27:56.922Z",
+      "arena": "lebanon"
     },
     {
       "id": "ebanons-ali-taher-ridge/",
@@ -25,8 +25,17 @@
       "titleHe": "צה\"ל חיזבאללה’ ‘ ’ לבנון’",
       "source": "Times of Israel",
       "url": "https://www.timesofisrael.com/idf-blows-up-hezbollahs-strategic-complex-beneath-south-lebanons-ali-taher-ridge/",
-      "publishedAt": "2026-09-10T22:06:55.933Z",
+      "publishedAt": "2026-09-10T22:27:56.644Z",
       "arena": "lebanon"
+    },
+    {
+      "id": "eblog-september-11-2026/",
+      "title": "Skeptical Vance reportedly sought direct intel from US generals on state of Iran war",
+      "titleHe": "מסר: ואנס ארה״ב איראן",
+      "source": "Times of Israel",
+      "url": "https://www.timesofisrael.com/liveblog-september-11-2026/",
+      "publishedAt": "2026-09-10T22:27:56.644Z",
+      "arena": "iran"
     },
     {
       "id": "dium=RSS&at_campaign=rss",
@@ -34,15 +43,6 @@
       "titleHe": "איראן מסר ש ארה״ב תקיפות הרג ' ' ארה״ב",
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "publishedAt": "2026-09-08T06:45:38.989Z",
-      "arena": "iran"
-    },
-    {
-      "id": "dium=RSS&at_campaign=rss",
-      "title": "US investigating if missile hit Iran wedding, Vance says",
-      "titleHe": "ארה״ב בודקת אם טיל פגע ב איראן ואנס מסר ש",
-      "source": "BBC ME",
-      "url": "https://www.bbc.co.uk/news/articles/cy4zvk3z2k1o?at_medium=RSS&at_campaign=rss",
       "publishedAt": "2026-09-08T06:45:38.989Z",
       "arena": "iran"
     },
@@ -99,15 +99,6 @@
       "url": "https://www.al-monitor.com/originals/2026/09/lebanon-says-israel-conducts-wave-deadly-strikes",
       "publishedAt": "2026-09-08T05:42:37.717Z",
       "arena": "lebanon"
-    },
-    {
-      "id": "s-aggression-hormuz.html",
-      "title": "Iran Signals Readiness to Escalate War With U.S. Amid Rising Economic Pressure",
-      "titleHe": "מסר: איראן המלחמה עם ארה״ב",
-      "source": "ה-NYT",
-      "url": "https://www.nytimes.com/2026/09/09/world/middleeast/iran-war-us-aggression-hormuz.html",
-      "publishedAt": "2026-09-10T19:43:16.474Z",
-      "arena": "iran"
     }
   ],
   "lastPackId": null,
