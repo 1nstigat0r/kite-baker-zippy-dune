@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-10T18:47:06.379Z",
+  "updatedAt": "2026-09-10T19:00:54.989Z",
   "ticker": [
     {
       "id": "latest-attacks-warships/",
@@ -7,8 +7,17 @@
       "titleHe": "טראמפ איראן טילים . . ירדן",
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/national-security/2026/09/08/us-launches-strikes-5-iranian-oil-tankers-after-latest-attacks-warships/",
-      "publishedAt": "2026-09-10T18:47:05.124Z",
+      "publishedAt": "2026-09-10T19:00:53.128Z",
       "arena": "iran"
+    },
+    {
+      "id": "al-taher-ridge-what-know",
+      "title": "Israel says it destroyed Hezbollah tunnels in Ali al-Taher ridge: What to know",
+      "titleHe": "ישראל מסר ש חיזבאללה מנהרות",
+      "source": "Al-Monitor",
+      "url": "https://www.al-monitor.com/originals/2026/09/israel-says-it-destroyed-hezbollah-tunnels-ali-al-taher-ridge-what-know",
+      "publishedAt": "2026-09-10T19:00:53.195Z",
+      "arena": "lebanon"
     },
     {
       "id": "s-aggression-hormuz.html",
@@ -16,7 +25,7 @@
       "titleHe": "מסר: איראן המלחמה עם ארה״ב",
       "source": "ה-NYT",
       "url": "https://www.nytimes.com/2026/09/09/world/middleeast/iran-war-us-aggression-hormuz.html",
-      "publishedAt": "2026-09-10T18:47:05.053Z",
+      "publishedAt": "2026-09-10T19:00:53.079Z",
       "arena": "iran"
     },
     {
@@ -98,15 +107,6 @@
       "source": "BBC ME",
       "url": "https://www.bbc.co.uk/news/articles/cx2zxgg4mx9o?at_medium=RSS&at_campaign=rss",
       "publishedAt": "2026-09-08T06:45:38.989Z",
-      "arena": "iran"
-    },
-    {
-      "id": "ear-deal-may-not-happen/",
-      "title": "U.S. energy secretary says Iran nuclear deal ‘may not’ happen anytime soon",
-      "titleHe": ". . מסר ש איראן גרעין ‘ ’",
-      "source": "ה-Washington Post",
-      "url": "https://www.washingtonpost.com/world/2026/09/06/us-energy-secretary-chris-wright-says-iran-nuclear-deal-may-not-happen/",
-      "publishedAt": "2026-09-08T06:45:38.866Z",
       "arena": "iran"
     }
   ],
