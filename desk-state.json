@@ -1,23 +1,23 @@
 {
-  "updatedAt": "2026-09-10T21:04:20.326Z",
+  "updatedAt": "2026-09-10T21:34:54.376Z",
   "ticker": [
-    {
-      "id": "latest-attacks-warships/",
-      "title": "Trump accuses Iran of meddling in midterms as wave of missiles targets U.S. base in Jordan",
-      "titleHe": "טראמפ איראן טילים . . ירדן",
-      "source": "ה-Washington Post",
-      "url": "https://www.washingtonpost.com/national-security/2026/09/08/us-launches-strikes-5-iranian-oil-tankers-after-latest-attacks-warships/",
-      "publishedAt": "2026-09-10T21:04:18.853Z",
-      "arena": "iran"
-    },
     {
       "id": "-destroyed-south-lebanon",
       "title": "Tremor recorded as Israel says Hezbollah tunnels destroyed in south Lebanon",
       "titleHe": "ישראל מסר ש חיזבאללה מנהרות לבנון",
       "source": "Al-Monitor",
       "url": "https://www.al-monitor.com/originals/2026/09/tremor-recorded-israel-says-hezbollah-tunnels-destroyed-south-lebanon",
-      "publishedAt": "2026-09-10T21:04:18.694Z",
+      "publishedAt": "2026-09-10T21:34:52.704Z",
       "arena": "lebanon"
+    },
+    {
+      "id": "latest-attacks-warships/",
+      "title": "Trump accuses Iran of meddling in midterms as wave of missiles targets U.S. base in Jordan",
+      "titleHe": "טראמפ איראן טילים . . ירדן",
+      "source": "ה-Washington Post",
+      "url": "https://www.washingtonpost.com/national-security/2026/09/08/us-launches-strikes-5-iranian-oil-tankers-after-latest-attacks-warships/",
+      "publishedAt": "2026-09-10T21:34:52.637Z",
+      "arena": "iran"
     },
     {
       "id": "dium=RSS&at_campaign=rss",
