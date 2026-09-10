@@ -1,6 +1,24 @@
 {
-  "updatedAt": "2026-09-08T06:45:40.474Z",
+  "updatedAt": "2026-09-10T14:11:36.852Z",
   "ticker": [
+    {
+      "id": "latest-attacks-warships/",
+      "title": "Trump accuses Iran of meddling in midterms as wave of missiles targets U.S. base in Jordan",
+      "titleHe": "טראמפ איראן טילים . . ירדן",
+      "source": "ה-Washington Post",
+      "url": "https://www.washingtonpost.com/national-security/2026/09/08/us-launches-strikes-5-iranian-oil-tankers-after-latest-attacks-warships/",
+      "publishedAt": "2026-09-10T14:11:34.777Z",
+      "arena": "iran"
+    },
+    {
+      "id": "s-aggression-hormuz.html",
+      "title": "Iran Signals Readiness to Escalate War With U.S. Amid Rising Economic Pressure",
+      "titleHe": "מסר: איראן המלחמה עם ארה״ב",
+      "source": "ה-NYT",
+      "url": "https://www.nytimes.com/2026/09/09/world/middleeast/iran-war-us-aggression-hormuz.html",
+      "publishedAt": "2026-09-10T14:11:34.674Z",
+      "arena": "iran"
+    },
     {
       "id": "dium=RSS&at_campaign=rss",
       "title": "Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians",
@@ -89,24 +107,6 @@
       "source": "ה-Washington Post",
       "url": "https://www.washingtonpost.com/world/2026/09/06/us-energy-secretary-chris-wright-says-iran-nuclear-deal-may-not-happen/",
       "publishedAt": "2026-09-08T06:45:38.866Z",
-      "arena": "iran"
-    },
-    {
-      "id": "ntelligence-reports.html",
-      "title": "A More Confident Iran Emerges After Six Months of War With the U.S.",
-      "titleHe": "מסר: איראן המלחמה עם ארה״ב",
-      "source": "ה-NYT",
-      "url": "https://www.nytimes.com/2026/09/04/us/politics/iran-war-intelligence-reports.html",
-      "publishedAt": "2026-09-08T06:45:38.844Z",
-      "arena": "iran"
-    },
-    {
-      "id": "-iranian-students-dreams",
-      "title": "US sanctions threaten to crush Iranian students' dreams",
-      "titleHe": "הסנקציות האמריקניות מאיימות לרסק את חלומותיהם של סטודנטים איראנים",
-      "source": "Al-Monitor",
-      "url": "https://www.al-monitor.com/originals/2026/09/us-sanctions-threaten-crush-iranian-students-dreams",
-      "publishedAt": "2026-09-08T06:45:38.881Z",
       "arena": "iran"
     }
   ],
